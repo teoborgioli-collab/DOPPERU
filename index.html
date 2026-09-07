@@ -93,6 +93,15 @@ h1{font-family:"Newsreader",Georgia,serif;font-weight:500;
   text-transform:uppercase;letter-spacing:.11em;color:var(--ok)}
 .linkbox{flex:1 1 100%;font-family:"Archivo",sans-serif;font-size:12.5px;color:var(--ink-soft);
   background:var(--sunk);border:1px solid var(--rule);border-radius:4px;padding:7px 10px}
+.pubform{display:flex;flex-wrap:wrap;gap:9px;align-items:center;flex:1 1 100%;margin-top:4px}
+.pubform input{font-family:"Archivo",sans-serif;font-size:14px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:7px 10px}
+.pubform input[type=text]{flex:1 1 260px;min-width:160px}
+.pubform input[type=password]{flex:0 1 150px}
+.pubform .add{background:none;border:1px solid var(--link);border-radius:4px;color:var(--link);
+  cursor:pointer;padding:8px 14px;font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;
+  font-size:11px;text-transform:uppercase;letter-spacing:.1em}
+.pubform .add:hover{background:var(--surface)}
 
 /* version strip */
 .versions{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
@@ -265,6 +274,19 @@ textarea::placeholder{color:var(--muted)}
            aria-label="Link carrying this plan">
   </div>
 
+  <div class="share" id="pubRow" hidden>
+    <span class="lab">Publish for everyone</span>
+    <button class="mini" id="pubToggle" type="button">Publish this plan…</button>
+    <button class="mini" id="pubCheck" type="button">Check for updates</button>
+    <span class="shareMsg" id="pubMsg"></span>
+    <form class="pubform" id="pubForm" hidden>
+      <input type="text" id="pubLabel" placeholder="What changed? Everyone sees this line">
+      <input type="password" id="pubKey" placeholder="Edit key" autocomplete="current-password">
+      <button type="submit" class="add">Publish</button>
+      <button type="button" class="mini" id="pubCancel">Cancel</button>
+    </form>
+  </div>
+
   <div class="versions">
     <div class="vcol">
       <span class="lab">Published plan</span>
@@ -406,7 +428,11 @@ var FALLBACK_SEED = {
   ]
 };
 
-var PUBLISHED_PLAN_URL = "plan.json";
+/* The API is tried first; a plain static host without it falls back to the
+   file next to this page. */
+var PLAN_API = "/api/plan";
+var PLAN_FILE = "plan.json";
+var canPublish = false;
 var publishedSeed = clone(FALLBACK_SEED);
 var state = clone(FALLBACK_SEED);
 var LS = "peru-nov-2026-plan";
@@ -494,19 +520,57 @@ function asWorking(p){
   return s;
 }
 
+function usablePlan(v){
+  if (!v || !Array.isArray(v.items)) return null;
+  if (!v.defs || typeof v.defs !== "object") v.defs = {};
+  return v;
+}
+
+/* Ask the API first. If it answers at all, publishing is possible here —
+   even when it has nothing stored yet. */
 async function loadPublishedPlan(){
   try {
-    var res = await fetch(PUBLISHED_PLAN_URL, {cache:"no-store"});
-    if (res.status === 404){ fetchState = "missing"; return; }
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    var v = await res.json();
-    if (!v || !Array.isArray(v.items)) throw new Error("plan.json has no items");
-    if (!v.defs || typeof v.defs !== "object") v.defs = {};
-    publishedSeed = clone(v);
+    var res = await fetch(PLAN_API + "?t=" + Date.now(), {cache:"no-store"});
+    if (res.ok){
+      var v = usablePlan(await res.json());
+      if (v){ publishedSeed = clone(v); fetchState = "ok"; canPublish = true; return; }
+    } else if (res.status === 404){
+      /* API is there, nothing published yet */
+      canPublish = true;
+    }
+  } catch(e){ /* no API on this host — fall through to the file */ }
+
+  try {
+    var r2 = await fetch(PLAN_FILE + "?t=" + Date.now(), {cache:"no-store"});
+    if (r2.status === 404){ fetchState = canPublish ? "missing" : "missing"; return; }
+    if (!r2.ok) throw new Error("HTTP " + r2.status);
+    var v2 = usablePlan(await r2.json());
+    if (!v2) throw new Error("plan.json has no items");
+    publishedSeed = clone(v2);
     fetchState = "ok";
   } catch(e){
-    fetchState = "error";
+    fetchState = canPublish ? "missing" : "error";
   }
+}
+
+async function publishPlan(label, key){
+  var res = await fetch(PLAN_API, {
+    method:"POST",
+    headers:{"Content-Type":"application/json", "X-Edit-Key":key || ""},
+    body: JSON.stringify({
+      label: label || "",
+      start: state.start, end: state.end,
+      items: state.items, defs: state.defs || {}
+    })
+  });
+  if (res.status === 401) throw new Error("bad_key");
+  if (!res.ok) throw new Error("http_" + res.status);
+  var v = usablePlan(await res.json());
+  if (!v) throw new Error("bad_response");
+  publishedSeed = clone(v);
+  fetchState = "ok";
+  markSeen();
+  return v;
 }
 
 /* ---------- undo slot ---------- */
@@ -1231,8 +1295,62 @@ document.getElementById("upPlan").addEventListener("change", function(e){
   e.target.value = "";
 });
 
+/* ---------- publishing ---------- */
+var LS_KEY = LS + ":editkey";
+
+function pubFlash(msg){
+  var el = document.getElementById("pubMsg");
+  if (!el) return;
+  el.textContent = msg;
+  setTimeout(function(){ if (el.textContent === msg) el.textContent = ""; }, 5000);
+}
+
+document.getElementById("pubToggle").addEventListener("click", function(){
+  var f = document.getElementById("pubForm");
+  f.hidden = !f.hidden;
+  if (!f.hidden){
+    document.getElementById("pubKey").value = lsGet(LS_KEY) || "";
+    document.getElementById("pubLabel").focus();
+  }
+});
+document.getElementById("pubCancel").addEventListener("click", function(){
+  document.getElementById("pubForm").hidden = true;
+});
+
+document.getElementById("pubForm").addEventListener("submit", async function(ev){
+  ev.preventDefault();
+  var label = document.getElementById("pubLabel").value.trim();
+  var key = document.getElementById("pubKey").value;
+  pubFlash("Publishing…");
+  try {
+    await publishPlan(label, key);
+    lsSet(LS_KEY, key);
+    document.getElementById("pubForm").hidden = true;
+    document.getElementById("pubLabel").value = "";
+    render();
+    pubFlash("Published — everyone else gets the banner");
+  } catch(e){
+    if (e.message === "bad_key") pubFlash("Wrong edit key");
+    else pubFlash("Publishing failed — " + e.message);
+  }
+});
+
+async function recheck(quiet){
+  var before = publishedSeed.updated;
+  await loadPublishedPlan();
+  render();
+  if (quiet) return;
+  pubFlash(publishedSeed.updated && publishedSeed.updated !== before
+    ? "A newer plan is available" : "You are on the newest plan");
+}
+document.getElementById("pubCheck").addEventListener("click", function(){ recheck(false); });
+document.addEventListener("visibilitychange", function(){
+  if (!document.hidden && canPublish) recheck(true);
+});
+
 async function init(){
   await loadPublishedPlan();
+  document.getElementById("pubRow").hidden = !canPublish;
 
   var fromLink = readHash();
   if (!fromLink){
@@ -1253,7 +1371,9 @@ async function init(){
   render();
   setSaveLine(fromLink
     ? "Loaded from a link and kept in this browser."
-    : "The published plan comes from plan.json and never overwrites your work — when a newer one appears you are asked. Your edits stay in this browser; use “Copy link with this plan” to move them elsewhere.");
+    : canPublish
+      ? "Your edits stay in this browser until you press Publish — then they become the plan everyone sees. Nobody's own version is ever overwritten; they get asked."
+      : "The published plan comes from plan.json and never overwrites your work — when a newer one appears you are asked. Your edits stay in this browser; use “Copy link with this plan” to move them elsewhere.");
 }
 
 init();
