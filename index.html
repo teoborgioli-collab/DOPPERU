@@ -275,14 +275,15 @@ textarea::placeholder{color:var(--muted)}
   </div>
 
   <div class="share" id="pubRow" hidden>
-    <span class="lab">Publish for everyone</span>
-    <button class="mini" id="pubToggle" type="button">Publish this plan…</button>
-    <button class="mini" id="pubCheck" type="button">Check for updates</button>
+    <span class="lab">Shared plan</span>
+    <button class="add" id="pubToggle" type="button">Save changes for everyone</button>
+    <button class="mini" id="pubCheck" type="button">Load latest</button>
+    <button class="mini drop" id="pubForget" type="button" hidden>Forget edit key</button>
     <span class="shareMsg" id="pubMsg"></span>
     <form class="pubform" id="pubForm" hidden>
-      <input type="text" id="pubLabel" placeholder="What changed? Everyone sees this line">
-      <input type="password" id="pubKey" placeholder="Edit key" autocomplete="current-password">
-      <button type="submit" class="add">Publish</button>
+      <input type="text" id="pubLabel" placeholder="Optional: what changed?">
+      <input type="password" id="pubKey" placeholder="Your edit key" autocomplete="current-password">
+      <button type="submit" class="add">Save for everyone</button>
       <button type="button" class="mini" id="pubCancel">Cancel</button>
     </form>
   </div>
@@ -433,12 +434,21 @@ var FALLBACK_SEED = {
 var PLAN_API = "/api/plan";
 var PLAN_FILE = "plan.json";
 var canPublish = false;
+var loadedSharedUpdated = "";
 var publishedSeed = clone(FALLBACK_SEED);
 var state = clone(FALLBACK_SEED);
 var LS = "peru-nov-2026-plan";
 var editing = null;
 
 function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+/* the label and the publisher name arrive from the server — never trust them
+   as markup */
+function esc(s){
+  return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
 
 /* A stop is its catalogue entry with any of your edits laid over the top.
    Custom stops live only in state.defs. */
@@ -485,9 +495,8 @@ function plannedNights(){
 }
 
 /* ---------- persistence ----------
-   Three slots in this browser: what you are working on, one undo step,
-   and the published version you last acknowledged. The published plan
-   is NEVER written over your work — it only ever offers itself. */
+   Blob is the shared source of truth. localStorage is only a draft/backup so
+   unfinished typing is not lost if the page closes or a network save fails. */
 var LS_BACKUP = LS + ":backup";
 var LS_SEEN   = LS + ":seen";
 var fetchState = "pending";   // ok | missing | error | pending
@@ -533,7 +542,7 @@ async function loadPublishedPlan(){
     var res = await fetch(PLAN_API + "?t=" + Date.now(), {cache:"no-store"});
     if (res.ok){
       var v = usablePlan(await res.json());
-      if (v){ publishedSeed = clone(v); fetchState = "ok"; canPublish = true; return; }
+      if (v){ publishedSeed = clone(v); loadedSharedUpdated = v.updated || ""; fetchState = "ok"; canPublish = true; return; }
     } else if (res.status === 404){
       /* API is there, nothing published yet */
       canPublish = true;
@@ -547,6 +556,7 @@ async function loadPublishedPlan(){
     var v2 = usablePlan(await r2.json());
     if (!v2) throw new Error("plan.json has no items");
     publishedSeed = clone(v2);
+    loadedSharedUpdated = v2.updated || "";
     fetchState = "ok";
   } catch(e){
     fetchState = canPublish ? "missing" : "error";
@@ -559,17 +569,21 @@ async function publishPlan(label, key){
     headers:{"Content-Type":"application/json", "X-Edit-Key":key || ""},
     body: JSON.stringify({
       label: label || "",
+      expectedUpdated: loadedSharedUpdated || "",
       start: state.start, end: state.end,
       items: state.items, defs: state.defs || {}
     })
   });
   if (res.status === 401) throw new Error("bad_key");
+  if (res.status === 409) throw new Error("stale_plan");
   if (!res.ok) throw new Error("http_" + res.status);
   var v = usablePlan(await res.json());
   if (!v) throw new Error("bad_response");
   publishedSeed = clone(v);
+  loadedSharedUpdated = v.updated || "";
   fetchState = "ok";
   markSeen();
+  lsDel(LS);
   return v;
 }
 
@@ -693,7 +707,8 @@ function renderVersions(){
   var pub = document.getElementById("vPub"), pubSub = document.getElementById("vPubSub");
   if (fetchState === "ok"){
     pub.textContent = fmtStamp(publishedSeed.updated) || "no date in plan.json";
-    pubSub.textContent = publishedSeed.label || "";
+    pubSub.textContent = [publishedSeed.label, publishedSeed.by ? "by " + publishedSeed.by : ""]
+      .filter(Boolean).join(" · ");
   } else if (fetchState === "missing"){
     pub.textContent = "None"; pubSub.textContent = "No plan.json alongside this page";
   } else if (fetchState === "error"){
@@ -744,7 +759,8 @@ function renderNotices(){
   if (publishedIsNewer()){
     box.appendChild(notice("news",
       "A newer plan was published on <b>" + (fmtStamp(publishedSeed.updated) || "an unknown date")
-      + "</b>" + (publishedSeed.label ? " — " + publishedSeed.label : "")
+      + "</b>" + (publishedSeed.by ? " by <b>" + esc(publishedSeed.by) + "</b>" : "")
+      + (publishedSeed.label ? " — " + esc(publishedSeed.label) : "")
       + ". Your own version is untouched; nothing has been overwritten.",
       [
         {label:"Use published plan", fn:adoptPublished},
@@ -864,8 +880,12 @@ function editPanel(id, refs){
   var row = document.createElement("div");
   row.className = "erow";
   var done = document.createElement("button");
-  done.type = "button"; done.className = "mini"; done.textContent = "Done";
-  done.onclick = function(){ editing = null; commit(); };
+  done.type = "button"; done.className = "add"; done.textContent = "Save changes";
+  done.onclick = async function(){
+    editing = null;
+    commit();
+    await openOrSaveShared();
+  };
   row.appendChild(done);
 
   if (isEdited(id)){
@@ -1305,43 +1325,103 @@ function pubFlash(msg){
   setTimeout(function(){ if (el.textContent === msg) el.textContent = ""; }, 5000);
 }
 
+function refreshKeyUi(){
+  document.getElementById("pubForget").hidden = !lsGet(LS_KEY);
+}
+
 document.getElementById("pubToggle").addEventListener("click", function(){
-  var f = document.getElementById("pubForm");
-  f.hidden = !f.hidden;
-  if (!f.hidden){
-    document.getElementById("pubKey").value = lsGet(LS_KEY) || "";
-    document.getElementById("pubLabel").focus();
-  }
+  openOrSaveShared();
+});
+
+document.getElementById("pubForget").addEventListener("click", function(){
+  lsDel(LS_KEY);
+  document.getElementById("pubKey").value = "";
+  refreshKeyUi();
+  pubFlash("Edit key removed from this browser");
 });
 document.getElementById("pubCancel").addEventListener("click", function(){
   document.getElementById("pubForm").hidden = true;
 });
 
+async function openOrSaveShared(){
+  var stored = lsGet(LS_KEY) || "";
+  if (!stored){
+    var f = document.getElementById("pubForm");
+    f.hidden = false;
+    document.getElementById("pubKey").value = "";
+    document.getElementById("pubKey").focus();
+    pubFlash("Enter your edit key once to save this shared plan");
+    return;
+  }
+  pubFlash("Saving for everyone…");
+  try {
+    var v = await publishPlan("", stored);
+    refreshKeyUi();
+    render();
+    pubFlash("Saved for everyone" + (v.by ? " as " + v.by : ""));
+  } catch(e){
+    if (e.message === "stale_plan"){
+      pubFlash("Someone else saved a newer version. Load latest before saving again.");
+    } else if (e.message === "bad_key"){
+      lsDel(LS_KEY);
+      refreshKeyUi();
+      document.getElementById("pubForm").hidden = false;
+      document.getElementById("pubKey").value = "";
+      document.getElementById("pubKey").focus();
+      pubFlash("Edit key rejected — enter the current key");
+    } else {
+      pubFlash("Save failed — your draft is still safe in this browser");
+    }
+  }
+}
+
 document.getElementById("pubForm").addEventListener("submit", async function(ev){
   ev.preventDefault();
   var label = document.getElementById("pubLabel").value.trim();
   var key = document.getElementById("pubKey").value;
-  pubFlash("Publishing…");
+  pubFlash("Saving for everyone…");
   try {
-    await publishPlan(label, key);
+    var v = await publishPlan(label, key);
     lsSet(LS_KEY, key);
     document.getElementById("pubForm").hidden = true;
     document.getElementById("pubLabel").value = "";
+    refreshKeyUi();
     render();
-    pubFlash("Published — everyone else gets the banner");
+    pubFlash("Saved for everyone" + (v.by ? " as " + v.by : ""));
   } catch(e){
-    if (e.message === "bad_key") pubFlash("Wrong edit key");
-    else pubFlash("Publishing failed — " + e.message);
+    if (e.message === "bad_key"){
+      /* the key may have been rotated — drop the stored one so the next
+         attempt starts from a clean field */
+      lsDel(LS_KEY);
+      refreshKeyUi();
+      document.getElementById("pubKey").value = "";
+      document.getElementById("pubKey").focus();
+      pubFlash("Key rejected — it may have been rotated. Enter the current one.");
+    } else if (e.message === "stale_plan"){
+      pubFlash("Someone else saved a newer version. Load latest, review it, then save again.");
+    } else if (e.message === "http_503"){
+      pubFlash("No edit keys configured on the server yet");
+    } else {
+      pubFlash("Save failed — " + e.message);
+    }
   }
 });
 
 async function recheck(quiet){
-  var before = publishedSeed.updated;
+  var before = loadedSharedUpdated;
   await loadPublishedPlan();
+  if (fetchState === "ok"){
+    stash("your draft before loading latest");
+    state = asWorking(publishedSeed);
+    normaliseState();
+    markSeen();
+    saveLocal();
+    syncDateInputs();
+  }
   render();
   if (quiet) return;
-  pubFlash(publishedSeed.updated && publishedSeed.updated !== before
-    ? "A newer plan is available" : "You are on the newest plan");
+  pubFlash(loadedSharedUpdated && loadedSharedUpdated !== before
+    ? "Loaded the latest shared plan" : "You already had the latest shared plan");
 }
 document.getElementById("pubCheck").addEventListener("click", function(){ recheck(false); });
 document.addEventListener("visibilitychange", function(){
@@ -1351,16 +1431,17 @@ document.addEventListener("visibilitychange", function(){
 async function init(){
   await loadPublishedPlan();
   document.getElementById("pubRow").hidden = !canPublish;
+  refreshKeyUi();
 
   var fromLink = readHash();
   if (!fromLink){
-    if (hasLocal()){
-      /* your work always wins on load — the published plan only offers itself */
-      loadLocal();
-    } else if (fetchState === "ok"){
+    if (fetchState === "ok"){
       state = asWorking(publishedSeed);
       normaliseState();
-      markSeen();          /* first visit: you are already on the current one */
+      markSeen();
+      saveLocal();
+    } else if (hasLocal()){
+      loadLocal();
     } else {
       state = clone(FALLBACK_SEED);
       normaliseState();
@@ -1370,10 +1451,10 @@ async function init(){
   syncDateInputs();
   render();
   setSaveLine(fromLink
-    ? "Loaded from a link and kept in this browser."
+    ? "Loaded from a link. Press Save changes for everyone to make it shared."
     : canPublish
-      ? "Your edits stay in this browser until you press Publish — then they become the plan everyone sees. Nobody's own version is ever overwritten; they get asked."
-      : "The published plan comes from plan.json and never overwrites your work — when a newer one appears you are asked. Your edits stay in this browser; use “Copy link with this plan” to move them elsewhere.");
+      ? "This page loads the shared Blob plan. Edit freely, then press Save changes for everyone. Local storage is only a draft backup if a save fails."
+      : "Shared saving is unavailable here, so this browser is using the local/fallback copy.");
 }
 
 init();

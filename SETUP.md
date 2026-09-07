@@ -1,58 +1,54 @@
-# Setup — shared plan on Vercel
+# Setup — shared plan on Vercel Blob
 
-Repo layout (everything at the root):
+Repo layout:
 
 ```
 index.html
-plan.json        ← fallback, used until something is published
+plan.json
 package.json
 api/plan.js
 ```
 
-## 1. Add a Blob store
+## 1. Connect Vercel Blob
 
-Vercel dashboard → your project → **Storage** → **Create Database** → **Blob** →
-connect it to this project.
+In your Vercel project, create/connect a Blob store under **Storage**. The API in
+`api/plan.js` reads and overwrites one shared `plan.json` object in Blob.
 
-That automatically adds the `BLOB_READ_WRITE_TOKEN` environment variable. You
-never touch it yourself.
+## 2. Add one edit key per person
 
-## 2. Add the edit key
+Vercel → Project → **Settings → Environment Variables**:
 
-Project → **Settings** → **Environment Variables** → Add:
-
-| Name | Value |
+| Name | Example value |
 |---|---|
-| `PLAN_EDIT_KEY` | any password you invent, e.g. `chuncho2026` |
+| `PLAN_EDIT_KEYS` | `matteo:LONG-RANDOM-1,friend:LONG-RANDOM-2` |
 
-Apply it to **Production, Preview and Development**.
+Generate long keys, for example:
 
-Without this variable set, publishing is refused — that is deliberate, so an
-unconfigured deployment can never be overwritten by a stranger.
+```bash
+openssl rand -base64 24
+```
 
-## 3. Redeploy
+Apply the environment variable to the environments you use, then redeploy.
 
-Vercel → **Deployments** → the newest one → **⋯** → **Redeploy**.
-Environment variables only take effect on a fresh deploy.
+## 3. How saving now works
 
-## 4. Use it
+- Opening the site loads the newest shared plan from Vercel Blob.
+- You can make several edits in the page.
+- **Save changes for everyone** writes the whole current plan to Blob.
+- The first save on a browser asks for that person's edit key; after a
+  successful save the key is remembered in that browser.
+- Another person sees the saved plan when they reopen the page or press
+  **Load latest**.
+- `localStorage` is only a draft/failure backup; it is not the shared source of
+  truth.
+- If somebody else saved a newer Blob version after you loaded the page, the
+  API returns a conflict instead of knowingly overwriting it. Press **Load
+  latest**, review the changes, then edit/save again.
 
-Open the site. A **Publish for everyone** row appears once the API answers.
+This is shared saving, not realtime simultaneous editing.
 
-- Change the plan however you like — it stays in your browser.
-- Press **Publish this plan…**, write one line about what changed, enter the
-  edit key, press **Publish**.
-- Everyone else sees a banner next time they open the page. Their own version
-  is not touched; they choose whether to take yours.
+## 4. Security note
 
-The key is remembered in your browser after the first successful publish.
-
-## Notes
-
-- `plan.json` in the repo stays as the fallback for the very first visit,
-  before anything has been published.
-- Anyone with the edit key can publish. Do not put it in the shared link.
-- **Check for updates** re-reads the API; it also re-checks automatically
-  whenever you switch back to the tab.
-- On a host without the API (GitHub Pages, Netlify Drop), the page silently
-  falls back to reading `plan.json` and the publish row stays hidden.
+An edit key is a shared secret, not a full user account. Give every editor a
+different key so one person's access can be revoked without changing everyone
+else's key. Do not put edit keys in GitHub or inside the HTML.
