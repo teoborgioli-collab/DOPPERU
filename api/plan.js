@@ -1,26 +1,7 @@
 import { put, head } from '@vercel/blob';
 
-/* One file in Blob storage holds the published plan. Fixed name, no random
-   suffix, overwritten in place — so every visitor reads the same thing. */
 const KEY = 'plan.json';
 
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      'Content-Type': 'application/json',
-      'Cache-Control': 'no-store, max-age=0',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, X-Edit-Key',
-    },
-  });
-}
-
-/* Editors are configured as PLAN_EDIT_KEYS = "matteo:xxxx,ana:yyyy".
-   Each person gets their own key, so one can be revoked without disturbing
-   the others, and every publish records who did it.
-   PLAN_EDIT_KEY (single, unnamed) still works for a one-person setup. */
 function editors() {
   const out = [];
   (process.env.PLAN_EDIT_KEYS || '').split(',').forEach((pair) => {
@@ -33,8 +14,7 @@ function editors() {
   return out.filter((e) => e.name && e.key.length >= 8);
 }
 
-/* compare without leaking where the difference is */
-function safeEq(a, b) {
+function safeEq(a = '', b = '') {
   const len = Math.max(a.length, b.length);
   let diff = a.length ^ b.length;
   for (let i = 0; i < len; i++) {
@@ -52,74 +32,79 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function readPlan() {
   try {
-    const meta = await head(KEY, { access: 'public' });
-    if (!meta || !meta.url) return null;
-    const res = await fetch(meta.url + '?t=' + Date.now(), { cache: 'no-store' });
-    if (!res.ok) return null;
-    const plan = await res.json();
+    const meta = await head(KEY);
+    if (!meta?.url) return null;
+    const r = await fetch(meta.url + '?t=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) return null;
+    const plan = await r.json();
     return plan && Array.isArray(plan.items) ? plan : null;
-  } catch (e) {
-    return null; // nothing stored yet
+  } catch {
+    return null;
   }
 }
 
-export default {
-  async fetch(request) {
-    if (request.method === 'OPTIONS') return json({ ok: true });
+function setHeaders(res) {
+  res.setHeader('Cache-Control', 'no-store, max-age=0');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Edit-Key');
+}
 
-    if (request.method === 'GET') {
-      const plan = await readPlan();
-      return plan ? json(plan) : json({ error: 'no_plan_yet' }, 404);
-    }
+export default async function handler(req, res) {
+  setHeaders(res);
 
-    if (request.method === 'POST') {
-      if (!editors().length) {
-        return json({ error: 'not_configured' }, 503);
-      }
-      const who = whoIs(request.headers.get('x-edit-key') || '');
-      if (!who) {
-        await sleep(600); // friction against guessing
-        return json({ error: 'bad_key' }, 401);
-      }
+  if (req.method === 'OPTIONS') return res.status(200).json({ ok: true });
 
-      let body;
-      try {
-        body = await request.json();
-      } catch (e) {
-        return json({ error: 'bad_json' }, 400);
-      }
-      if (!body || !Array.isArray(body.items)) return json({ error: 'bad_plan' }, 400);
+  if (req.method === 'GET') {
+    const plan = await readPlan();
+    return plan ? res.status(200).json(plan) : res.status(404).json({ error: 'no_plan_yet' });
+  }
 
-      /* Refuse an obvious stale overwrite: if this browser loaded version A,
-         but Blob is already on version B, ask it to load latest first. */
-      const current = await readPlan();
-      const expected = typeof body.expectedUpdated === 'string' ? body.expectedUpdated : '';
-      const currentUpdated = current && typeof current.updated === 'string' ? current.updated : '';
-      if (expected && currentUpdated && expected !== currentUpdated) {
-        return json({ error: 'stale_plan', currentUpdated }, 409);
-      }
+  if (req.method !== 'POST') return res.status(405).json({ error: 'method_not_allowed' });
 
-      const plan = {
-        updated: new Date().toISOString(),
-        by: who,
-        label: typeof body.label === 'string' ? body.label.slice(0, 200) : '',
-        start: typeof body.start === 'string' ? body.start : '',
-        end: typeof body.end === 'string' ? body.end : '',
-        defs: body.defs && typeof body.defs === 'object' ? body.defs : {},
-        items: body.items.slice(0, 100),
-      };
+  if (!editors().length) return res.status(503).json({ error: 'not_configured' });
 
-      await put(KEY, JSON.stringify(plan, null, 2), {
-        access: 'public',
-        addRandomSuffix: false,
-        allowOverwrite: true,
-        contentType: 'application/json',
-        cacheControlMaxAge: 60,
-      });
+  const who = whoIs(req.headers['x-edit-key'] || '');
+  if (!who) {
+    await sleep(600);
+    return res.status(401).json({ error: 'bad_key' });
+  }
 
-      return json(plan);
-    }
+  let body = req.body;
+  if (typeof body === 'string') {
+    try { body = JSON.parse(body); } catch { return res.status(400).json({ error: 'bad_json' }); }
+  }
+  if (!body || !Array.isArray(body.items)) return res.status(400).json({ error: 'bad_plan' });
 
-    return json({ error: 'method_not_allowed' }, 405);
-  },
-};
+  const current = await readPlan();
+  const expected = typeof body.expectedUpdated === 'string' ? body.expectedUpdated : '';
+  const currentUpdated = current && typeof current.updated === 'string' ? current.updated : '';
+  if (expected && currentUpdated && expected !== currentUpdated) {
+    return res.status(409).json({ error: 'stale_plan', currentUpdated });
+  }
+
+  const plan = {
+    updated: new Date().toISOString(),
+    by: who,
+    label: typeof body.label === 'string' ? body.label.slice(0, 200) : '',
+    start: typeof body.start === 'string' ? body.start : '',
+    end: typeof body.end === 'string' ? body.end : '',
+    defs: body.defs && typeof body.defs === 'object' ? body.defs : {},
+    items: body.items.slice(0, 100),
+  };
+
+  try {
+    await put(KEY, JSON.stringify(plan, null, 2), {
+      access: 'public',
+      addRandomSuffix: false,
+      allowOverwrite: true,
+      contentType: 'application/json',
+      cacheControlMaxAge: 60,
+    });
+  } catch (err) {
+    console.error('Blob write failed:', err);
+    return res.status(500).json({ error: 'blob_write_failed', message: err?.message || 'Unknown Blob error' });
+  }
+
+  return res.status(200).json(plan);
+}
