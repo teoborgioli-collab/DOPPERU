@@ -1,0 +1,1466 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{color-scheme:light dark}
+html,body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<title>Fourteen Nights in Peru</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Archivo:wght@400;500;600&family=Archivo+Narrow:wght@500;600&display=swap">
+
+<style>
+:root{
+  --paper:#eef1ec; --surface:#f7f9f6; --sunk:#e7ebe5;
+  --ink:#141f19; --ink-soft:#3b4a42; --muted:#5f6e65;
+  --rule:#d2dad1; --rule-soft:#e2e8e0;
+  --coast:#3a5f8d; --lowland:#136349; --cloudforest:#1f7079; --puna:#8a6821; --city:#5d5a6b;
+  --link:#1f5f52; --focus:#c8792a;
+  --warn:#8a5a12; --warn-bg:#f6efe2; --bad:#9a2f3f; --bad-bg:#f7eaec; --ok:#1f6a52;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#101512; --surface:#171e1a; --sunk:#1d251f;
+    --ink:#e5eae4; --ink-soft:#c2cdc4; --muted:#8f9d93;
+    --rule:#28322c; --rule-soft:#1f2823;
+    --coast:#82a8dc; --lowland:#4fb489; --cloudforest:#4fbcc4; --puna:#d3a851; --city:#a9a4bd;
+    --link:#6fc9b0; --focus:#e8a15c;
+    --warn:#e0ae5e; --warn-bg:#251e12; --bad:#ea8093; --bad-bg:#26161a; --ok:#5cbb98;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#101512; --surface:#171e1a; --sunk:#1d251f;
+  --ink:#e5eae4; --ink-soft:#c2cdc4; --muted:#8f9d93;
+  --rule:#28322c; --rule-soft:#1f2823;
+  --coast:#82a8dc; --lowland:#4fb489; --cloudforest:#4fbcc4; --puna:#d3a851; --city:#a9a4bd;
+  --link:#6fc9b0; --focus:#e8a15c;
+  --warn:#e0ae5e; --warn-bg:#251e12; --bad:#ea8093; --bad-bg:#26161a; --ok:#5cbb98;
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--paper);color:var(--ink);
+  font-family:"Archivo","Helvetica Neue",Arial,sans-serif;font-size:15px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1000px;margin:0 auto;padding:38px 22px 90px}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:3px}
+
+.lab{font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;
+  text-transform:uppercase;letter-spacing:.12em;font-size:11.5px;color:var(--muted)}
+
+/* masthead */
+.mast{border-bottom:2px solid var(--ink);padding-bottom:22px}
+h1{font-family:"Newsreader",Georgia,serif;font-weight:500;
+  font-size:clamp(2.2rem,5.5vw,3.5rem);line-height:1.03;letter-spacing:-.015em;
+  margin:.16em 0 .12em;text-wrap:balance}
+.dek{font-family:"Newsreader",Georgia,serif;font-size:1.1rem;color:var(--ink-soft);
+  max-width:60ch;margin:.4em 0 0}
+
+/* budget meter */
+.meter{display:flex;flex-wrap:wrap;gap:18px 30px;align-items:flex-end;
+  padding:20px 0 16px;border-bottom:1px solid var(--rule)}
+.stat{display:flex;flex-direction:column;gap:2px}
+.stat .big{font-family:"Newsreader",Georgia,serif;font-size:1.85rem;line-height:1;
+  font-variant-numeric:tabular-nums}
+.bar-track{flex:1 1 220px;min-width:180px}
+.track{height:9px;background:var(--sunk);border-radius:2px;overflow:hidden;display:flex}
+.track i{display:block;height:100%;background:var(--band,var(--link))}
+.bal{margin-top:7px;font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;
+  font-size:12px;text-transform:uppercase;letter-spacing:.1em}
+.bal.ok{color:var(--ok)} .bal.over{color:var(--bad)} .bal.under{color:var(--warn)}
+
+/* dates row */
+.dates{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center;padding:14px 0;
+  border-bottom:1px solid var(--rule)}
+.dates label{display:flex;align-items:center;gap:8px}
+.dates input{font-family:"Archivo",sans-serif;font-size:14px;padding:5px 8px;
+  background:var(--surface);color:var(--ink);border:1px solid var(--rule);border-radius:3px}
+
+/* share row */
+.share{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;padding:14px 0;
+  border-bottom:1px solid var(--rule)}
+.share .lab{margin-right:2px}
+.shareMsg{font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;font-size:11.5px;
+  text-transform:uppercase;letter-spacing:.11em;color:var(--ok)}
+.linkbox{flex:1 1 100%;font-family:"Archivo",sans-serif;font-size:12.5px;color:var(--ink-soft);
+  background:var(--sunk);border:1px solid var(--rule);border-radius:4px;padding:7px 10px}
+.pubform{display:flex;flex-wrap:wrap;gap:9px;align-items:center;flex:1 1 100%;margin-top:4px}
+.pubform input{font-family:"Archivo",sans-serif;font-size:14px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:7px 10px}
+.pubform input[type=text]{flex:1 1 260px;min-width:160px}
+.pubform input[type=password]{flex:0 1 150px}
+.pubform .add{background:none;border:1px solid var(--link);border-radius:4px;color:var(--link);
+  cursor:pointer;padding:8px 14px;font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;
+  font-size:11px;text-transform:uppercase;letter-spacing:.1em}
+.pubform .add:hover{background:var(--surface)}
+
+/* version strip */
+.versions{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:14px 26px;padding:14px 0 16px;border-bottom:1px solid var(--rule)}
+.vcol{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vval{font-size:14.5px;font-variant-numeric:tabular-nums}
+.vsub{font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
+
+/* notices */
+.notice{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;
+  padding:13px 15px;border-radius:4px;margin-top:16px;font-size:14px;line-height:1.5}
+.notice.news{background:var(--surface);border-left:3px solid var(--link)}
+.notice.warn{background:var(--warn-bg);border-left:3px solid var(--warn)}
+.notice .ntext{flex:1 1 320px;min-width:0}
+.notice .nacts{display:flex;flex-wrap:wrap;gap:16px}
+.notice b{font-weight:600}
+
+/* section heads */
+h2{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:1.6rem;
+  margin:44px 0 4px;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:14px;margin:0 0 16px;max-width:62ch}
+
+/* itinerary rows */
+.leg{display:grid;grid-template-columns:96px 1fr;gap:0 18px;
+  border-top:2px solid var(--band);padding:14px 0 16px;align-items:start}
+.leg + .leg{margin-top:2px}
+.when{padding-top:2px}
+.when .day{font-family:"Newsreader",Georgia,serif;font-size:1.02rem;line-height:1.25;
+  font-variant-numeric:tabular-nums;color:var(--ink)}
+.when .out{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.body{min-width:0}
+.legtop{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.legtop h3{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:1.32rem;
+  margin:0;letter-spacing:-.01em}
+.badge{font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;font-size:10px;
+  text-transform:uppercase;letter-spacing:.12em;color:var(--band);
+  border:1px solid var(--band);border-radius:2px;padding:1px 5px;white-space:nowrap}
+.legmeta{color:var(--muted);font-size:13.5px;margin:3px 0 0;font-variant-numeric:tabular-nums}
+.legwhy{color:var(--ink-soft);font-size:14px;margin:8px 0 0;max-width:64ch}
+
+.controls{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin-top:12px}
+.step{display:inline-flex;align-items:center;border:1px solid var(--rule);border-radius:4px;
+  overflow:hidden;background:var(--surface)}
+.step button{width:30px;height:30px;border:none;background:none;color:var(--ink);
+  font-size:17px;line-height:1;cursor:pointer}
+.step button:hover{background:var(--sunk)}
+.step button:disabled{color:var(--rule);cursor:default;background:none}
+.step .n{min-width:64px;text-align:center;font-family:"Archivo Narrow",Arial,sans-serif;
+  font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.08em;
+  font-variant-numeric:tabular-nums}
+.mini{background:none;border:none;padding:2px 0;cursor:pointer;color:var(--muted);
+  font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;font-size:11.5px;
+  text-transform:uppercase;letter-spacing:.11em}
+.mini:hover{color:var(--ink)}
+.mini.drop:hover{color:var(--bad)}
+.mini:disabled{color:var(--rule-soft);cursor:default}
+textarea{
+  width:100%;margin-top:11px;min-height:44px;resize:vertical;
+  font-family:"Archivo",sans-serif;font-size:14px;line-height:1.5;color:var(--ink);
+  background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:9px 11px;
+}
+textarea::placeholder{color:var(--muted)}
+
+.empty{padding:26px 0;color:var(--muted);border-top:1px solid var(--rule)}
+
+/* editor */
+.editor{margin-top:14px;padding:16px;background:var(--sunk);border-radius:5px}
+.fld{display:block;margin-bottom:12px}
+.fld .lab{display:block;margin-bottom:4px}
+.fld input,.fld select,.fld textarea{
+  width:100%;font-family:"Archivo",sans-serif;font-size:14px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:7px 10px;
+}
+.fld textarea{margin-top:0;min-height:64px}
+.egrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:0 16px}
+.flags{margin-top:2px}
+.flags .lab{display:block;margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{display:inline-flex;align-items:center;gap:6px;cursor:pointer;
+  border:1px solid var(--rule);border-radius:20px;padding:4px 11px 4px 9px;
+  background:var(--surface);font-size:13px;color:var(--ink-soft)}
+.chip input{width:13px;height:13px;margin:0;accent-color:var(--link);cursor:pointer}
+.chip.on{border-color:var(--link);color:var(--ink)}
+.erow{display:flex;flex-wrap:wrap;gap:16px;margin-top:16px;
+  border-top:1px solid var(--rule);padding-top:12px}
+.edited{font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;font-size:10px;
+  text-transform:uppercase;letter-spacing:.11em;color:var(--warn)}
+
+/* create form */
+.mkform{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.mkform input,.mkform select{font-family:"Archivo",sans-serif;font-size:14px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:7px 10px}
+.mkform input[type=text]{flex:1 1 220px;min-width:150px}
+.mkform input[type=number]{width:68px}
+.mkform .add{padding:8px 14px}
+
+/* checks */
+.check{display:flex;gap:11px;align-items:flex-start;padding:11px 13px;border-radius:4px;
+  margin-bottom:7px;font-size:14px;line-height:1.5}
+.check.bad{background:var(--bad-bg);color:var(--ink)}
+.check.warn{background:var(--warn-bg);color:var(--ink)}
+.check.ok{background:var(--surface);color:var(--ink-soft)}
+.check b{font-weight:600}
+.mark{font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;font-size:10.5px;
+  text-transform:uppercase;letter-spacing:.12em;padding-top:3px;white-space:nowrap;flex:none;
+  width:52px}
+.check.bad .mark{color:var(--bad)} .check.warn .mark{color:var(--warn)}
+.check.ok .mark{color:var(--ok)}
+
+/* catalog */
+.cat{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:0 24px}
+.catgroup{border-top:1px solid var(--rule);padding-top:10px;margin-top:14px}
+.catgroup .lab{display:block;margin-bottom:4px}
+.opt{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:baseline;
+  padding:9px 0;border-bottom:1px solid var(--rule-soft)}
+.opt .nm{font-size:14.5px;font-weight:500}
+.opt .mt{grid-column:1;color:var(--muted);font-size:13px;margin:0}
+.opt .add{grid-row:1;grid-column:2;background:none;border:1px solid var(--rule);
+  border-radius:4px;color:var(--link);cursor:pointer;padding:3px 10px;
+  font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;font-size:11px;
+  text-transform:uppercase;letter-spacing:.1em}
+.opt .add:hover{border-color:var(--link);background:var(--surface)}
+.opt .add.in{color:var(--muted);cursor:default;border-style:dashed}
+
+.foot{margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);
+  color:var(--muted);font-size:13.5px;max-width:66ch}
+.foot a{color:var(--link)}
+.saveline{font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;font-size:11px;
+  text-transform:uppercase;letter-spacing:.11em;color:var(--muted);margin-top:6px}
+
+@media (max-width:620px){
+  .leg{grid-template-columns:1fr;gap:8px}
+  .when{display:flex;gap:12px;align-items:baseline}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="mast">
+    <p class="lab">Peru &middot; 9–23 November 2026</p>
+    <h1>Fourteen Nights in Peru</h1>
+    <p class="dek">Add stops, set the nights, rewrite any of them, invent your own. Dates recompute
+    as you go, and the checks below flag anything that will bite you — altitude, travel days, and
+    whether the plan still has a macaw in it.</p>
+  </header>
+
+  <div class="meter">
+    <div class="stat"><span class="lab">Nights planned</span><span class="big" id="mNights">0</span></div>
+    <div class="stat"><span class="lab">Stops</span><span class="big" id="mStops">0</span></div>
+    <div class="bar-track">
+      <div class="track" id="track"></div>
+      <div class="bal" id="mBal">&nbsp;</div>
+    </div>
+  </div>
+
+  <div class="dates">
+    <label><span class="lab">Arrive</span><input type="date" id="dStart" value="2026-11-09"></label>
+    <label><span class="lab">Depart</span><input type="date" id="dEnd" value="2026-11-23"></label>
+    <button class="mini" id="resetPlan" type="button">Reset to published plan</button>
+  </div>
+
+  <div class="share">
+    <span class="lab">Take it with you</span>
+    <button class="mini" id="mkLink" type="button">Copy link with this plan</button>
+    <button class="mini" id="dlPlan" type="button">Save as file</button>
+    <button class="mini" id="upBtn" type="button">Load a file</button>
+    <input type="file" id="upPlan" accept=".json,application/json" hidden>
+    <span class="shareMsg" id="shareMsg"></span>
+    <input type="text" id="linkBox" class="linkbox" readonly hidden
+           aria-label="Link carrying this plan">
+  </div>
+
+  <div class="share" id="pubRow" hidden>
+    <span class="lab">Shared plan</span>
+    <button class="add" id="pubToggle" type="button">Save changes for everyone</button>
+    <button class="mini" id="pubCheck" type="button">Load latest</button>
+    <button class="mini drop" id="pubForget" type="button" hidden>Forget edit key</button>
+    <span class="shareMsg" id="pubMsg"></span>
+    <form class="pubform" id="pubForm" hidden>
+      <input type="text" id="pubLabel" placeholder="Optional: what changed?">
+      <input type="password" id="pubKey" placeholder="Your edit key" autocomplete="current-password">
+      <button type="submit" class="add">Save for everyone</button>
+      <button type="button" class="mini" id="pubCancel">Cancel</button>
+    </form>
+  </div>
+
+  <div class="versions">
+    <div class="vcol">
+      <span class="lab">Published plan</span>
+      <span class="vval" id="vPub">—</span>
+      <span class="vsub" id="vPubSub"></span>
+    </div>
+    <div class="vcol">
+      <span class="lab">Your version</span>
+      <span class="vval" id="vMine">—</span>
+      <span class="vsub" id="vMineSub"></span>
+    </div>
+    <div class="vcol">
+      <span class="lab">Undo</span>
+      <span class="vval" id="vBack">Nothing to undo</span>
+      <span class="vsub" id="vBackSub"></span>
+    </div>
+  </div>
+
+  <div id="notices"></div>
+
+  <h2>Itinerary</h2>
+  <p class="sub">Nights, not days — a stop's last date is the morning you move on.</p>
+  <div id="legs"></div>
+
+  <h2>Checks</h2>
+  <p class="sub">Recomputed live from the plan above.</p>
+  <div id="checks"></div>
+
+  <h2>Add a stop</h2>
+  <p class="sub">Travel times are from the nearest hub, and the night counts are the minimum that
+  makes the stop worth doing at all.</p>
+  <div id="catalog"></div>
+
+  <footer class="foot">
+    <p>Distances and flight legs assume the usual routings: Lima is the hub for the north coast,
+    and Cusco is the hub for Tambopata and the Manu Road. Anything marked as a travel day will
+    swallow most of the daylight, so it is worth counting those separately from the nights.</p>
+    <p class="saveline" id="saveline">Loading…</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+var STOPS = {
+  lima:   {name:"Lima", band:"city", region:"Arrival & hubs", elev:"sea level", min:1,
+           badge:"Hub", travel:"International arrival · airport hotel is fine",
+           why:"Most long-haul flights land late. One night here is a buffer, not a stop — unless you want the Pantanos de Villa wetland on the south edge of the city, which is an easy half day.",
+           tags:["hub"]},
+  arequipa:{name:"Arequipa", band:"puna", region:"South", elev:"2,335 m", min:3,
+           badge:"Endemics",
+           travel:"1h 40m flight from Lima",
+           why:"The sane place to start altitude-wise. Salinas for three flamingo species, Mejía lagoons on the coast for the desert-coast specialities and peak November shorebirds.",
+           tags:["endemics","acclimatise"]},
+  colca:  {name:"Colca Canyon", band:"puna", region:"South", elev:"3,300 m", min:1,
+           badge:"Condors",
+           travel:"4h drive from Arequipa · overnight in Chivay",
+           why:"Condors at eye level mid-morning, and a spectacular drive. Bird-for-bird a second day at Salinas beats it, so take it for the landscape.",
+           tags:["endemics"]},
+  puno:   {name:"Puno & Lake Titicaca", band:"puna", region:"South", elev:"3,830 m", min:2,
+           badge:"Endemic grebe",
+           travel:"6h bus from Arequipa, or 7h from Cusco",
+           why:"Titicaca Grebe is flightless, endemic and found nowhere else. Sits neatly on the road between Arequipa and Cusco if you are going overland.",
+           tags:["endemics"]},
+  cusco:  {name:"Cusco", band:"puna", region:"Cusco & the Andes", elev:"3,400 m", min:3,
+           badge:"Base",
+           travel:"1h 20m flight from Arequipa",
+           why:"Base for everything Andean. Huacarpay Lake is 45 minutes out and holds two Peruvian endemics — a good first-day outing while you are still acclimatising.",
+           tags:["endemics","altitude"]},
+  valley: {name:"Sacred Valley", band:"cloudforest", region:"Cusco & the Andes", elev:"2,800 m", min:2,
+           badge:"Gentler",
+           travel:"1h from Cusco",
+           why:"Six hundred metres lower than Cusco, which makes it the kinder place to sleep on arrival. Torrent Duck on the Urubamba, and the road to Abra Málaga starts here.",
+           tags:["acclimatise"]},
+  malaga: {name:"Abra Málaga", band:"puna", region:"Cusco & the Andes", elev:"4,200 m", min:2,
+           badge:"Rare endemics",
+           travel:"3h from Cusco via Ollantaytambo",
+           why:"The most important stop on the route for rare endemics. Royal Cinclodes, White-browed Tit-Spinetail and Ash-breasted Tit-Tyrant, all confined to the last fragments of Polylepis woodland.",
+           tags:["endemics"]},
+  wayqecha:{name:"Wayqecha Cloud Forest", band:"cloudforest", region:"Cusco & the Andes", elev:"3,010 m", min:2,
+           badge:"Cloud forest",
+           travel:"3.5h from Cusco",
+           why:"Upper Manu Road without the Manu Road gamble — it sits above the stretch that slides in the rains. Canopy walkway, hummingbird feeders, and the endemic Red-and-white Antpitta.",
+           tags:["endemics","rain-risk"]},
+  tambopata:{name:"Tambopata", band:"lowland", region:"Amazon", elev:"200 m", min:3,
+           badge:"Macaws",
+           travel:"45m flight from Cusco to Puerto Maldonado, then upriver",
+           why:"The macaw leg. Chuncho is the largest clay lick in Peru — up to sixteen parrot species use the Tambopata licks. Stay upriver rather than day-tripping, so you get more than one dawn at the lick.",
+           tags:["macaws","rain-risk"]},
+  paracas:{name:"Paracas", band:"coast", region:"Coast & beach", elev:"sea level", min:2,
+           badge:"Seabirds",
+           travel:"1h flight to Lima, then 3.5h drive south",
+           why:"A beach in the technical sense — the Humboldt Current keeps the water near 17°C. What it has is the Ballestas Islands: Humboldt Penguin, Peruvian Booby, Guanay Cormorant and Inca Tern in enormous numbers.",
+           tags:["beach","cold-water"]},
+  mancora:{name:"Máncora & Vichayito", band:"coast", region:"Coast & beach", elev:"sea level", min:3,
+           badge:"Warm water",
+           travel:"Cusco → Lima → Talara or Piura, then 1–1.5h · a full travel day",
+           why:"The actual swimming beach. The north coast sits above the cold current, so it is warm and sunny year-round; November is just before the December–March peak, which means the same weather with fewer people.",
+           tags:["beach","travel-day"]},
+  chaparri:{name:"Chaparrí", band:"coast", region:"Coast & beach", elev:"300 m", min:2,
+           badge:"Dry forest",
+           travel:"1.5h from Chiclayo · pairs with the north coast",
+           why:"Tumbesian dry forest, which is a completely different endemic set from the Andes: White-winged Guan, Peruvian Plantcutter, Tumbes Tyrant — plus wild Spectacled Bear.",
+           tags:["endemics","travel-day"]},
+  huanchaco:{name:"Huanchaco", band:"coast", region:"Coast & beach", elev:"sea level", min:2,
+           badge:"Surf town",
+           travel:"1.5h flight to Trujillo from Lima",
+           why:"Reed fishing boats, long surf break, cold water. Chan Chan and the Moche pyramids are next door if you want ruins that are not Inca.",
+           tags:["beach","cold-water"]}
+};
+
+var GROUPS = ["Arrival & hubs","South","Cusco & the Andes","Amazon","Coast & beach"];
+
+var KINDS = [
+  {band:"city", label:"City or hub"},
+  {band:"coast", label:"Coast"},
+  {band:"lowland", label:"Lowland Amazon"},
+  {band:"cloudforest", label:"Cloud forest"},
+  {band:"puna", label:"High Andes"}
+];
+var FLAGS = [
+  {tag:"macaws", label:"Clay lick"},
+  {tag:"endemics", label:"Endemics"},
+  {tag:"beach", label:"Beach"},
+  {tag:"acclimatise", label:"Below 3,000 m"},
+  {tag:"travel-day", label:"Costs a travel day"},
+  {tag:"rain-risk", label:"Rain risk"}
+];
+
+var FALLBACK_SEED = {
+  start:"2026-11-09", end:"2026-11-23",
+  defs:{},
+  items:[
+    {id:"lima", nights:1, note:""},
+    {id:"arequipa", nights:4, note:"Salinas one day, Mejía the next."},
+    {id:"cusco", nights:5, note:""},
+    {id:"mancora", nights:4, note:""}
+  ]
+};
+
+/* The API is tried first; a plain static host without it falls back to the
+   file next to this page. */
+var PLAN_API = "/api/plan";
+var PLAN_FILE = "plan.json";
+var canPublish = false;
+var loadedSharedUpdated = "";
+var publishedSeed = clone(FALLBACK_SEED);
+var state = clone(FALLBACK_SEED);
+var LS = "peru-nov-2026-plan";
+var editing = null;
+
+function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+/* the label and the publisher name arrive from the server — never trust them
+   as markup */
+function esc(s){
+  return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+/* A stop is its catalogue entry with any of your edits laid over the top.
+   Custom stops live only in state.defs. */
+function resolve(id){
+  var base = STOPS[id], over = state.defs && state.defs[id];
+  if (!base && !over) return null;
+  var out = {};
+  if (base) for (var k in base) out[k] = base[k];
+  if (over) for (var j in over) out[j] = over[j];
+  if (!out.tags) out.tags = [];
+  if (!out.min) out.min = 1;
+  if (!out.band) out.band = "city";
+  if (!out.badge) out.badge = "Stop";
+  return out;
+}
+function isCustom(id){ return !STOPS[id]; }
+function isEdited(id){ return !!(state.defs && state.defs[id]) && !isCustom(id); }
+function defOf(id){
+  if (!state.defs) state.defs = {};
+  if (!state.defs[id]) state.defs[id] = {};
+  return state.defs[id];
+}
+function newId(){
+  var n = 1;
+  while (STOPS["x" + n] || (state.defs && state.defs["x" + n])) n++;
+  return "x" + n;
+}
+
+/* ---------- dates ---------- */
+function parseD(s){
+  var p = String(s || "").split("-");
+  return new Date(Date.UTC(+p[0], (+p[1] || 1) - 1, +p[2] || 1));
+}
+function addDays(d, n){ var x = new Date(d.getTime()); x.setUTCDate(x.getUTCDate() + n); return x; }
+var MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function fmt(d){ return d.getUTCDate() + " " + MON[d.getUTCMonth()]; }
+function tripNights(){
+  var a = parseD(state.start), b = parseD(state.end);
+  var n = Math.round((b - a) / 86400000);
+  return n > 0 ? n : 0;
+}
+function plannedNights(){
+  return state.items.reduce(function(s, it){ return s + (it.nights || 0); }, 0);
+}
+
+/* ---------- persistence ----------
+   Blob is the shared source of truth. localStorage is only a draft/backup so
+   unfinished typing is not lost if the page closes or a network save fails. */
+var LS_BACKUP = LS + ":backup";
+var LS_SEEN   = LS + ":seen";
+var fetchState = "pending";   // ok | missing | error | pending
+
+function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+function lsSet(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
+function lsDel(k){ try { localStorage.removeItem(k); } catch(e){} }
+
+function saveLocal(){ lsSet(LS, JSON.stringify(state)); }
+function hasLocal(){ return !!lsGet(LS); }
+function loadLocal(){
+  var raw = lsGet(LS);
+  if (raw){
+    try { var v = JSON.parse(raw); if (v && Array.isArray(v.items)) state = v; } catch(e){}
+  }
+  normaliseState();
+}
+function normaliseState(){
+  if (!state.defs || typeof state.defs !== "object") state.defs = {};
+  if (!Array.isArray(state.items)) state.items = [];
+  state.items = state.items.filter(function(it){ return !!resolve(it.id); });
+}
+function touch(){ state.updatedAt = new Date().toISOString(); }
+function save(){ touch(); saveLocal(); }
+
+/* the published plan's own fields don't belong in your working copy */
+function asWorking(p){
+  var s = clone(p);
+  delete s.updated; delete s.label;
+  return s;
+}
+
+function usablePlan(v){
+  if (!v || !Array.isArray(v.items)) return null;
+  if (!v.defs || typeof v.defs !== "object") v.defs = {};
+  return v;
+}
+
+/* Ask the API first. If it answers at all, publishing is possible here —
+   even when it has nothing stored yet. */
+async function loadPublishedPlan(){
+  try {
+    var res = await fetch(PLAN_API + "?t=" + Date.now(), {cache:"no-store"});
+    if (res.ok){
+      var v = usablePlan(await res.json());
+      if (v){ publishedSeed = clone(v); loadedSharedUpdated = v.updated || ""; fetchState = "ok"; canPublish = true; return; }
+    } else if (res.status === 404){
+      /* API is there, nothing published yet */
+      canPublish = true;
+    }
+  } catch(e){ /* no API on this host — fall through to the file */ }
+
+  try {
+    var r2 = await fetch(PLAN_FILE + "?t=" + Date.now(), {cache:"no-store"});
+    if (r2.status === 404){ fetchState = canPublish ? "missing" : "missing"; return; }
+    if (!r2.ok) throw new Error("HTTP " + r2.status);
+    var v2 = usablePlan(await r2.json());
+    if (!v2) throw new Error("plan.json has no items");
+    publishedSeed = clone(v2);
+    loadedSharedUpdated = v2.updated || "";
+    fetchState = "ok";
+  } catch(e){
+    fetchState = canPublish ? "missing" : "error";
+  }
+}
+
+async function publishPlan(label, key){
+  var res = await fetch(PLAN_API, {
+    method:"POST",
+    headers:{"Content-Type":"application/json", "X-Edit-Key":key || ""},
+    body: JSON.stringify({
+      label: label || "",
+      expectedUpdated: loadedSharedUpdated || "",
+      start: state.start, end: state.end,
+      items: state.items, defs: state.defs || {}
+    })
+  });
+  if (res.status === 401) throw new Error("bad_key");
+  if (res.status === 409) throw new Error("stale_plan");
+  if (!res.ok) throw new Error("http_" + res.status);
+  var v = usablePlan(await res.json());
+  if (!v) throw new Error("bad_response");
+  publishedSeed = clone(v);
+  loadedSharedUpdated = v.updated || "";
+  fetchState = "ok";
+  markSeen();
+  lsDel(LS);
+  return v;
+}
+
+/* ---------- undo slot ---------- */
+function stash(label){
+  lsSet(LS_BACKUP, JSON.stringify({
+    label: label,
+    at: state.updatedAt || new Date().toISOString(),
+    state: clone(state)
+  }));
+}
+function backup(){
+  var raw = lsGet(LS_BACKUP);
+  if (!raw) return null;
+  try {
+    var b = JSON.parse(raw);
+    return (b && b.state && Array.isArray(b.state.items)) ? b : null;
+  } catch(e){ return null; }
+}
+function restoreBackup(){
+  var b = backup(); if (!b) return;
+  stash("the version you had before the undo");
+  state = b.state;
+  normaliseState();
+  editing = null;
+  syncDateInputs();
+  commit();
+  flash("Restored");
+}
+
+function seenPublished(){ return lsGet(LS_SEEN) || ""; }
+function markSeen(){
+  if (publishedSeed && publishedSeed.updated) lsSet(LS_SEEN, publishedSeed.updated);
+}
+function publishedIsNewer(){
+  return fetchState === "ok"
+    && !!publishedSeed.updated
+    && seenPublished() !== publishedSeed.updated;
+}
+
+function adoptPublished(){
+  stash("your own version");
+  state = asWorking(publishedSeed);
+  normaliseState();
+  markSeen();
+  editing = null;
+  syncDateInputs();
+  commit();
+  flash("Published plan loaded — undo is available");
+}
+
+/* ---------- stamps ---------- */
+function fmtStamp(iso){
+  if (!iso) return "";
+  var d = new Date(iso);
+  if (isNaN(d)) return "";
+  return d.toLocaleDateString(undefined, {day:"numeric", month:"short", year:"numeric"})
+       + ", " + d.toLocaleTimeString(undefined, {hour:"2-digit", minute:"2-digit"});
+}
+
+function setSaveLine(t){
+  var el = document.getElementById("saveline"); if (el) el.textContent = t;
+}
+function syncDateInputs(){
+  document.getElementById("dStart").value = state.start;
+  document.getElementById("dEnd").value = state.end;
+}
+
+/* ---------- carrying the plan between browsers ---------- */
+function utf8ToB64(s){
+  var bytes = new TextEncoder().encode(s), bin = "";
+  for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+function b64ToUtf8(s){
+  var b = s.replace(/-/g, "+").replace(/_/g, "/");
+  while (b.length % 4) b += "=";
+  var bin = atob(b), bytes = new Uint8Array(bin.length);
+  for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+function packed(){
+  return JSON.stringify({
+    v:1, updatedAt: state.updatedAt || null,
+    start:state.start, end:state.end, items:state.items, defs:state.defs || {}
+  });
+}
+function adopt(obj){
+  if (!obj || !Array.isArray(obj.items)) return false;
+  state = {
+    start: obj.start || FALLBACK_SEED.start,
+    end: obj.end || FALLBACK_SEED.end,
+    items: obj.items,
+    defs: (obj.defs && typeof obj.defs === "object") ? obj.defs : {},
+    updatedAt: obj.updatedAt || new Date().toISOString()
+  };
+  normaliseState();
+  return true;
+}
+function planLink(){
+  return location.origin + location.pathname + location.search
+       + "#p=" + utf8ToB64(packed());
+}
+function flash(msg){
+  var el = document.getElementById("shareMsg");
+  if (!el) return;
+  el.textContent = msg;
+  setTimeout(function(){ if (el.textContent === msg) el.textContent = ""; }, 4000);
+}
+function readHash(){
+  var h = location.hash || "";
+  if (h.indexOf("#p=") !== 0) return false;
+  try {
+    if (adopt(JSON.parse(b64ToUtf8(h.slice(3))))){ saveLocal(); return true; }
+  } catch(e){}
+  return false;
+}
+
+/* ---------- version strip & notices ---------- */
+function renderVersions(){
+  var pub = document.getElementById("vPub"), pubSub = document.getElementById("vPubSub");
+  if (fetchState === "ok"){
+    pub.textContent = fmtStamp(publishedSeed.updated) || "no date in plan.json";
+    pubSub.textContent = [publishedSeed.label, publishedSeed.by ? "by " + publishedSeed.by : ""]
+      .filter(Boolean).join(" · ");
+  } else if (fetchState === "missing"){
+    pub.textContent = "None"; pubSub.textContent = "No plan.json alongside this page";
+  } else if (fetchState === "error"){
+    pub.textContent = "Couldn't load"; pubSub.textContent = "Using the built-in plan";
+  } else {
+    pub.textContent = "…"; pubSub.textContent = "";
+  }
+
+  var mine = document.getElementById("vMine"), mineSub = document.getElementById("vMineSub");
+  if (state.updatedAt){
+    mine.textContent = fmtStamp(state.updatedAt);
+    mineSub.textContent = "Kept in this browser only";
+  } else {
+    mine.textContent = "Unchanged";
+    mineSub.textContent = "Nothing edited here yet";
+  }
+
+  var b = backup();
+  var vb = document.getElementById("vBack"), vbSub = document.getElementById("vBackSub");
+  vb.textContent = b ? fmtStamp(b.at) : "Nothing to undo";
+  vbSub.textContent = b ? b.label : "";
+}
+
+function notice(kind, html, actions){
+  var d = document.createElement("div");
+  d.className = "notice " + kind;
+  var t = document.createElement("span");
+  t.className = "ntext"; t.innerHTML = html;
+  d.appendChild(t);
+  if (actions && actions.length){
+    var a = document.createElement("span"); a.className = "nacts";
+    actions.forEach(function(act){
+      var btn = document.createElement("button");
+      btn.type = "button"; btn.className = "mini" + (act.drop ? " drop" : "");
+      btn.textContent = act.label;
+      btn.onclick = act.fn;
+      a.appendChild(btn);
+    });
+    d.appendChild(a);
+  }
+  return d;
+}
+
+function renderNotices(){
+  var box = document.getElementById("notices");
+  box.textContent = "";
+
+  if (publishedIsNewer()){
+    box.appendChild(notice("news",
+      "A newer plan was published on <b>" + (fmtStamp(publishedSeed.updated) || "an unknown date")
+      + "</b>" + (publishedSeed.by ? " by <b>" + esc(publishedSeed.by) + "</b>" : "")
+      + (publishedSeed.label ? " — " + esc(publishedSeed.label) : "")
+      + ". Your own version is untouched; nothing has been overwritten.",
+      [
+        {label:"Use published plan", fn:adoptPublished},
+        {label:"Keep mine", fn:function(){ markSeen(); renderNotices(); }}
+      ]));
+  }
+
+  var b = backup();
+  if (b){
+    box.appendChild(notice("news",
+      "You can go back to <b>" + b.label + "</b> from " + fmtStamp(b.at) + ".",
+      [
+        {label:"Undo", fn:restoreBackup},
+        {label:"Discard undo", drop:true, fn:function(){ lsDel(LS_BACKUP); render(); }}
+      ]));
+  }
+
+  if (fetchState === "error"){
+    box.appendChild(notice("warn",
+      "<b>plan.json could not be loaded</b>, so this is the built-in plan. On a hosted site that "
+      + "usually means the file is missing or malformed; opening the page straight from disk "
+      + "(<code>file://</code>) blocks the request outright."));
+  }
+}
+
+/* ---------- editing a stop ---------- */
+function field(labelText, node){
+  var w = document.createElement("label");
+  w.className = "fld";
+  var l = document.createElement("span"); l.className = "lab"; l.textContent = labelText;
+  w.appendChild(l); w.appendChild(node);
+  return w;
+}
+
+function editPanel(id, refs){
+  var S = resolve(id), d = defOf(id);
+  var panel = document.createElement("div");
+  panel.className = "editor";
+
+  function put(key, value){
+    d[key] = value;
+    save();
+    var R = resolve(id);
+    refs.h3.textContent = R.name;
+    refs.bd.textContent = R.badge;
+    refs.meta.textContent = [R.elev, R.travel].filter(Boolean).join(" · ");
+    refs.why.textContent = R.why || "";
+    refs.leg.style.setProperty("--band", "var(--" + R.band + ")");
+  }
+  function text(key, placeholder){
+    var i = document.createElement("input");
+    i.type = "text"; i.value = S[key] || ""; i.placeholder = placeholder || "";
+    i.addEventListener("input", function(){ put(key, i.value); });
+    return i;
+  }
+
+  var grid = document.createElement("div");
+  grid.className = "egrid";
+  grid.appendChild(field("Name", text("name", "Where is it?")));
+  grid.appendChild(field("Label", text("badge", "Macaws, Beach, Ruins…")));
+
+  var kind = document.createElement("select");
+  KINDS.forEach(function(k){
+    var o = document.createElement("option");
+    o.value = k.band; o.textContent = k.label;
+    if (k.band === S.band) o.selected = true;
+    kind.appendChild(o);
+  });
+  kind.addEventListener("change", function(){ put("band", kind.value); });
+  grid.appendChild(field("Kind", kind));
+
+  grid.appendChild(field("Elevation", text("elev", "e.g. 3,400 m")));
+  grid.appendChild(field("Getting there", text("travel", "e.g. 4h drive from Cusco")));
+
+  var minN = document.createElement("input");
+  minN.type = "number"; minN.min = "1"; minN.max = "30"; minN.value = S.min;
+  minN.addEventListener("input", function(){
+    var v = parseInt(minN.value, 10);
+    if (v >= 1 && v <= 30) put("min", v);
+  });
+  grid.appendChild(field("Minimum nights", minN));
+  panel.appendChild(grid);
+
+  var why = document.createElement("textarea");
+  why.className = "ewhy";
+  why.value = S.why || "";
+  why.placeholder = "What this stop is for — birds, beach, ruins, a rest day…";
+  why.addEventListener("input", function(){ put("why", why.value); });
+  panel.appendChild(field("What it's for", why));
+
+  var flagWrap = document.createElement("div");
+  flagWrap.className = "flags";
+  var fl = document.createElement("span"); fl.className = "lab"; fl.textContent = "Counts as";
+  flagWrap.appendChild(fl);
+  var chips = document.createElement("div"); chips.className = "chips";
+  FLAGS.forEach(function(f){
+    var lab = document.createElement("label");
+    lab.className = "chip";
+    var cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.checked = S.tags.indexOf(f.tag) > -1;
+    cb.addEventListener("change", function(){
+      var t = resolve(id).tags.slice();
+      var at = t.indexOf(f.tag);
+      if (cb.checked && at === -1) t.push(f.tag);
+      if (!cb.checked && at > -1) t.splice(at, 1);
+      d.tags = t; save(); renderChecks(null); lab.classList.toggle("on", cb.checked);
+    });
+    lab.classList.toggle("on", cb.checked);
+    var sp = document.createElement("span"); sp.textContent = f.label;
+    lab.appendChild(cb); lab.appendChild(sp);
+    chips.appendChild(lab);
+  });
+  flagWrap.appendChild(chips);
+  panel.appendChild(flagWrap);
+
+  var row = document.createElement("div");
+  row.className = "erow";
+  var done = document.createElement("button");
+  done.type = "button"; done.className = "add"; done.textContent = "Save changes";
+  done.onclick = async function(){
+    editing = null;
+    commit();
+    await openOrSaveShared();
+  };
+  row.appendChild(done);
+
+  if (isEdited(id)){
+    var rst = document.createElement("button");
+    rst.type = "button"; rst.className = "mini"; rst.textContent = "Reset to catalogue";
+    rst.onclick = function(){ delete state.defs[id]; editing = null; commit(); };
+    row.appendChild(rst);
+  }
+  if (isCustom(id)){
+    var del = document.createElement("button");
+    del.type = "button"; del.className = "mini drop"; del.textContent = "Delete this stop";
+    del.onclick = function(){
+      state.items = state.items.filter(function(x){ return x.id !== id; });
+      delete state.defs[id]; editing = null; commit();
+    };
+    row.appendChild(del);
+  }
+  panel.appendChild(row);
+  return panel;
+}
+
+/* ---------- render ---------- */
+function render(){
+  var legs = document.getElementById("legs");
+  legs.textContent = "";
+  var cursor = parseD(state.start);
+
+  if (!state.items.length){
+    var e = document.createElement("p");
+    e.className = "empty";
+    e.textContent = "No stops yet — add one below.";
+    legs.appendChild(e);
+  }
+
+  state.items.forEach(function(it, i){
+    var S = resolve(it.id); if (!S) return;
+    var inD = cursor, outD = addDays(cursor, it.nights);
+    cursor = outD;
+
+    var leg = document.createElement("div");
+    leg.className = "leg";
+    leg.style.setProperty("--band", "var(--" + S.band + ")");
+
+    var when = document.createElement("div");
+    when.className = "when";
+    when.innerHTML = '<div class="day">' + fmt(inD) + '</div>'
+      + '<div class="out">out ' + fmt(outD) + '</div>';
+    leg.appendChild(when);
+
+    var body = document.createElement("div");
+    body.className = "body";
+
+    var top = document.createElement("div");
+    top.className = "legtop";
+    var h3 = document.createElement("h3"); h3.textContent = S.name;
+    var bd = document.createElement("span"); bd.className = "badge"; bd.textContent = S.badge;
+    top.appendChild(h3); top.appendChild(bd);
+    body.appendChild(top);
+
+    var meta = document.createElement("p");
+    meta.className = "legmeta";
+    meta.textContent = [S.elev, S.travel].filter(Boolean).join(" · ");
+    body.appendChild(meta);
+
+    var why = document.createElement("p");
+    why.className = "legwhy"; why.textContent = S.why;
+    body.appendChild(why);
+
+    var ctl = document.createElement("div");
+    ctl.className = "controls";
+
+    var step = document.createElement("div");
+    step.className = "step";
+    var minus = document.createElement("button");
+    minus.type = "button"; minus.textContent = "–";
+    minus.setAttribute("aria-label", "One night fewer in " + S.name);
+    minus.disabled = it.nights <= 1;
+    minus.onclick = function(){ it.nights = Math.max(1, it.nights - 1); commit(); };
+    var n = document.createElement("span");
+    n.className = "n";
+    n.textContent = it.nights + (it.nights === 1 ? " night" : " nights");
+    var plus = document.createElement("button");
+    plus.type = "button"; plus.textContent = "+";
+    plus.setAttribute("aria-label", "One night more in " + S.name);
+    plus.disabled = it.nights >= 30;
+    plus.onclick = function(){ it.nights = Math.min(30, it.nights + 1); commit(); };
+    step.appendChild(minus); step.appendChild(n); step.appendChild(plus);
+    ctl.appendChild(step);
+
+    var up = document.createElement("button");
+    up.type = "button"; up.className = "mini"; up.textContent = "Move up";
+    up.disabled = i === 0;
+    up.onclick = function(){ swap(i, i - 1); };
+    var dn = document.createElement("button");
+    dn.type = "button"; dn.className = "mini"; dn.textContent = "Move down";
+    dn.disabled = i === state.items.length - 1;
+    dn.onclick = function(){ swap(i, i + 1); };
+    var ed = document.createElement("button");
+    ed.type = "button"; ed.className = "mini";
+    ed.textContent = editing === it.id ? "Done editing" : "Edit stop";
+    ed.onclick = function(){
+      editing = editing === it.id ? null : it.id; commit();
+    };
+    var rm = document.createElement("button");
+    rm.type = "button"; rm.className = "mini drop"; rm.textContent = "Remove";
+    rm.onclick = function(){
+      if (editing === it.id) editing = null;
+      state.items.splice(i, 1); commit();
+    };
+    ctl.appendChild(up); ctl.appendChild(dn); ctl.appendChild(ed); ctl.appendChild(rm);
+    body.appendChild(ctl);
+
+    if (editing === it.id){
+      body.appendChild(editPanel(it.id, {h3:h3, bd:bd, meta:meta, why:why, leg:leg}));
+    }
+
+    var ta = document.createElement("textarea");
+    ta.value = it.note || "";
+    ta.placeholder = "Notes — lodge, guide, flight number, what to book…";
+    ta.setAttribute("aria-label", "Notes for " + S.name);
+    ta.addEventListener("input", function(){ it.note = ta.value; save(); });
+    ta.addEventListener("blur", function(){ commit(); });
+    body.appendChild(ta);
+
+    leg.appendChild(body);
+    legs.appendChild(leg);
+  });
+
+  renderMeter();
+  renderChecks(cursor);
+  renderCatalog();
+  renderVersions();
+  renderNotices();
+}
+
+function renderMeter(){
+  var planned = plannedNights(), budget = tripNights();
+  document.getElementById("mNights").textContent = planned;
+  document.getElementById("mStops").textContent = state.items.length;
+
+  var track = document.getElementById("track");
+  track.textContent = "";
+  var span = Math.max(planned, budget, 1);
+  state.items.forEach(function(it){
+    var S = resolve(it.id); if (!S) return;
+    var seg = document.createElement("i");
+    seg.style.width = (it.nights / span * 100) + "%";
+    seg.style.setProperty("--band", "var(--" + S.band + ")");
+    seg.title = S.name + " · " + it.nights + "n";
+    track.appendChild(seg);
+  });
+
+  var bal = document.getElementById("mBal"), diff = planned - budget;
+  bal.className = "bal " + (diff === 0 ? "ok" : diff > 0 ? "over" : "under");
+  bal.textContent = diff === 0
+    ? "Fits the " + budget + " nights exactly"
+    : diff > 0
+      ? Math.abs(diff) + (Math.abs(diff) === 1 ? " night" : " nights") + " over — trim somewhere"
+      : Math.abs(diff) + (Math.abs(diff) === 1 ? " night" : " nights") + " spare";
+}
+
+function has(tag){
+  return state.items.some(function(it){
+    var S = resolve(it.id); return S && S.tags.indexOf(tag) > -1;
+  });
+}
+function idx(id){
+  for (var i = 0; i < state.items.length; i++) if (state.items[i].id === id) return i;
+  return -1;
+}
+
+function renderChecks(endCursor){
+  var out = [], planned = plannedNights(), budget = tripNights();
+
+  if (planned !== budget){
+    out.push(["bad","Nights",
+      "The plan runs to <b>" + planned + " nights</b> but the trip is <b>" + budget + "</b>."
+      + (endCursor ? " Last stop currently ends " + fmt(endCursor) + "." : "")]);
+  }
+
+  if (!has("macaws")){
+    out.push(["bad","Macaws",
+      "No clay lick in this plan. Macaws and parrots were the priority, and there is no substitute "
+      + "for the Amazon — <b>Tambopata</b> is a 45-minute flight from Cusco and needs three nights."]);
+  }
+
+  var iC = idx("cusco"), iA = idx("arequipa"), iV = idx("valley"), iP = idx("puno");
+  var acclim = [iA, iV, iP].some(function(i){ return i > -1 && i < iC; });
+  if (iC > -1 && !acclim){
+    out.push(["warn","Altitude",
+      "Cusco sits at <b>3,400 m</b> with nothing lower before it. Coming straight from sea level and "
+      + "then birding at 4,200 m on Abra Málaga is rough — put Arequipa or the Sacred Valley first."]);
+  }
+
+  state.items.forEach(function(it){
+    var S = resolve(it.id);
+    if (S && it.nights < S.min){
+      out.push(["warn", S.name.split(" ")[0],
+        "<b>" + S.name + "</b> at " + it.nights + (it.nights === 1 ? " night" : " nights")
+        + " is short. " + S.min + " is the minimum that makes the travel worth it."]);
+    }
+  });
+
+  var travelDays = state.items.filter(function(it){
+    var S = resolve(it.id); return S && S.tags.indexOf("travel-day") > -1;
+  });
+  if (travelDays.length){
+    out.push(["warn","Transit",
+      travelDays.map(function(it){ return "<b>" + resolve(it.id).name + "</b>"; }).join(" and ")
+      + " needs two flights via Lima. Budget a whole day each way and do not count it as beach time."]);
+  }
+
+  if (has("rain-risk")){
+    out.push(["warn","Weather",
+      "November is the turn of the wet season. Keep a buffer day after anything on the east slope, "
+      + "and never schedule a flight for the morning straight after coming off a mountain road."]);
+  }
+
+  var coldOnly = has("cold-water") && idx("mancora") === -1;
+  if (coldOnly){
+    out.push(["warn","Water",
+      "The only coast in this plan is on the Humboldt Current — water around <b>17°C</b> and "
+      + "often overcast. Fine for seabirds, not for swimming. The north coast is the warm one."]);
+  }
+
+  if (!out.length){
+    out.push(["ok","Clear","Nights balance, altitude sequence is sane, and the plan has a clay lick in it."]);
+  }
+
+  var box = document.getElementById("checks");
+  box.textContent = "";
+  out.forEach(function(c){
+    var d = document.createElement("div");
+    d.className = "check " + c[0];
+    var m = document.createElement("span"); m.className = "mark"; m.textContent = c[1];
+    var t = document.createElement("span"); t.innerHTML = c[2];
+    d.appendChild(m); d.appendChild(t);
+    box.appendChild(d);
+  });
+}
+
+function customIds(){
+  return Object.keys(state.defs || {}).filter(isCustom);
+}
+
+function catRow(id){
+  var S = resolve(id), inPlan = idx(id) > -1;
+  var o = document.createElement("div"); o.className = "opt";
+  var nm = document.createElement("span"); nm.className = "nm"; nm.textContent = S.name;
+  if (isEdited(id)){
+    var e = document.createElement("span"); e.className = "edited"; e.textContent = "edited";
+    nm.appendChild(document.createTextNode(" ")); nm.appendChild(e);
+  }
+  var mt = document.createElement("p"); mt.className = "mt";
+  mt.textContent = [S.elev, S.min + "n min", S.travel].filter(Boolean).join(" · ");
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "add" + (inPlan ? " in" : "");
+  b.textContent = inPlan ? "Added" : "Add";
+  b.disabled = inPlan;
+  b.onclick = function(){ state.items.push({id:id, nights:S.min, note:""}); commit(); };
+  o.appendChild(nm); o.appendChild(b); o.appendChild(mt);
+  return o;
+}
+
+function renderCatalog(){
+  var cat = document.getElementById("catalog");
+  cat.textContent = "";
+
+  GROUPS.forEach(function(g){
+    var ids = Object.keys(STOPS).filter(function(k){ return STOPS[k].region === g; });
+    if (!ids.length) return;
+    var wrap = document.createElement("div");
+    wrap.className = "catgroup";
+    var lab = document.createElement("span"); lab.className = "lab"; lab.textContent = g;
+    wrap.appendChild(lab);
+    var grid = document.createElement("div"); grid.className = "cat";
+    ids.forEach(function(id){ grid.appendChild(catRow(id)); });
+    wrap.appendChild(grid);
+    cat.appendChild(wrap);
+  });
+
+  var mine = customIds();
+  if (mine.length){
+    var w = document.createElement("div");
+    w.className = "catgroup";
+    var l = document.createElement("span"); l.className = "lab"; l.textContent = "Your own stops";
+    w.appendChild(l);
+    var g2 = document.createElement("div"); g2.className = "cat";
+    mine.forEach(function(id){ g2.appendChild(catRow(id)); });
+    w.appendChild(g2);
+    cat.appendChild(w);
+  }
+
+  /* create-your-own */
+  var mk = document.createElement("div");
+  mk.className = "catgroup make";
+  var ml = document.createElement("span"); ml.className = "lab";
+  ml.textContent = "Somewhere else";
+  mk.appendChild(ml);
+  var p = document.createElement("p"); p.className = "sub";
+  p.style.margin = "4px 0 12px";
+  p.textContent = "Add anywhere you like — it goes straight into the itinerary, and you can fill "
+    + "in the details with Edit stop.";
+  mk.appendChild(p);
+
+  var form = document.createElement("form");
+  form.className = "mkform";
+  var name = document.createElement("input");
+  name.type = "text"; name.placeholder = "Name of the place"; name.required = true;
+  name.setAttribute("aria-label", "Name of the new stop");
+  var nights = document.createElement("input");
+  nights.type = "number"; nights.min = "1"; nights.max = "30"; nights.value = "2";
+  nights.setAttribute("aria-label", "Nights");
+  var kind = document.createElement("select");
+  kind.setAttribute("aria-label", "Kind of place");
+  KINDS.forEach(function(k){
+    var o = document.createElement("option"); o.value = k.band; o.textContent = k.label;
+    kind.appendChild(o);
+  });
+  var go = document.createElement("button");
+  go.type = "submit"; go.className = "add"; go.textContent = "Add stop";
+
+  form.addEventListener("submit", function(ev){
+    ev.preventDefault();
+    var nm = name.value.trim();
+    if (!nm) { name.focus(); return; }
+    var n = parseInt(nights.value, 10); if (!(n >= 1 && n <= 30)) n = 2;
+    var id = newId();
+    if (!state.defs) state.defs = {};
+    state.defs[id] = {
+      name:nm, badge:"Stop", band:kind.value, region:"Your own stops",
+      elev:"", travel:"", why:"", min:1, tags:[]
+    };
+    state.items.push({id:id, nights:n, note:""});
+    editing = id;
+    name.value = "";
+    commit();
+    var t = document.getElementById("legs").lastChild;
+    if (t && t.scrollIntoView) t.scrollIntoView({block:"center", behavior:"smooth"});
+  });
+
+  form.appendChild(name); form.appendChild(nights); form.appendChild(kind); form.appendChild(go);
+  mk.appendChild(form);
+  cat.appendChild(mk);
+}
+
+function swap(a, b){
+  var t = state.items[a]; state.items[a] = state.items[b]; state.items[b] = t; commit();
+}
+function commit(){ save(); render(); }
+
+/* ---------- wiring ---------- */
+document.getElementById("dStart").addEventListener("change", function(e){
+  state.start = e.target.value; commit();
+});
+document.getElementById("dEnd").addEventListener("change", function(e){
+  state.end = e.target.value; commit();
+});
+document.getElementById("resetPlan").addEventListener("click", function(){
+  var keep = {};
+  customIds().forEach(function(id){ keep[id] = state.defs[id]; });
+  stash("your own version");
+  state = asWorking(publishedSeed);
+  state.defs = Object.assign({}, state.defs || {}, keep);
+  normaliseState();
+  markSeen();
+  editing = null;
+  syncDateInputs();
+  commit();
+  flash("Back to the published plan — undo is available");
+});
+
+document.getElementById("mkLink").addEventListener("click", function(){
+  var url = planLink();
+  var box = document.getElementById("linkBox");
+  box.hidden = false; box.value = url; box.focus(); box.select();
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(
+      function(){ flash("Copied — open it in any browser"); },
+      function(){ flash("Copy the link below"); }
+    );
+  } else { flash("Copy the link below"); }
+});
+
+var saver = null;
+(async function(){
+  try {
+    saver = (typeof claude !== "undefined" && claude.use) ? await claude.use("downloads") : null;
+  } catch(e){ saver = null; }
+})();
+
+document.getElementById("dlPlan").addEventListener("click", function(){
+  var json = packed();
+  if (saver && saver.save){
+    saver.save({filename:"peru-plan.json", data:json}).then(
+      function(){ flash("Saved"); },
+      function(err){ if (!err || err.code !== "declined") flash("Couldn't save — use the link"); }
+    );
+    return;
+  }
+  var blob = new Blob([json], {type:"application/json"});
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "peru-plan.json";
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  flash("Saved");
+});
+
+document.getElementById("upBtn").addEventListener("click", function(){
+  document.getElementById("upPlan").click();
+});
+document.getElementById("upPlan").addEventListener("change", function(e){
+  var f = e.target.files && e.target.files[0];
+  if (!f) return;
+  var r = new FileReader();
+  r.onload = function(){
+    try {
+      var incoming = JSON.parse(r.result);
+      stash("your version before loading the file");
+      if (adopt(incoming)){
+        editing = null; syncDateInputs(); commit(); flash("Plan loaded — undo is available");
+      } else { flash("That file isn't a plan"); }
+    } catch(err){ flash("That file isn't a plan"); }
+  };
+  r.readAsText(f);
+  e.target.value = "";
+});
+
+/* ---------- publishing ---------- */
+var LS_KEY = LS + ":editkey";
+
+function pubFlash(msg){
+  var el = document.getElementById("pubMsg");
+  if (!el) return;
+  el.textContent = msg;
+  setTimeout(function(){ if (el.textContent === msg) el.textContent = ""; }, 5000);
+}
+
+function refreshKeyUi(){
+  document.getElementById("pubForget").hidden = !lsGet(LS_KEY);
+}
+
+document.getElementById("pubToggle").addEventListener("click", function(){
+  openOrSaveShared();
+});
+
+document.getElementById("pubForget").addEventListener("click", function(){
+  lsDel(LS_KEY);
+  document.getElementById("pubKey").value = "";
+  refreshKeyUi();
+  pubFlash("Edit key removed from this browser");
+});
+document.getElementById("pubCancel").addEventListener("click", function(){
+  document.getElementById("pubForm").hidden = true;
+});
+
+async function openOrSaveShared(){
+  var stored = lsGet(LS_KEY) || "";
+  if (!stored){
+    var f = document.getElementById("pubForm");
+    f.hidden = false;
+    document.getElementById("pubKey").value = "";
+    document.getElementById("pubKey").focus();
+    pubFlash("Enter your edit key once to save this shared plan");
+    return;
+  }
+  pubFlash("Saving for everyone…");
+  try {
+    var v = await publishPlan("", stored);
+    refreshKeyUi();
+    render();
+    pubFlash("Saved for everyone" + (v.by ? " as " + v.by : ""));
+  } catch(e){
+    if (e.message === "stale_plan"){
+      pubFlash("Someone else saved a newer version. Load latest before saving again.");
+    } else if (e.message === "bad_key"){
+      lsDel(LS_KEY);
+      refreshKeyUi();
+      document.getElementById("pubForm").hidden = false;
+      document.getElementById("pubKey").value = "";
+      document.getElementById("pubKey").focus();
+      pubFlash("Edit key rejected — enter the current key");
+    } else {
+      pubFlash("Save failed — your draft is still safe in this browser");
+    }
+  }
+}
+
+document.getElementById("pubForm").addEventListener("submit", async function(ev){
+  ev.preventDefault();
+  var label = document.getElementById("pubLabel").value.trim();
+  var key = document.getElementById("pubKey").value;
+  pubFlash("Saving for everyone…");
+  try {
+    var v = await publishPlan(label, key);
+    lsSet(LS_KEY, key);
+    document.getElementById("pubForm").hidden = true;
+    document.getElementById("pubLabel").value = "";
+    refreshKeyUi();
+    render();
+    pubFlash("Saved for everyone" + (v.by ? " as " + v.by : ""));
+  } catch(e){
+    if (e.message === "bad_key"){
+      /* the key may have been rotated — drop the stored one so the next
+         attempt starts from a clean field */
+      lsDel(LS_KEY);
+      refreshKeyUi();
+      document.getElementById("pubKey").value = "";
+      document.getElementById("pubKey").focus();
+      pubFlash("Key rejected — it may have been rotated. Enter the current one.");
+    } else if (e.message === "stale_plan"){
+      pubFlash("Someone else saved a newer version. Load latest, review it, then save again.");
+    } else if (e.message === "http_503"){
+      pubFlash("No edit keys configured on the server yet");
+    } else {
+      pubFlash("Save failed — " + e.message);
+    }
+  }
+});
+
+async function recheck(quiet){
+  var before = loadedSharedUpdated;
+  await loadPublishedPlan();
+  if (fetchState === "ok"){
+    stash("your draft before loading latest");
+    state = asWorking(publishedSeed);
+    normaliseState();
+    markSeen();
+    saveLocal();
+    syncDateInputs();
+  }
+  render();
+  if (quiet) return;
+  pubFlash(loadedSharedUpdated && loadedSharedUpdated !== before
+    ? "Loaded the latest shared plan" : "You already had the latest shared plan");
+}
+document.getElementById("pubCheck").addEventListener("click", function(){ recheck(false); });
+document.addEventListener("visibilitychange", function(){
+  if (!document.hidden && canPublish) recheck(true);
+});
+
+async function init(){
+  await loadPublishedPlan();
+  document.getElementById("pubRow").hidden = !canPublish;
+  refreshKeyUi();
+
+  var fromLink = readHash();
+  if (!fromLink){
+    if (fetchState === "ok"){
+      state = asWorking(publishedSeed);
+      normaliseState();
+      markSeen();
+      saveLocal();
+    } else if (hasLocal()){
+      loadLocal();
+    } else {
+      state = clone(FALLBACK_SEED);
+      normaliseState();
+    }
+  }
+
+  syncDateInputs();
+  render();
+  setSaveLine(fromLink
+    ? "Loaded from a link. Press Save changes for everyone to make it shared."
+    : canPublish
+      ? "This page loads the shared Blob plan. Edit freely, then press Save changes for everyone. Local storage is only a draft backup if a save fails."
+      : "Shared saving is unavailable here, so this browser is using the local/fallback copy.");
+}
+
+init();
+
+})();
+</script>
+
+</body>
+</html>
