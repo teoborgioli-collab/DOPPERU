@@ -32,6 +32,23 @@ in the wrong place or `package.json` is missing.
 The page itself prints its build at the bottom — handy for confirming a deploy
 actually landed.
 
+## What is in a stop
+
+Each stop is a panel, coloured down the left edge by elevation.
+
+- **Vibe** — the italic line under the name. Free text: *"birding, altitude
+  training, good food"*. Click it and type; it saves with the plan.
+- **Activities** — add anything to do, optionally pinned to **Day 1**, **Day 2**
+  and so on, or left as **Any day**. Each can carry a link (an eBird hotspot, a
+  lodge, a booking page); type it without `https://` and it is added for you.
+  Entries group under day headings, so a four-night stop reads as a small day
+  plan.
+- **Notes** — the free box at the bottom for anything else.
+
+Day numbers count from the stop's arrival date. If you change the nights, the
+day picker follows; entries pinned to a day beyond the new length stay put
+rather than being thrown away.
+
 ## Using it
 
 | Button | What it does |

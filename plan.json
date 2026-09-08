@@ -1,0 +1,13 @@
+{
+  "updated": "2026-09-07T14:00:00Z",
+  "label": "Starting plan — Arequipa, Cusco, north coast",
+  "start": "2026-11-09",
+  "end": "2026-11-23",
+  "defs": {},
+  "items": [
+    {"id": "lima", "nights": 1, "note": ""},
+    {"id": "arequipa", "nights": 4, "note": "Salinas one day, Mejía the next."},
+    {"id": "cusco", "nights": 5, "note": ""},
+    {"id": "mancora", "nights": 4, "note": ""}
+  ]
+}
