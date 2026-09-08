@@ -199,11 +199,13 @@ h2{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:1.6rem;
   background-position:calc(100% - 11px) 52%, calc(100% - 7px) 52%;
   background-size:4px 4px,4px 4px;background-repeat:no-repeat}
 
+.aname{flex:1 1 240px;min-width:150px;font-size:14.5px;font-weight:600;color:var(--ink)}
 .at{flex:1 1 240px;min-width:150px;font-family:"Archivo",sans-serif;font-size:14.5px;
-  color:var(--ink);background:none;border:none;padding:3px 0;
-  border-bottom:1px dashed transparent}
-.at:hover{border-bottom-color:var(--rule)}
-.at:focus{outline:none;border-bottom-color:var(--link)}
+  font-weight:600;color:var(--ink);background:var(--paper);
+  border:1px solid var(--link);border-radius:4px;padding:5px 8px}
+.at:focus{outline:none}
+.aedit{margin-top:7px}
+.aedit .au{width:100%;flex:none}
 
 .st{font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;font-size:10px;
   text-transform:uppercase;letter-spacing:.11em;cursor:pointer;flex:none;
@@ -229,13 +231,12 @@ h2{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:1.6rem;
 .au,.an{font-family:"Archivo",sans-serif;font-size:12.5px;color:var(--ink-soft);
   background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:5px 8px}
 .au{flex:0 1 240px;min-width:130px}
-.an{flex:1 1 260px;min-width:150px}
+.an{flex:1 1 100%}
 .au::placeholder,.an::placeholder{color:var(--muted)}
 .au:hover,.an:hover{border-color:var(--muted)}
 .au:focus,.an:focus{outline:none;border-color:var(--link)}
 
-/* the title is the one thing that reads as text until you touch it */
-.at{border-bottom:1px dashed var(--rule-soft)}
+
 
 .actadd{display:flex;flex-wrap:wrap;gap:7px;align-items:center;padding:12px 0 2px;
   border-top:1px solid var(--rule)}
@@ -527,7 +528,7 @@ var FALLBACK_SEED = {
 
 /* The API is tried first; a plain static host without it falls back to the
    file next to this page. */
-var BUILD = "2026-09-08-final9";   /* shown in the footer — check it after deploying */
+var BUILD = "2026-09-08-final10";   /* shown in the footer — check it after deploying */
 var PLAN_API = "/api/plan";
 var PLAN_FILE = "plan.json";
 var canPublish = false;
@@ -600,6 +601,7 @@ var serverRev = 0;            // revision this screen was loaded from
 var dirty = false;            // unsaved edits on this screen
 var history_ = [];            // recent saves from the server
 var conflict = null;          // the server version that beat us to it
+var editAct = null;           // the one activity whose link is open for editing
 var saveError = null;         // last save failure, shown until it is fixed
 var openMode = false;         // server accepts saves without a key
 var LS_NAME = LS + ":name";
@@ -1059,11 +1061,18 @@ function activityBlock(it, S){
 
     head.appendChild(daySelect(a.d, function(v){ a.d = v; commit(); }, "Day for " + a.t));
 
-    var t = document.createElement("input");
-    t.type = "text"; t.className = "at"; t.value = a.t; t.maxLength = 120;
-    t.setAttribute("aria-label", "Activity");
-    t.addEventListener("input", function(){ a.t = t.value; save(); renderStatus(); });
-    head.appendChild(t);
+    /* the name reads as text until you press Edit */
+    if (editAct === a){
+      var t = document.createElement("input");
+      t.type = "text"; t.className = "at"; t.value = a.t; t.maxLength = 120;
+      t.setAttribute("aria-label", "Activity name");
+      t.addEventListener("input", function(){ a.t = t.value; save(); renderStatus(); });
+      head.appendChild(t);
+    } else {
+      var name = document.createElement("strong");
+      name.className = "aname"; name.textContent = a.t;
+      head.appendChild(name);
+    }
 
     head.appendChild(statusSelect(a.s, function(v){ a.s = v; commit(); }, "Status of " + a.t));
 
@@ -1074,36 +1083,49 @@ function activityBlock(it, S){
       head.appendChild(link);
     }
 
+    var ed = document.createElement("button");
+    ed.type = "button"; ed.className = "mini";
+    ed.textContent = editAct === a ? "Done" : "Edit";
+    ed.setAttribute("aria-label", (editAct === a ? "Finish editing " : "Edit ") + a.t);
+    ed.onclick = function(){ editAct = (editAct === a) ? null : a; commit(); };
+    head.appendChild(ed);
+
     var x = document.createElement("button");
     x.type = "button"; x.className = "mini drop x"; x.textContent = "Remove";
     x.setAttribute("aria-label", "Remove " + a.t);
-    x.onclick = function(){ it.acts.splice(entry.i, 1); commit(); };
+    x.onclick = function(){
+      if (editAct === a) editAct = null;
+      it.acts.splice(entry.i, 1); commit();
+    };
     head.appendChild(x);
     row.appendChild(head);
 
+    /* the link only appears while editing — otherwise the row stays quiet */
+    if (editAct === a){
+      var erow = document.createElement("div");
+      erow.className = "aedit";
+      var u = document.createElement("input");
+      u.type = "text"; u.className = "au"; u.value = a.u || ""; u.maxLength = 500;
+      u.placeholder = "link — paste or type, https:// gets added";
+      u.setAttribute("aria-label", "Link for " + a.t);
+      u.addEventListener("input", function(){ a.u = u.value.trim(); save(); renderStatus(); });
+      u.addEventListener("blur", function(){
+        if (a.u && !/^https?:\/\//i.test(a.u)){ a.u = "https://" + a.u; commit(); }
+      });
+      erow.appendChild(u);
+      row.appendChild(erow);
+    }
+
     var sub = document.createElement("div");
     sub.className = "asub";
-
-    var u = document.createElement("input");
-    u.type = "text"; u.className = "au"; u.value = a.u || ""; u.maxLength = 500;
-    u.placeholder = "🔗  add a link";
-    u.setAttribute("aria-label", "Link for " + a.t);
-    u.addEventListener("input", function(){ a.u = u.value.trim(); save(); renderStatus(); });
-    u.addEventListener("blur", function(){
-      if (a.u && !/^https?:\/\//i.test(a.u)){ a.u = "https://" + a.u; }
-      commit();
-    });
-    sub.appendChild(u);
-
     var n = document.createElement("input");
     n.type = "text"; n.className = "an"; n.value = a.n || ""; n.maxLength = 300;
     n.placeholder = "note — time, price, who to ask…";
-    n.title = "Free note for this activity";
     n.setAttribute("aria-label", "Note for " + a.t);
     n.addEventListener("input", function(){ a.n = n.value; save(); renderStatus(); });
     sub.appendChild(n);
-
     row.appendChild(sub);
+
     wrap.appendChild(row);
   });
 

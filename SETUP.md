@@ -39,16 +39,12 @@ it can be changed in place — click a piece of text and type.
 
 - **Subtitle** — an optional short line beside the stop name, e.g. *"Arrive,
   eat well, settle in."* Set it under **Edit stop**. Left blank, nothing shows.
-- **Activities** — one row each. Every field stays editable afterwards:
-  - the **day pill** (Any day, Day 1, Day 2 …) — change it and the row moves
-  - the **title**
-  - the **status** — *Unsure*, *Optional*, *To book*, *Booked*, or none.
-    Settable when adding and changeable later.
-  - the **link** and the **note**, in the two boxes on the line underneath.
-    Type a link without `https://` and it is completed when you click away.
-
-  The day and status pills are dropdowns — click them. Nothing here opens a
-  dialog: the row you see is the row you edit.
+- **Activities** — one row each, the name in bold. Straight from the row you can
+  change the **day pill**, the **status pill**, and the **note** underneath, and
+  **open ↗** follows the link.
+  Press **Edit** on a row to rename it or set its link, then **Done**. The link
+  box only shows while editing, so a finished row stays quiet. Type a link
+  without `https://` and it is completed when you click away.
 
   Rows sort by day, with *Any day* last. A day beyond the stop's length is
   marked ⚠ rather than thrown away, so shortening a stay never loses anything.
