@@ -16,6 +16,7 @@ function json(data, status = 200) {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, X-Edit-Key',
+      'X-Plan-Open': isOpen() ? '1' : '0',
     },
   });
 }
@@ -31,7 +32,7 @@ function editors() {
   });
   const single = (process.env.PLAN_EDIT_KEY || '').trim();
   if (single) out.push({ name: 'editor', key: single });
-  return out.filter((e) => e.name && e.key.length >= 8);
+  return out.filter((e) => e.name && e.key.length >= 4);
 }
 
 function safeEq(a, b) {
@@ -44,6 +45,22 @@ function safeEq(a, b) {
 function whoIs(given) {
   for (const e of editors()) if (safeEq(e.key, given)) return e.name;
   return null;
+}
+
+/* Saving needs no key by default: anyone with the address can save, which is
+   what a small shared plan usually wants. Set PLAN_EDIT_KEYS to lock it down;
+   PLAN_OPEN=true forces open even when keys exist. Either way nothing is lost
+   for good — every save keeps the previous ten versions. */
+function isOpen() {
+  const forced = (process.env.PLAN_OPEN || '').trim().toLowerCase();
+  if (forced === 'true' || forced === '1' || forced === 'yes') return true;
+  return editors().length === 0;
+}
+
+function cleanName(n) {
+  return typeof n === 'string'
+    ? n.replace(/[^\p{L}\p{N} _.-]/gu, '').trim().slice(0, 24)
+    : '';
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -100,18 +117,40 @@ export default {
     if (request.method === 'OPTIONS') return json({ ok: true });
 
     if (request.method === 'GET') {
+      /* /api/plan?diag=1 — what the server actually sees. Names and lengths
+         only, never the keys themselves. */
+      if (new URL(request.url).searchParams.get('diag')) {
+        const list = editors();
+        return json({
+          build: '2026-09-08-final2',
+          openMode: isOpen(),
+          PLAN_EDIT_KEYS_set: !!(process.env.PLAN_EDIT_KEYS || '').trim(),
+          PLAN_EDIT_KEY_set: !!(process.env.PLAN_EDIT_KEY || '').trim(),
+          BLOB_TOKEN_set: !!(process.env.BLOB_READ_WRITE_TOKEN || '').trim(),
+          usableEditors: list.length,
+          names: list.map((e) => e.name),
+          keyLengths: list.map((e) => e.key.length),
+          hint: isOpen()
+            ? 'Open mode: no key needed to save. Set PLAN_EDIT_KEYS (name:key pairs, key at least 4 characters) and redeploy if you want it locked.'
+            : 'Keys are on. If a save is rejected, the key typed into the page does not match one of the names above.',
+        });
+      }
+
       const plan = await readPlan();
       return plan ? json(plan) : json({ error: 'no_plan_yet' }, 404);
     }
 
     if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
 
-    if (!editors().length) return json({ error: 'not_configured' }, 503);
+    const open = isOpen();
 
-    const who = whoIs(request.headers.get('x-edit-key') || '');
-    if (!who) {
-      await sleep(600); // friction against guessing
-      return json({ error: 'bad_key' }, 401);
+    let who = null;
+    if (!open) {
+      who = whoIs(request.headers.get('x-edit-key') || '');
+      if (!who) {
+        await sleep(600); // friction against guessing
+        return json({ error: 'bad_key' }, 401);
+      }
     }
 
     let body;
@@ -121,6 +160,8 @@ export default {
       return json({ error: 'bad_json' }, 400);
     }
     if (!body || !Array.isArray(body.items)) return json({ error: 'bad_plan' }, 400);
+
+    if (open) who = cleanName(body.by) || 'someone';
 
     const current = await readPlan();
     const currentRev = current ? current.rev || 0 : 0;

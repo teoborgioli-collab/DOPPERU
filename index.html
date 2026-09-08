@@ -85,45 +85,35 @@ h1{font-family:"Newsreader",Georgia,serif;font-weight:500;
 .dates input{font-family:"Archivo",sans-serif;font-size:14px;padding:5px 8px;
   background:var(--surface);color:var(--ink);border:1px solid var(--rule);border-radius:3px}
 
-/* share row */
-.share{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;padding:14px 0;
+/* toolbar */
+.toolbar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;
+  padding:16px 0;border-bottom:1px solid var(--rule)}
+.btn{font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;font-size:11.5px;
+  text-transform:uppercase;letter-spacing:.11em;cursor:pointer;padding:8px 15px;
+  border:1px solid var(--rule);border-radius:4px;background:var(--surface);color:var(--ink-soft)}
+.btn:hover{border-color:var(--muted);color:var(--ink)}
+.btn.primary{border-color:var(--link);color:var(--link)}
+.btn.primary:disabled{border-color:var(--rule);color:var(--muted);cursor:default}
+.btn.primary:not(:disabled)::before{content:"";display:inline-block;width:6px;height:6px;
+  border-radius:50%;background:var(--warn);margin-right:8px;vertical-align:1px}
+.status{color:var(--muted);font-size:13.5px;margin-left:auto;
+  font-variant-numeric:tabular-nums;text-align:right}
+.status b{color:var(--ink);font-weight:500}
+.namefld{display:inline-flex;align-items:center;gap:8px}
+.namefld input{font-family:"Archivo",sans-serif;font-size:14px;color:var(--ink);width:120px;
+  background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:7px 9px}
+
+.moremenu{display:flex;flex-wrap:wrap;gap:10px 20px;padding:12px 0;
   border-bottom:1px solid var(--rule)}
-.share .lab{margin-right:2px}
-.shareMsg{font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;font-size:11.5px;
-  text-transform:uppercase;letter-spacing:.11em;color:var(--ok)}
-.linkbox{flex:1 1 100%;font-family:"Archivo",sans-serif;font-size:12.5px;color:var(--ink-soft);
-  background:var(--sunk);border:1px solid var(--rule);border-radius:4px;padding:7px 10px}
-.pubform{display:flex;flex-wrap:wrap;gap:9px;align-items:center;flex:1 1 100%;margin-top:4px}
-.pubform input{font-family:"Archivo",sans-serif;font-size:14px;color:var(--ink);
-  background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:7px 10px}
-.pubform input[type=text]{flex:1 1 260px;min-width:160px}
-.pubform input[type=password]{flex:0 1 150px}
-.pubform .add{background:none;border:1px solid var(--link);border-radius:4px;color:var(--link);
-  cursor:pointer;padding:8px 14px;font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;
-  font-size:11px;text-transform:uppercase;letter-spacing:.1em}
-.pubform .add:hover{background:var(--surface)}
-.mini.strong{color:var(--link)}
-.mini.strong:disabled{color:var(--muted)}
-.dot-dirty{display:inline-block;width:7px;height:7px;border-radius:50%;
-  background:var(--warn);margin-right:6px;vertical-align:1px}
-
-/* history */
-.hrow{display:grid;grid-template-columns:76px 1fr auto;gap:4px 16px;align-items:baseline;
-  padding:11px 0;border-bottom:1px solid var(--rule-soft)}
-.hrow:first-child{border-top:1px solid var(--rule)}
-.hrev{font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;font-size:11.5px;
-  text-transform:uppercase;letter-spacing:.11em;color:var(--muted);
-  font-variant-numeric:tabular-nums}
-.hmain{min-width:0}
-.hwhen{font-size:14.5px;font-variant-numeric:tabular-nums}
-.hnote{font-size:13px;color:var(--muted);overflow-wrap:anywhere}
-
-/* version strip */
-.versions{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
-  gap:14px 26px;padding:14px 0 16px;border-bottom:1px solid var(--rule)}
-.vcol{display:flex;flex-direction:column;gap:2px;min-width:0}
-.vval{font-size:14.5px;font-variant-numeric:tabular-nums}
-.vsub{font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
+.keyrow{display:flex;flex-wrap:wrap;gap:9px;align-items:center;padding:12px 0;
+  border-bottom:1px solid var(--rule)}
+.keyrow input{font-family:"Archivo",sans-serif;font-size:14px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:8px 10px}
+.keyrow input[type=text]{flex:1 1 260px;min-width:150px}
+.keyrow input[type=password]{flex:0 1 170px}
+.linkbox{width:100%;margin-top:10px;font-family:"Archivo",sans-serif;font-size:12.5px;
+  color:var(--ink-soft);background:var(--sunk);border:1px solid var(--rule);
+  border-radius:4px;padding:8px 10px}
 
 /* notices */
 .notice{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;
@@ -133,6 +123,17 @@ h1{font-family:"Newsreader",Georgia,serif;font-weight:500;
 .notice .ntext{flex:1 1 320px;min-width:0}
 .notice .nacts{display:flex;flex-wrap:wrap;gap:16px}
 .notice b{font-weight:600}
+
+/* history */
+.hrow{display:grid;grid-template-columns:70px 1fr auto;gap:4px 16px;align-items:baseline;
+  padding:11px 0;border-bottom:1px solid var(--rule-soft)}
+.hrow:first-child{border-top:1px solid var(--rule)}
+.hrev{font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;font-size:11.5px;
+  text-transform:uppercase;letter-spacing:.11em;color:var(--muted);
+  font-variant-numeric:tabular-nums}
+.hmain{min-width:0}
+.hwhen{font-size:14.5px;font-variant-numeric:tabular-nums}
+.hnote{font-size:13px;color:var(--muted);overflow-wrap:anywhere}
 
 /* section heads */
 h2{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:1.6rem;
@@ -252,40 +253,6 @@ textarea::placeholder{color:var(--muted)}
   .when{display:flex;gap:12px;align-items:baseline}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-
-/* Compact itinerary with a dedicated space for activities. */
-.leg{padding:20px;border:1px solid var(--rule);border-left:3px solid var(--band);border-radius:12px;background:var(--surface);grid-template-columns:88px minmax(0,1fr);gap:0 20px}
-.leg + .leg{margin-top:12px}
-.legtop{align-items:center;gap:8px 12px}
-.legtop h3{font-size:1.6rem;overflow-wrap:anywhere}
-.leg .badge{border:0;padding:2px 0;font-size:12px}
-.leg .controls{margin-top:12px;gap:12px}
-.leg .mini{font-family:inherit;font-size:14px;text-transform:none;letter-spacing:0;min-height:40px;padding:8px 12px;border-radius:6px}
-.leg .mini:hover{background:var(--sunk)}
-.leg .step{border-radius:8px;background:var(--paper)}
-.leg .step button{height:40px;width:38px}
-.leg .step .n{font-family:inherit;font-size:14px;text-transform:none;letter-spacing:0}
-.stop-details{margin-top:16px;border-top:1px solid var(--rule-soft);padding-top:12px}
-.stop-details>summary{cursor:pointer;color:var(--link);font-size:14px;padding:4px 0;min-height:32px}
-.stop-details[open]>summary{margin-bottom:14px}
-.stop-details .legmeta{font-size:14px;margin:0 0 8px}
-.stop-details .legwhy{font-size:16px;margin-bottom:18px}
-.activity-list{display:grid;gap:8px;margin:12px 0}
-.activity-row{display:flex;gap:12px;align-items:center;padding:10px 12px;background:var(--paper);border-radius:8px}
-.activity-row a,.activity-row span{flex:1;min-width:0;overflow-wrap:anywhere;font-size:16px;color:var(--ink)}
-.activity-row a{text-decoration-color:var(--link);text-underline-offset:4px}
-.activity-row .mini{flex:none}
-.activity-form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:10px;align-items:end;margin:12px 0 20px}
-.activity-form .fld{margin:0;min-width:0}
-.leg .fld .lab{font-family:inherit;font-size:14px;text-transform:none;letter-spacing:0}
-.leg .fld input,.leg .fld select,.leg .fld textarea{font-size:16px;padding:10px 12px;border-radius:7px}
-.activity-form button,.editor .erow button:first-child{background:var(--link);color:var(--surface);border:0;border-radius:7px;padding:11px 16px;min-height:44px;font-size:14px;cursor:pointer}
-.activity-heading{margin:16px 0 0;font-size:16px;font-weight:500}
-.activity-empty{color:var(--muted);font-size:14px;margin:8px 0}
-.editor{padding:18px;border:1px solid var(--rule);border-radius:9px}
-.stop-actions{display:flex;flex-wrap:wrap;gap:6px;border-top:1px solid var(--rule);margin-top:14px;padding-top:10px}
-.leg .when .day{font-size:18px}.leg .when .out{font-size:14px}
-@media(max-width:620px){.leg{padding:16px;grid-template-columns:minmax(0,1fr);gap:12px}.activity-form{grid-template-columns:minmax(0,1fr)}.activity-form button{justify-self:start}.egrid{grid-template-columns:minmax(0,1fr)}}
 </style>
 
 <div class="wrap">
@@ -309,52 +276,37 @@ textarea::placeholder{color:var(--muted)}
   <div class="dates">
     <label><span class="lab">Arrive</span><input type="date" id="dStart" value="2026-11-09"></label>
     <label><span class="lab">Depart</span><input type="date" id="dEnd" value="2026-11-23"></label>
-    <button class="mini" id="resetPlan" type="button">Reset to published plan</button>
   </div>
 
-  <div class="share">
-    <span class="lab">Take it with you</span>
-    <button class="mini" id="mkLink" type="button">Copy link with this plan</button>
-    <button class="mini" id="dlPlan" type="button">Save as file</button>
-    <button class="mini" id="upBtn" type="button">Load a file</button>
-    <input type="file" id="upPlan" accept=".json,application/json" hidden>
-    <span class="shareMsg" id="shareMsg"></span>
-    <input type="text" id="linkBox" class="linkbox" readonly hidden
-           aria-label="Link carrying this plan">
+  <div class="toolbar" id="toolbar" hidden>
+    <button class="btn primary" id="saveBtn" type="button">Save</button>
+    <button class="btn" id="shareBtn" type="button">Share link</button>
+    <button class="btn" id="reloadBtn" type="button">Reload</button>
+    <label class="namefld" id="nameFld" hidden>
+      <span class="lab">You</span>
+      <input type="text" id="pubName" placeholder="your name" maxlength="24">
+    </label>
+    <span class="status" id="status">Loading…</span>
+    <button class="mini" id="moreBtn" type="button" aria-expanded="false">More</button>
   </div>
 
-  <div class="share" id="pubRow" hidden>
-    <span class="lab">Shared plan</span>
-    <button class="mini strong" id="saveBtn" type="button">Save for everyone</button>
-    <button class="mini" id="pubToggle" type="button">Save with a note…</button>
-    <button class="mini" id="pubCheck" type="button">Reload from server</button>
+  <div class="moremenu" id="moreMenu" hidden>
+    <button class="mini" id="noteBtn" type="button">Save with a note…</button>
+    <button class="mini" id="resetPlan" type="button">Reset to starting plan</button>
+    <button class="mini" id="dlPlan" type="button">Download a copy</button>
+    <button class="mini" id="upBtn" type="button">Load from a file</button>
     <button class="mini drop" id="pubForget" type="button" hidden>Forget edit key</button>
-    <span class="shareMsg" id="pubMsg"></span>
-    <form class="pubform" id="pubForm" hidden>
-      <input type="text" id="pubLabel" placeholder="What changed? Everyone sees this line">
-      <input type="password" id="pubKey" placeholder="Edit key" autocomplete="current-password">
-      <button type="submit" class="add">Save</button>
-      <button type="button" class="mini" id="pubCancel">Cancel</button>
-    </form>
+    <input type="file" id="upPlan" accept=".json,application/json" hidden>
   </div>
 
-  <div class="versions">
-    <div class="vcol">
-      <span class="lab">On the server</span>
-      <span class="vval" id="vPub">—</span>
-      <span class="vsub" id="vPubSub"></span>
-    </div>
-    <div class="vcol">
-      <span class="lab">This screen</span>
-      <span class="vval" id="vMine">—</span>
-      <span class="vsub" id="vMineSub"></span>
-    </div>
-    <div class="vcol">
-      <span class="lab">Earlier saves</span>
-      <span class="vval" id="vBack">None yet</span>
-      <span class="vsub" id="vBackSub"></span>
-    </div>
-  </div>
+  <form class="keyrow" id="keyRow" hidden>
+    <input type="text" id="pubLabel" placeholder="What changed? (optional)">
+    <input type="password" id="pubKey" placeholder="Edit key" autocomplete="current-password" hidden>
+    <button type="submit" class="btn primary">Save</button>
+    <button type="button" class="mini" id="pubCancel">Cancel</button>
+  </form>
+
+  <input type="text" id="linkBox" class="linkbox" readonly hidden aria-label="Link to this plan">
 
   <div id="notices"></div>
 
@@ -383,6 +335,7 @@ textarea::placeholder{color:var(--muted)}
     and Cusco is the hub for Tambopata and the Manu Road. Anything marked as a travel day will
     swallow most of the daylight, so it is worth counting those separately from the nights.</p>
     <p class="saveline" id="saveline">Loading…</p>
+    <p class="saveline" id="buildline"></p>
   </footer>
 </div>
 
@@ -488,6 +441,7 @@ var FALLBACK_SEED = {
 
 /* The API is tried first; a plain static host without it falls back to the
    file next to this page. */
+var BUILD = "2026-09-08-final2";   /* shown in the footer — check it after deploying */
 var PLAN_API = "/api/plan";
 var PLAN_FILE = "plan.json";
 var canPublish = false;
@@ -495,7 +449,6 @@ var publishedSeed = clone(FALLBACK_SEED);
 var state = clone(FALLBACK_SEED);
 var LS = "peru-nov-2026-plan";
 var editing = null;
-var expandedStops = {};
 
 function clone(o){ return JSON.parse(JSON.stringify(o)); }
 
@@ -558,10 +511,11 @@ function plannedNights(){
 var LS_KEY = LS + ":editkey";
 var fetchState = "pending";   // ok | missing | error | pending
 var serverRev = 0;            // revision this screen was loaded from
-var editGeneration = 0;
 var dirty = false;            // unsaved edits on this screen
 var history_ = [];            // recent saves from the server
 var conflict = null;          // the server version that beat us to it
+var openMode = false;         // server accepts saves without a key
+var LS_NAME = LS + ":name";
 
 function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
 function lsSet(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
@@ -574,7 +528,7 @@ function normaliseState(){
 }
 
 /* every edit only marks the screen dirty — it is not stored anywhere yet */
-function save(){ editGeneration++; dirty = true; renderVersions(); }
+function save(){ dirty = true; }
 
 function usablePlan(v){
   if (!v || !Array.isArray(v.items)) return null;
@@ -595,6 +549,7 @@ function adoptServer(v){
 async function loadServer(){
   try {
     var res = await fetch(PLAN_API + "?t=" + Date.now(), {cache:"no-store"});
+    openMode = res.headers.get("x-plan-open") === "1";
     if (res.ok){
       var v = usablePlan(await res.json());
       if (v){ fetchState = "ok"; canPublish = true; return v; }
@@ -617,12 +572,12 @@ async function loadSeedFile(){
 }
 
 async function saveToServer(label, key, force){
-  var savingGeneration = editGeneration;
   var res = await fetch(PLAN_API, {
     method:"POST",
     headers:{"Content-Type":"application/json", "X-Edit-Key":key || ""},
     body: JSON.stringify({
       baseRev: serverRev, force: !!force, label: label || "",
+      by: openMode ? (lsGet(LS_NAME) || "") : undefined,
       start: state.start, end: state.end,
       items: state.items, defs: state.defs || {}
     })
@@ -640,9 +595,8 @@ async function saveToServer(label, key, force){
   publishedSeed = clone(v);
   serverRev = v.rev || 0;
   history_ = Array.isArray(v.history) ? v.history : [];
-  dirty = editGeneration !== savingGeneration;
+  dirty = false;
   conflict = null;
-  fetchState = "ok";
   return v;
 }
 
@@ -706,48 +660,53 @@ function flash(msg){
 }
 function readHash(){
   var h = location.hash || "";
+
+  /* An editor link carries the key. Take it, remember it, and strip it back
+     out of the address bar so it does not sit in screenshots or history. */
+  var k = h.match(/[#&]k=([^&]+)/);
+  if (k){
+    try { lsSet(LS_KEY, decodeURIComponent(k[1])); } catch(e){}
+    h = h.replace(/([#&])k=[^&]*/, "$1").replace(/^#&/, "#").replace(/^#$/, "");
+    try { history.replaceState(null, "", location.pathname + location.search + h); } catch(e){}
+  }
+
   if (h.indexOf("#p=") !== 0) return false;
   try { return adopt(JSON.parse(b64ToUtf8(h.slice(3)))); } catch(e){}
   return false;
 }
 
-/* ---------- version strip, notices, history ---------- */
-function renderVersions(){
-  var pub = document.getElementById("vPub"), pubSub = document.getElementById("vPubSub");
-  if (fetchState === "ok"){
-    pub.textContent = fmtStamp(publishedSeed.updated) || "saved";
-    pubSub.textContent = [
-      publishedSeed.rev ? "v" + publishedSeed.rev : "",
-      publishedSeed.by ? "by " + publishedSeed.by : "",
-      publishedSeed.label || ""
-    ].filter(Boolean).join(" · ");
-  } else if (fetchState === "missing"){
-    pub.textContent = "Nothing saved yet";
-    pubSub.textContent = "Press Save to make this the shared plan";
-  } else if (fetchState === "error"){
-    pub.textContent = "No server here";
-    pubSub.textContent = "This copy is local only";
-  } else {
-    pub.textContent = "…"; pubSub.textContent = "";
-  }
+function editorLink(){
+  var key = lsGet(LS_KEY) || "";
+  return location.origin + location.pathname + location.search
+       + (key ? "#k=" + encodeURIComponent(key) : "");
+}
 
-  var mine = document.getElementById("vMine"), mineSub = document.getElementById("vMineSub");
-  if (dirty){
-    mine.innerHTML = '<span class="dot-dirty"></span>Unsaved changes';
-    mineSub.textContent = canPublish
-      ? "Nobody else sees these until you save"
-      : "Nothing here can be saved — no server";
-  } else {
-    mine.textContent = "In sync";
-    mineSub.textContent = "Same as the server";
-  }
-
-  var vb = document.getElementById("vBack"), vbSub = document.getElementById("vBackSub");
-  vb.textContent = history_.length ? history_.length + (history_.length === 1 ? " version" : " versions") : "None yet";
-  vbSub.textContent = history_.length ? "Listed at the bottom of the page" : "";
-
+/* ---------- status line, notices, history ---------- */
+function renderStatus(){
+  var el = document.getElementById("status");
   var sb = document.getElementById("saveBtn");
+  var parts = [];
+
+  if (!canPublish){
+    parts.push("Read-only — no server on this host");
+  } else if (dirty){
+    parts.push("<b>Unsaved changes</b>");
+    if (publishedSeed.rev) parts.push("server has v" + publishedSeed.rev);
+  } else if (fetchState === "ok"){
+    parts.push("<b>Saved</b>");
+    parts.push("v" + (publishedSeed.rev || 1)
+      + (publishedSeed.by ? " by " + esc(publishedSeed.by) : "")
+      + " · " + fmtStamp(publishedSeed.updated));
+  } else {
+    parts.push("Nothing saved yet");
+  }
+  el.innerHTML = parts.join(" · ");
+
   if (sb) sb.disabled = !canPublish || !dirty;
+  var nf = document.getElementById("nameFld");
+  if (nf) nf.hidden = !canPublish || !openMode;
+  var fg = document.getElementById("pubForget");
+  if (fg) fg.hidden = openMode || !lsGet(LS_KEY);
 }
 
 function notice(kind, html, actions){
@@ -840,13 +799,12 @@ function field(labelText, node){
 }
 
 function editPanel(id, refs){
-  var S = resolve(id);
-  function definition(){ return defOf(id); }
+  var S = resolve(id), d = defOf(id);
   var panel = document.createElement("div");
   panel.className = "editor";
 
   function put(key, value){
-    definition()[key] = value;
+    d[key] = value;
     save();
     var R = resolve(id);
     refs.h3.textContent = R.name;
@@ -912,7 +870,7 @@ function editPanel(id, refs){
       var at = t.indexOf(f.tag);
       if (cb.checked && at === -1) t.push(f.tag);
       if (!cb.checked && at > -1) t.splice(at, 1);
-      definition().tags = t; save(); renderChecks(null); lab.classList.toggle("on", cb.checked);
+      d.tags = t; save(); renderChecks(null); lab.classList.toggle("on", cb.checked);
     });
     lab.classList.toggle("on", cb.checked);
     var sp = document.createElement("span"); sp.textContent = f.label;
@@ -926,7 +884,7 @@ function editPanel(id, refs){
   row.className = "erow";
   var done = document.createElement("button");
   done.type = "button"; done.className = "mini"; done.textContent = "Done";
-  done.onclick = function(){ editing = null; render(); };
+  done.onclick = function(){ editing = null; commit(); };
   row.appendChild(done);
 
   if (isEdited(id)){
@@ -989,11 +947,11 @@ function render(){
     var meta = document.createElement("p");
     meta.className = "legmeta";
     meta.textContent = [S.elev, S.travel].filter(Boolean).join(" · ");
-
+    body.appendChild(meta);
 
     var why = document.createElement("p");
     why.className = "legwhy"; why.textContent = S.why;
-
+    body.appendChild(why);
 
     var ctl = document.createElement("div");
     ctl.className = "controls";
@@ -1028,7 +986,7 @@ function render(){
     ed.type = "button"; ed.className = "mini";
     ed.textContent = editing === it.id ? "Done editing" : "Edit stop";
     ed.onclick = function(){
-      editing = editing === it.id ? null : it.id; render();
+      editing = editing === it.id ? null : it.id; commit();
     };
     var rm = document.createElement("button");
     rm.type = "button"; rm.className = "mini drop"; rm.textContent = "Remove";
@@ -1036,88 +994,20 @@ function render(){
       if (editing === it.id) editing = null;
       state.items.splice(i, 1); commit();
     };
-    ctl.appendChild(ed);
-    ed.setAttribute("aria-expanded", String(editing === it.id));
+    ctl.appendChild(up); ctl.appendChild(dn); ctl.appendChild(ed); ctl.appendChild(rm);
     body.appendChild(ctl);
 
     if (editing === it.id){
-      var editor = editPanel(it.id, {h3:h3, bd:bd, meta:meta, why:why, leg:leg});
-      var actions = document.createElement("div"); actions.className = "stop-actions";
-      actions.appendChild(up); actions.appendChild(dn); actions.appendChild(rm);
-      editor.appendChild(actions); body.appendChild(editor);
+      body.appendChild(editPanel(it.id, {h3:h3, bd:bd, meta:meta, why:why, leg:leg}));
     }
 
-    var details = document.createElement("details");
-    details.className = "stop-details";
-    details.open = !!expandedStops[it.id];
-    var summary = document.createElement("summary");
-    var activities = Array.isArray(it.activities) ? it.activities : [];
-    summary.textContent = activities.length ? activities.length + (activities.length === 1 ? " activity" : " activities") + " · Details & notes" : "Activities, links & notes";
-    details.appendChild(summary);
-    details.addEventListener("toggle", function(){ expandedStops[it.id] = details.open; });
-    details.appendChild(meta); details.appendChild(why);
-    var heading = document.createElement("h4"); heading.className = "activity-heading";
-    heading.textContent = "Activities & links"; details.appendChild(heading);
-    var editingActivity = -1;
-    var list = document.createElement("div"); list.className = "activity-list";
-    function activityUrl(value){
-      if (!value) return "";
-      try { var u = new URL(/^https?:\/\//i.test(value) ? value : "https://" + value);
-        return (u.protocol === "https:" || u.protocol === "http:") && u.hostname.indexOf(".") > -1 ? u.href : "";
-      } catch(e){ return ""; }
-    }
-    function renderActivities(){
-      list.textContent = "";
-      summary.textContent = activities.length ? activities.length + (activities.length === 1 ? " activity" : " activities") + " · Details & notes" : "Activities, links & notes";
-      if (!activities.length){
-        var empty = document.createElement("p"); empty.className = "activity-empty";
-        empty.textContent = "Keep walks, day trips and bookings together."; list.appendChild(empty);
-      }
-      activities.forEach(function(activity, index){
-        if (!activity || typeof activity.title !== "string") return;
-        var row = document.createElement("div"); row.className = "activity-row";
-        var url = activityUrl(typeof activity.url === "string" ? activity.url : "");
-        var title = document.createElement(url ? "a" : "span"); title.textContent = activity.title;
-        if (url){ title.href = url; title.target = "_blank"; title.rel = "noopener noreferrer"; }
-        row.appendChild(title);
-        var editActivity = document.createElement("button"); editActivity.type = "button"; editActivity.className = "mini";
-        editActivity.textContent = "Edit"; editActivity.setAttribute("aria-label", "Edit activity " + activity.title);
-        editActivity.onclick = function(){ editingActivity = index; activityName.value = activity.title; activityLink.value = activity.url || ""; addActivity.textContent = "Update activity"; activityName.focus(); };
-        row.appendChild(editActivity);
-        var remove = document.createElement("button"); remove.type = "button"; remove.className = "mini drop";
-        remove.textContent = "Remove"; remove.setAttribute("aria-label", "Remove activity " + activity.title);
-        remove.onclick = function(){ activities.splice(index, 1); it.activities = activities; editingActivity = -1; activityForm.reset(); addActivity.textContent = "Add activity"; save(); renderActivities(); };
-        row.appendChild(remove); list.appendChild(row);
-      });
-    }
-    renderActivities(); details.appendChild(list);
-    var activityForm = document.createElement("form"); activityForm.className = "activity-form";
-    var activityName = document.createElement("input"); activityName.type = "text"; activityName.required = true;
-    activityName.maxLength = 200; activityName.placeholder = "e.g. Salinas day trip";
-    var activityLink = document.createElement("input"); activityLink.type = "text"; activityLink.inputMode = "url";
-    activityLink.placeholder = "https://…";
-    activityLink.addEventListener("input", function(){ activityLink.setCustomValidity(""); });
-    activityName.addEventListener("input", function(){ activityName.setCustomValidity(""); });
-    activityForm.appendChild(field("Activity", activityName)); activityForm.appendChild(field("Link (optional)", activityLink));
-    var addActivity = document.createElement("button"); addActivity.type = "submit"; addActivity.textContent = "Add activity";
-    activityForm.appendChild(addActivity);
-    activityForm.addEventListener("submit", function(event){
-      event.preventDefault();
-      var title = activityName.value.trim(), raw = activityLink.value.trim(), url = activityUrl(raw);
-      if (!title){ activityName.setCustomValidity("Enter an activity name."); activityName.reportValidity(); return; }
-      if (raw && !url){ activityLink.setCustomValidity("Enter a valid website link, such as https://example.com."); activityLink.reportValidity(); return; }
-      if (editingActivity >= 0) activities[editingActivity] = {title:title, url:url};
-      else activities.push({title:title, url:url});
-      editingActivity = -1; addActivity.textContent = "Add activity"; it.activities = activities;
-      save(); renderActivities(); activityForm.reset(); activityName.focus();
-    });
-    details.appendChild(activityForm);
     var ta = document.createElement("textarea");
     ta.value = it.note || "";
-    ta.placeholder = "Guide, meeting point, booking reference…";
+    ta.placeholder = "Notes — lodge, guide, flight number, what to book…";
+    ta.setAttribute("aria-label", "Notes for " + S.name);
     ta.addEventListener("input", function(){ it.note = ta.value; save(); });
-    details.appendChild(field("Notes", ta));
-    body.appendChild(details);
+    ta.addEventListener("blur", function(){ commit(); });
+    body.appendChild(ta);
 
     leg.appendChild(body);
     legs.appendChild(leg);
@@ -1126,7 +1016,7 @@ function render(){
   renderMeter();
   renderChecks(cursor);
   renderCatalog();
-  renderVersions();
+  renderStatus();
   renderNotices();
   renderHistory();
 }
@@ -1348,67 +1238,142 @@ function swap(a, b){
 function commit(){ save(); render(); }
 
 /* ---------- wiring ---------- */
-document.getElementById("dStart").addEventListener("change", function(e){
-  state.start = e.target.value; commit();
-});
-document.getElementById("dEnd").addEventListener("change", function(e){
-  state.end = e.target.value; commit();
+function $(id){ return document.getElementById(id); }
+
+$("dStart").addEventListener("change", function(e){ state.start = e.target.value; commit(); });
+$("dEnd").addEventListener("change", function(e){ state.end = e.target.value; commit(); });
+
+$("moreBtn").addEventListener("click", function(){
+  var m = $("moreMenu");
+  m.hidden = !m.hidden;
+  $("moreBtn").setAttribute("aria-expanded", String(!m.hidden));
 });
 
-document.getElementById("resetPlan").addEventListener("click", function(){
+$("resetPlan").addEventListener("click", function(){
   var keep = {};
   customIds().forEach(function(id){ keep[id] = state.defs[id]; });
   state = clone(FALLBACK_SEED);
   state.defs = Object.assign({}, state.defs || {}, keep);
   normaliseState();
-  dirty = true;
-  editing = null;
-  syncDateInputs();
-  commit();
-  flash("Starting plan loaded — save it to share it");
+  dirty = true; editing = null;
+  syncDateInputs(); commit();
+  say("Starting plan loaded — press Save to share it");
 });
 
-document.getElementById("mkLink").addEventListener("click", function(){
-  var url = planLink();
-  var box = document.getElementById("linkBox");
+/* One share button. It hands over the key too when keys are switched on,
+   so nobody the link reaches ever has to type one. */
+$("shareBtn").addEventListener("click", function(){
+  var key = openMode ? "" : (lsGet(LS_KEY) || "");
+  var url = location.origin + location.pathname
+          + (key ? "#k=" + encodeURIComponent(key) : "");
+  var box = $("linkBox");
   box.hidden = false; box.value = url; box.focus(); box.select();
+  var msg = key ? "Copied — this link can edit the plan"
+                : "Copied — anyone with this link can edit the plan";
   if (navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(url).then(
-      function(){ flash("Copied — a read-only snapshot of this screen"); },
-      function(){ flash("Copy the link below"); }
-    );
-  } else { flash("Copy the link below"); }
+      function(){ say(msg); }, function(){ say("Copy the link below"); });
+  } else { say("Copy the link below"); }
 });
 
-var saver = null;
-(async function(){
-  try {
-    saver = (typeof claude !== "undefined" && claude.use) ? await claude.use("downloads") : null;
-  } catch(e){ saver = null; }
-})();
+$("reloadBtn").addEventListener("click", async function(){
+  if (dirty && !window.confirm("Discard your unsaved changes and load the saved version?")) return;
+  var v = await loadServer();
+  if (v){ adoptServer(v); syncDateInputs(); render(); say("Loaded v" + (v.rev || "?")); }
+  else { render(); say("Nothing saved yet"); }
+});
 
-document.getElementById("dlPlan").addEventListener("click", function(){
-  var json = packed();
-  if (saver && saver.save){
-    saver.save({filename:"peru-plan.json", data:json}).then(
-      function(){ flash("Saved"); },
-      function(err){ if (!err || err.code !== "declined") flash("Couldn't save — use the link"); }
-    );
+$("pubName").addEventListener("input", function(e){ lsSet(LS_NAME, e.target.value.trim()); });
+
+/* ---------- saving ---------- */
+function say(msg){
+  var el = $("status");
+  if (!el) return;
+  el.innerHTML = esc(msg);
+  setTimeout(renderStatus, 4000);
+}
+
+async function doSave(label, force){
+  if (!openMode && !lsGet(LS_KEY) && !$("pubKey").value){
+    $("keyRow").hidden = false;
+    $("pubKey").hidden = false;
+    $("pubKey").focus();
+    say("Enter the edit key to save");
     return;
   }
-  var blob = new Blob([json], {type:"application/json"});
-  var a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "peru-plan.json";
-  document.body.appendChild(a); a.click();
-  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
-  flash("Saved");
+  var key = lsGet(LS_KEY) || $("pubKey").value;
+  say("Saving…");
+  try {
+    var v = await saveToServer(label, key, force);
+    if (key) lsSet(LS_KEY, key);
+    $("keyRow").hidden = true;
+    $("pubLabel").value = "";
+    render();
+    say("Saved as v" + v.rev + (v.by ? " by " + v.by : ""));
+  } catch(e){
+    if (e.message === "bad_key"){
+      lsDel(LS_KEY);
+      $("pubKey").value = ""; $("pubKey").hidden = false;
+      $("keyRow").hidden = false; $("pubKey").focus();
+      render();
+      say("That edit key was not accepted");
+    } else if (e.message === "conflict"){
+      render();
+      say("Somebody saved first — see the notice below");
+    } else if (e.message === "not_configured"){
+      say("The server is not set up for saving yet");
+    } else {
+      say("Saving failed — " + e.message);
+    }
+  }
+}
+
+$("saveBtn").addEventListener("click", function(){ doSave("", false); });
+
+$("noteBtn").addEventListener("click", function(){
+  var r = $("keyRow");
+  r.hidden = !r.hidden;
+  $("pubKey").hidden = openMode || !!lsGet(LS_KEY);
+  if (!r.hidden) $("pubLabel").focus();
+});
+$("pubCancel").addEventListener("click", function(){ $("keyRow").hidden = true; });
+$("keyRow").addEventListener("submit", function(ev){
+  ev.preventDefault();
+  var k = $("pubKey").value;
+  if (k) lsSet(LS_KEY, k);
+  doSave($("pubLabel").value.trim(), false);
 });
 
-document.getElementById("upBtn").addEventListener("click", function(){
-  document.getElementById("upPlan").click();
+$("pubForget").addEventListener("click", function(){
+  lsDel(LS_KEY); $("pubKey").value = "";
+  renderStatus(); say("Edit key removed from this browser");
 });
-document.getElementById("upPlan").addEventListener("change", function(e){
+
+/* ---------- file copy in and out ---------- */
+var saver = null;
+(async function(){
+  try { saver = (typeof claude !== "undefined" && claude.use) ? await claude.use("downloads") : null; }
+  catch(e){ saver = null; }
+})();
+
+$("dlPlan").addEventListener("click", function(){
+  var data = packed();
+  if (saver && saver.save){
+    saver.save({filename:"peru-plan.json", data:data}).then(
+      function(){ say("Downloaded"); },
+      function(err){ if (!err || err.code !== "declined") say("Couldn't download"); });
+    return;
+  }
+  var blob = new Blob([data], {type:"application/json"});
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "peru-plan.json";
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  say("Downloaded");
+});
+
+$("upBtn").addEventListener("click", function(){ $("upPlan").click(); });
+$("upPlan").addEventListener("change", function(e){
   var f = e.target.files && e.target.files[0];
   if (!f) return;
   var r = new FileReader();
@@ -1416,103 +1381,22 @@ document.getElementById("upPlan").addEventListener("change", function(e){
     try {
       if (adopt(JSON.parse(r.result))){
         editing = null; syncDateInputs(); commit();
-        flash("Loaded onto this screen — save it to share it");
-      } else { flash("That file isn't a plan"); }
-    } catch(err){ flash("That file isn't a plan"); }
+        say("Loaded — press Save to share it");
+      } else { say("That file isn't a plan"); }
+    } catch(err){ say("That file isn't a plan"); }
   };
   r.readAsText(f);
   e.target.value = "";
 });
 
-/* ---------- saving ---------- */
-function pubFlash(msg){
-  var el = document.getElementById("pubMsg");
-  if (!el) return;
-  el.textContent = msg;
-  setTimeout(function(){ if (el.textContent === msg) el.textContent = ""; }, 5000);
-}
-function refreshKeyUi(){
-  document.getElementById("pubForget").hidden = !lsGet(LS_KEY);
-}
-
-async function doSave(label, force){
-  var key = lsGet(LS_KEY) || document.getElementById("pubKey").value;
-  if (!key){
-    document.getElementById("pubForm").hidden = false;
-    document.getElementById("pubKey").focus();
-    pubFlash("Enter the edit key to save");
-    return;
-  }
-  pubFlash("Saving…");
-  try {
-    var v = await saveToServer(label, key, force);
-    lsSet(LS_KEY, key);
-    document.getElementById("pubForm").hidden = true;
-    document.getElementById("pubLabel").value = "";
-    refreshKeyUi();
-    render();
-    pubFlash("Saved as v" + v.rev + (v.by ? " by " + v.by : ""));
-  } catch(e){
-    if (e.message === "bad_key"){
-      lsDel(LS_KEY); refreshKeyUi();
-      var kf = document.getElementById("pubKey");
-      kf.value = ""; document.getElementById("pubForm").hidden = false; kf.focus();
-      pubFlash("Key rejected — it may have been rotated. Enter the current one.");
-    } else if (e.message === "conflict"){
-      render();
-      pubFlash("Someone else saved first — see the notice above");
-    } else if (e.message === "not_configured"){
-      pubFlash("No edit keys configured on the server yet");
-    } else {
-      pubFlash("Saving failed — " + e.message);
-    }
-  }
-}
-
-document.getElementById("saveBtn").addEventListener("click", function(){ doSave("", false); });
-
-document.getElementById("pubToggle").addEventListener("click", function(){
-  var f = document.getElementById("pubForm");
-  f.hidden = !f.hidden;
-  if (!f.hidden){
-    document.getElementById("pubKey").value = lsGet(LS_KEY) || "";
-    document.getElementById("pubLabel").focus();
-  }
-});
-document.getElementById("pubCancel").addEventListener("click", function(){
-  document.getElementById("pubForm").hidden = true;
-});
-document.getElementById("pubForget").addEventListener("click", function(){
-  lsDel(LS_KEY);
-  document.getElementById("pubKey").value = "";
-  refreshKeyUi();
-  pubFlash("Edit key removed from this browser");
-});
-
-document.getElementById("pubForm").addEventListener("submit", function(ev){
-  ev.preventDefault();
-  var key = document.getElementById("pubKey").value;
-  if (key) lsSet(LS_KEY, key);
-  doSave(document.getElementById("pubLabel").value.trim(), false);
-});
-
-/* Reload discards unsaved edits, so it asks first. */
-document.getElementById("pubCheck").addEventListener("click", async function(){
-  if (dirty && !window.confirm("Discard your unsaved changes and load the server version?")) return;
-  var v = await loadServer();
-  if (v){ adoptServer(v); syncDateInputs(); render(); pubFlash("Loaded v" + (v.rev || "?")); }
-  else { render(); pubFlash("Nothing saved on the server yet"); }
-});
-
-/* Quiet background check: pick up other people's saves when this screen has
-   nothing unsaved, otherwise just flag that a newer version exists. */
+/* ---------- staying in sync ---------- */
 async function poll(){
   if (!canPublish || document.hidden) return;
   var v = await loadServer();
   if (!v || (v.rev || 0) === serverRev) return;
   if (!dirty){
     adoptServer(v); syncDateInputs(); render();
-    pubFlash("Updated to v" + v.rev + (v.by ? " by " + v.by : ""));
+    say("Updated to v" + v.rev + (v.by ? " by " + v.by : ""));
   } else {
     conflict = v; renderNotices();
   }
@@ -1527,7 +1411,6 @@ async function init(){
   var v = await loadServer();
 
   if (v === undefined){
-    /* no API here at all — read-only from the file next to the page */
     fetchState = "error";
     var seed = await loadSeedFile();
     state = seed ? {start:seed.start, end:seed.end, items:seed.items, defs:seed.defs || {}}
@@ -1536,7 +1419,6 @@ async function init(){
   } else if (v){
     adoptServer(v);
   } else {
-    /* API is live but empty — offer the repo file as the starting point */
     var seed2 = await loadSeedFile();
     state = seed2 ? {start:seed2.start, end:seed2.end, items:seed2.items, defs:seed2.defs || {}}
                   : clone(FALLBACK_SEED);
@@ -1546,14 +1428,17 @@ async function init(){
 
   if (readHash()) dirty = true;
 
-  document.getElementById("pubRow").hidden = !canPublish;
-  refreshKeyUi();
+  document.getElementById("toolbar").hidden = false;
+  document.getElementById("pubName").value = lsGet(LS_NAME) || "";
+  document.getElementById("buildline").textContent = "Build " + BUILD;
   syncDateInputs();
   render();
 
-  setSaveLine(canPublish
-    ? "The plan lives on the server, not in your browser. Edit freely — nobody else sees it until you press Save, and if someone saved first you are asked instead of losing either version."
-    : "No server on this host, so this is a read-only copy of plan.json. Changes stay on this screen until you reload.");
+  setSaveLine(!canPublish
+    ? "No server on this address, so this is a read-only copy. Changes stay on this screen until you reload."
+    : openMode
+      ? "The plan lives on the server. Everyone with the link sees the same one and can save — the last ten versions are kept, so nothing is lost for good."
+      : "The plan lives on the server. Everyone with the link sees the same one; saving needs the edit key, and Share link hands it over so nobody has to type it.");
 }
 
 init();
