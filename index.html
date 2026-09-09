@@ -574,7 +574,7 @@ var FALLBACK_SEED = {
 
 /* The API is tried first; a plain static host without it falls back to the
    file next to this page. */
-var BUILD = "2026-09-09-live-sync-merge";   /* shown in the footer — check it after deploying */
+var BUILD = "2026-09-09-race-fix";   /* shown in the footer — check it after deploying */
 var PLAN_API = "/api/plan";
 var PLAN_FILE = "plan.json";
 
@@ -626,6 +626,16 @@ function defOf(id){
    to pick a whole side — see mergePlan() below */
 function newActId(){
   return "a" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+/* an activity saved before ids existed has no id to load — every browser
+   would otherwise invent its own random one for the same real activity,
+   which is precisely what breaks the merge (two different ids that should
+   be one). Derive the id from the activity's own content instead, so every
+   browser backfills the exact same id for the exact same legacy activity. */
+function legacyActId(stopId, a, index){
+  var s = stopId + "|" + (a.t || "") + "|" + (a.d || 0) + "|" + index, h = 2166136261;
+  for (var i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = (h * 16777619) >>> 0; }
+  return "L" + h.toString(36);
 }
 function newId(){
   var n = 1;
@@ -713,11 +723,11 @@ function normaliseState(){
     if (typeof it.vibe !== "string") it.vibe = "";
     if (!Array.isArray(it.acts)) it.acts = [];
     it.acts = it.acts.filter(function(a){ return a && typeof a.t === "string" && a.t; })
-      .map(function(a){
+      .map(function(a, idx){
         var st = typeof a.s === "string" ? a.s : "";
         if (!STATUSES.some(function(x){ return x.v === st; })) st = "";
         var votes = a.votes && typeof a.votes === "object" ? a.votes : {};
-        return {id: typeof a.id === "string" && a.id ? a.id : newActId(),
+        return {id: typeof a.id === "string" && a.id ? a.id : legacyActId(it.id, a, idx),
                 d: Math.max(0, parseInt(a.d, 10) || 0),
                 t: String(a.t).slice(0, 120),
                 u: typeof a.u === "string" ? a.u.slice(0, 500) : "",
@@ -732,8 +742,10 @@ function normaliseState(){
    so this is not the first save of the session — queues a quiet autosave a
    couple of seconds after you stop typing, so your partner sees it without
    either of you pressing Save. */
+var editSeq = 0;   /* bumped on every real edit — lets a save tell whether you changed something else while it was in flight */
 function save(){
   dirty = true;
+  editSeq++;
   scheduleAutosave();
 }
 function scheduleAutosave(){
@@ -816,6 +828,7 @@ async function loadSeedFile(){
 }
 
 async function saveToServer(label, key, force){
+  var seqAtStart = editSeq;   /* if this changes before the request returns, you edited something new mid-flight */
   var res = await fetch(PLAN_API, {
     method:"POST",
     headers:{"Content-Type":"application/json", "X-Edit-Key":encodeURIComponent(key || "")},
@@ -843,7 +856,11 @@ async function saveToServer(label, key, force){
   publishedSeed = clone(v);
   serverRev = v.rev || 0;
   history_ = Array.isArray(v.history) ? v.history : [];
-  dirty = false;
+  /* only clear dirty if nothing changed on screen while this request was in
+     flight — otherwise a newer, still-unsaved edit would look "saved" to
+     poll()/adoptServer(), which would then happily overwrite it with the
+     server copy that never actually saw it (the "click reverts itself" bug) */
+  dirty = editSeq !== seqAtStart;
   conflict = null;
   return v;
 }
@@ -1945,7 +1962,8 @@ async function doSave(label, force){
        A full render() here would rebuild the whole itinerary and could steal
        focus out from under you mid-type when an autosave lands. */
     renderStatus(); renderNotices(); renderHistory();
-    say("Saved as v" + v.rev + (v.by ? " by " + v.by : ""));
+    say(dirty ? "Saved as v" + v.rev + " — one more change is queuing up right behind it"
+              : "Saved as v" + v.rev + (v.by ? " by " + v.by : ""));
   } catch(e){
     saveError = (e.message === "bad_key" || e.message === "not_configured") ? e.message : null;
     if (e.message === "bad_key"){
