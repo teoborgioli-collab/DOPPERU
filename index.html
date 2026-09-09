@@ -451,6 +451,10 @@ textarea::placeholder{color:var(--muted)}
   </footer>
 </div>
 
+<!-- Optional: instant "your partner just saved" push, instead of waiting for
+     the periodic poll. Harmless if PUSHER_KEY below is left blank — the poll
+     keeps working on its own. See SETUP.md → Live updates. -->
+<script src="https://js.pusher.com/8.4/pusher.min.js"></script>
 <script>
 (function(){
 "use strict";
@@ -573,6 +577,13 @@ var FALLBACK_SEED = {
 var BUILD = "2026-09-08-vercel-key-only";   /* shown in the footer — check it after deploying */
 var PLAN_API = "/api/plan";
 var PLAN_FILE = "plan.json";
+
+/* Pusher app key + cluster are not secret — they only let a browser subscribe
+   to the public "plan" channel, not publish to it — so they are hardcoded
+   here rather than fetched. Leave PUSHER_KEY blank to skip this entirely and
+   rely on the plain periodic poll below. See SETUP.md → Live updates. */
+var PUSHER_KEY = "d3a49a4ea3ebef2979fc";
+var PUSHER_CLUSTER = "eu";
 var canPublish = false;
 var publishedSeed = clone(FALLBACK_SEED);
 var state = clone(FALLBACK_SEED);
@@ -1933,11 +1944,22 @@ async function poll(){
     conflict = v; renderNotices();
   }
 }
-setInterval(poll, 6000);   /* short enough that two people editing together feel in sync */
+setInterval(poll, 6000);   /* backstop — catches anything missed if the push below is skipped, drops, or was never configured */
 document.addEventListener("visibilitychange", function(){ if (!document.hidden) poll(); });
 window.addEventListener("beforeunload", function(e){
   if (dirty){ e.preventDefault(); e.returnValue = ""; }
 });
+
+/* the server publishes to this channel right after a save goes through (see
+   api/plan.js) — an event here just means "go check", the same as a poll
+   tick finding a newer rev, so it reuses poll() rather than carrying data */
+function initPusher(){
+  if (!PUSHER_KEY || typeof Pusher === "undefined") return;
+  try {
+    var client = new Pusher(PUSHER_KEY, {cluster: PUSHER_CLUSTER});
+    client.subscribe("plan").bind("updated", function(){ poll(); });
+  } catch(e){ /* the 6s poll above still covers it */ }
+}
 
 async function init(){
   var v = await loadServer();
@@ -1965,6 +1987,7 @@ async function init(){
   document.getElementById("buildline").textContent = "Build " + BUILD;
   syncDateInputs();
   render();
+  initPusher();
 
   setSaveLine(!canPublish
     ? "No server on this address, so this is a read-only copy. Changes stay on this screen until you reload."

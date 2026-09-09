@@ -75,10 +75,13 @@ counted as an Amazon stop, a beach, or a travel day.
 | **You** | Your name, so saves are labelled. Optional, remembered locally. |
 | **More** | Save with a note, reset to the starting plan, download a copy, load a file. |
 
-Edits stay on your screen until you press Save — the status line on the right
-says **Unsaved changes** until then. The page re-checks every 20 seconds and
-whenever you come back to the tab; if somebody else saved and you have nothing
-unsaved, it just updates itself.
+Once your edit key is known, edits save themselves about 2.5 seconds after
+you stop typing — the status line briefly says **Unsaved changes**, then
+**Saved**. The Save button still works too, for a save right now or one with
+a note. The page also re-checks the server every 6 seconds and whenever you
+come back to the tab; if somebody else saved and you have nothing unsaved, it
+just updates itself. See **Live updates** below to make that instant instead
+of a few seconds.
 
 ### If two people save at once
 
@@ -124,6 +127,40 @@ Then:
   unaffected. They get *"That edit key was not accepted"* and the page clears
   the stored key.
 - **More → Forget edit key** wipes it from a shared or borrowed machine.
+
+## Live updates
+
+By default the page re-checks the server every 6 seconds, so a save by one of
+you shows up for the other within a few seconds without either of you doing
+anything. If that's fast enough, skip this section entirely — nothing below
+is required.
+
+To make it instant instead (push rather than poll), connect a free
+[Pusher](https://pusher.com) Channels app:
+
+1. pusher.com → sign up → **Create app** → any name, any cluster close to you.
+   Pick **Channels**.
+2. On the app's **App Keys** tab you'll see four values: `app_id`, `key`,
+   `secret`, `cluster`.
+3. In Vercel → Settings → Environment Variables, add all four, exactly named:
+
+   | Name | Value |
+   |---|---|
+   | `PUSHER_APP_ID` | from the App Keys tab |
+   | `PUSHER_KEY` | from the App Keys tab |
+   | `PUSHER_SECRET` | from the App Keys tab |
+   | `PUSHER_CLUSTER` | from the App Keys tab, e.g. `eu`, `us2` |
+
+4. In `index.html`, find `PUSHER_KEY` and `PUSHER_CLUSTER` near the top of the
+   `<script>` block and paste in the same **key** and **cluster** values (not
+   the app id or secret — those stay server-side only). These two are not
+   secret; they only let a browser listen, not publish.
+5. `npm install` (adds the `pusher` package) if you install dependencies
+   locally, then commit and redeploy.
+
+Leave `PUSHER_KEY` blank in `index.html` (or skip steps 1–4 altogether) and
+everything keeps working exactly as before — the page just falls back to the
+6-second poll, silently.
 
 ## Notes
 
