@@ -574,7 +574,7 @@ var FALLBACK_SEED = {
 
 /* The API is tried first; a plain static host without it falls back to the
    file next to this page. */
-var BUILD = "2026-09-09-save-identity";   /* shown in the footer — check it after deploying */
+var BUILD = "2026-09-09-slower-autosave";   /* shown in the footer — check it after deploying */
 var PLAN_API = "/api/plan";
 var PLAN_FILE = "plan.json";
 
@@ -767,7 +767,11 @@ function save(){
 function scheduleAutosave(){
   if (!canPublish || !lsGet(LS_KEY) || conflict) return;
   clearTimeout(autosaveTimer);
-  autosaveTimer = setTimeout(function(){ if (!saving) doSave("", false); }, 1200);
+  /* long enough that Vercel Blob's storage (fronted by a CDN, not instantly
+     consistent) has caught up with the last write by the time this one
+     reads "what's current" — too short here is what was causing a
+     same-person conflict on nearly every edit */
+  autosaveTimer = setTimeout(function(){ if (!saving) doSave("", false); }, 4000);
 }
 
 function usablePlan(v){
@@ -857,27 +861,13 @@ async function loadSeedFile(){
   } catch(e){ return null; }
 }
 
-var sentSaves = new Map();
-function acknowledgeOwnSave(v){
-  if (!v || !v.saveId || !sentSaves.has(v.saveId)) return false;
-  var sent = sentSaves.get(v.saveId);
-  if ((v.rev || 0) < serverRev) return false;
-  publishedSeed = clone(v); serverRev = v.rev || 0;
-  history_ = Array.isArray(v.history) ? v.history : [];
-  dirty = editSeq !== sent;
-  conflict = null;
-  return true;
-}
 async function saveToServer(label, key, force){
-  var saveId = crypto.randomUUID();
-  sentSaves.set(saveId, editSeq);
-  if (sentSaves.size > 100) sentSaves.delete(sentSaves.keys().next().value);
   var seqAtStart = editSeq;   /* if this changes before the request returns, you edited something new mid-flight */
   var res = await fetch(PLAN_API, {
     method:"POST",
     headers:{"Content-Type":"application/json", "X-Edit-Key":encodeURIComponent(key || "")},
     body: JSON.stringify({
-      saveId:saveId, baseRev: serverRev, force: !!force, label: label || "",
+      baseRev: serverRev, force: !!force, label: label || "",
       title:state.title, subtitle:state.subtitle, start: state.start, end: state.end,
       items: state.items, defs: state.defs || {}, scenarios: allPlan().scenarios, activeScenario:state.activeScenario
     })
@@ -887,11 +877,6 @@ async function saveToServer(label, key, force){
   if (res.status === 409){
     var body = await res.json();
     conflict = usablePlan(body.current);
-    if (acknowledgeOwnSave(conflict)) {
-      // The prior POST reached storage but its response never reached this tab.
-      // Keep newer edits and let the coordinator queue their next save.
-      return publishedSeed;
-    }
     throw new Error("conflict");
   }
   if (!res.ok){
@@ -1039,12 +1024,12 @@ function renderNotices(){
 
   if (conflict){
     box.appendChild(notice("warn",
-      (conflict.by === currentEditor ? "A different save using your <b>" + esc(currentEditor) + "</b> key reached the server" : "<b>" + esc(conflict.by || "Someone") + "</b> saved while you were editing")
+      "<b>" + esc(conflict.by || "Someone") + "</b> saved while you were editing"
       + (conflict.label ? " — " + esc(conflict.label) : "")
       + " (" + fmtStamp(conflict.updated) + "). Your screen still has your version. "
-      + "Load the saved version to replace your screen, or save your version over it.",
+      + "Take theirs and lose yours, or save over it.",
       [
-        {label:"Load saved version", fn:function(){
+        {label:"Load theirs", fn:function(){
           adoptServer(conflict); syncDateInputs(); render(); flash("Loaded the server version");
         }},
         {label:"Save over it", drop:true, fn:function(){ doSave(null, true); }}
@@ -2163,11 +2148,6 @@ async function poll(){
     var v = await loadServer();
     // A read begun before a save/edit must never replace newer local state.
     if (!v || saving || serverRev !== rev || editSeq !== seq || (v.rev || 0) <= serverRev) return;
-    if (acknowledgeOwnSave(v)){
-      renderStatus(); renderNotices(); renderHistory();
-      if (dirty) scheduleAutosave();
-      return;
-    }
     if (dirty){
       // Do not replace objects underneath live input event handlers.
       // The next save can merge, or show the genuine conflict for a person.
