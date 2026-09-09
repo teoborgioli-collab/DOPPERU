@@ -78,7 +78,7 @@ async function readPlan() {
        shapes have drifted across @vercel/blob versions) rather than treat
        it as a real storage failure */
     const text = String((error && error.name) || '') + ' ' + String((error && error.message) || '');
-    if (/not\s*found/i.test(text)) return null;
+    if (/not\s*found|does\s*not\s*exist|doesn.?t\s*exist/i.test(text)) return null;
     throw error;
   }
 }
@@ -185,7 +185,7 @@ export default async function handler(req, res) {
 
     const configured = editors();
     if (req.method === 'GET' && req.query && req.query.diag) return send(res, 200, {
-      build: '2026-09-09-expose-raw-error', openMode: false,
+      build: '2026-09-09-not-exist-fix', openMode: false,
       PLAN_EDIT_KEYS_set: !!(process.env.PLAN_EDIT_KEYS || '').trim(),
       BLOB_TOKEN_set: !!blobToken(),
       PUSHER_configured: !!(process.env.PUSHER_APP_ID && process.env.PUSHER_KEY
