@@ -28,6 +28,14 @@ function whoIs(given) {
   return null;
 }
 
+/* the client percent-encodes the key before putting it in a header — a
+   header value has to be ISO-8859-1, and a key with a smart quote or emoji
+   in it (easy to end up with from phone autocorrect) is not */
+function headerKey(req) {
+  const raw = String(req.headers['x-edit-key'] || '');
+  try { return decodeURIComponent(raw); } catch (error) { return raw; }
+}
+
 function setHeaders(res) {
   res.setHeader('Cache-Control', 'no-store, max-age=0');
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -75,6 +83,7 @@ async function announce(rev) {
       cluster: PUSHER_CLUSTER, useTLS: true,
     });
     await pusher.trigger('plan', 'updated', { rev });
+    console.log('Pusher: announced rev', rev);
   } catch (error) {
     console.error('Pusher announce failed (save still succeeded):', error && error.message);
   }
@@ -154,6 +163,8 @@ export default async function handler(req, res) {
       build: '2026-09-08-vercel-key-only', openMode: false,
       PLAN_EDIT_KEYS_set: !!(process.env.PLAN_EDIT_KEYS || '').trim(),
       BLOB_TOKEN_set: !!(process.env.BLOB_READ_WRITE_TOKEN || '').trim(),
+      PUSHER_configured: !!(process.env.PUSHER_APP_ID && process.env.PUSHER_KEY
+        && process.env.PUSHER_SECRET && process.env.PUSHER_CLUSTER),
       usableEditors: configured.length, names: configured.map((e) => e.name),
     });
     if (configured.length !== 2 || !configured.some((e) => e.name === 'matteo') || !configured.some((e) => e.name === 'levin')) {
@@ -162,7 +173,7 @@ export default async function handler(req, res) {
 
     if (req.method === 'GET') {
       if (req.query && req.query.who) {
-        const name = whoIs(String(req.headers['x-edit-key'] || ''));
+        const name = whoIs(headerKey(req));
         return name ? send(res, 200, { name }) : send(res, 401, { error: 'bad_key' });
       }
       const plan = await readPlan();
@@ -170,7 +181,7 @@ export default async function handler(req, res) {
     }
 
     if (req.method !== 'POST') return send(res, 405, { error: 'method_not_allowed' });
-    const who = whoIs(String(req.headers['x-edit-key'] || ''));
+    const who = whoIs(headerKey(req));
     if (!who) return send(res, 401, { error: 'bad_key', message: 'That edit key was not accepted.' });
 
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
