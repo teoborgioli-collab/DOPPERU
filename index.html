@@ -574,7 +574,7 @@ var FALLBACK_SEED = {
 
 /* The API is tried first; a plain static host without it falls back to the
    file next to this page. */
-var BUILD = "2026-09-09-first-read-fix";   /* shown in the footer — check it after deploying */
+var BUILD = "2026-09-09-expose-raw-error";   /* shown in the footer — check it after deploying */
 var PLAN_API = "/api/plan";
 var PLAN_FILE = "plan.json";
 
@@ -803,8 +803,13 @@ async function loadServer(){
          and worth saying so rather than lumping it in with that */
       canPublish = true;
       fetchState = "serverError";
-      try { var detail = await res.json(); serverErrorDetail = (detail && detail.message) || ("Server error " + res.status); }
-      catch(e2){ serverErrorDetail = "Server error " + res.status; }
+      try {
+        var detail = await res.json();
+        serverErrorDetail = (detail && detail.message) || ("Server error " + res.status);
+        if (detail && detail.raw && (detail.raw.name || detail.raw.message)){
+          serverErrorDetail += " [" + (detail.raw.name || "") + ": " + (detail.raw.message || "") + "]";
+        }
+      } catch(e2){ serverErrorDetail = "Server error " + res.status; }
       return null;
     }
   } catch(e){ /* genuinely unreachable — no API on this host */ }
