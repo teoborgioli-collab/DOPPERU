@@ -36,6 +36,10 @@ function headerKey(req) {
   try { return decodeURIComponent(raw); } catch (error) { return raw; }
 }
 
+function randomId() {
+  return 'a' + Math.random().toString(36).slice(2, 10);
+}
+
 function setHeaders(res) {
   res.setHeader('Cache-Control', 'no-store, max-age=0');
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -114,6 +118,7 @@ function cleanItem(item) {
     note: typeof it.note === 'string' ? it.note.slice(0, 2000) : '',
     vibe: typeof it.vibe === 'string' ? it.vibe.slice(0, 120) : '',
     acts: Array.isArray(it.acts) ? it.acts.slice(0, 60).map((activity) => ({
+      id: String((activity && activity.id) || '').slice(0, 40) || randomId(),
       d: Math.min(60, Math.max(0, parseInt(activity && activity.d, 10) || 0)),
       t: String((activity && activity.t) || '').slice(0, 120),
       u: typeof (activity && activity.u) === 'string' ? activity.u.slice(0, 500) : '',
