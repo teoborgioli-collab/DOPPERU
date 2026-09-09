@@ -574,7 +574,7 @@ var FALLBACK_SEED = {
 
 /* The API is tried first; a plain static host without it falls back to the
    file next to this page. */
-var BUILD = "2026-09-09-race-fix";   /* shown in the footer — check it after deploying */
+var BUILD = "2026-09-09-scenario-delete";   /* shown in the footer — check it after deploying */
 var PLAN_API = "/api/plan";
 var PLAN_FILE = "plan.json";
 
@@ -707,6 +707,21 @@ function renderScenarios(){
   var rename = document.createElement("button"); rename.type = "button"; rename.className = "mini"; rename.textContent = "Rename scenario";
   rename.onclick = function(){ var p = state.scenarios.find(function(p){return p.id === state.activeScenario;}); var n = window.prompt("Scenario name",p.name); if(n && n.trim()){p.name=n.trim().slice(0,40);commit();} };
   tabs.appendChild(rename);
+
+  var del = document.createElement("button"); del.type = "button"; del.className = "mini drop"; del.textContent = "Delete scenario";
+  del.disabled = state.scenarios.length <= 1;
+  del.title = del.disabled ? "The last option can't be deleted" : "";
+  del.onclick = function(){
+    if (state.scenarios.length <= 1) return;
+    var current = state.scenarios.find(function(p){ return p.id === state.activeScenario; });
+    if (!window.confirm('Delete "' + (current ? current.name : "this option") + '"? Unsaved, this is instant; once saved, it is only recoverable from Earlier saves.')) return;
+    state.scenarios = state.scenarios.filter(function(p){ return p.id !== state.activeScenario; });
+    var next = state.scenarios[0];
+    Object.assign(state, scenarioCopy(next));
+    state.activeScenario = next.id;
+    normaliseState(); editing = null; editAct = null; syncDateInputs(); commit();
+  };
+  tabs.appendChild(del);
 }
 function normaliseState(){
   if (typeof state.title !== "string" || !state.title.trim()) state.title = FALLBACK_SEED.title;
