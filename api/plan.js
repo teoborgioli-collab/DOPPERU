@@ -40,6 +40,16 @@ function randomId() {
   return 'a' + Math.random().toString(36).slice(2, 10);
 }
 
+/* @vercel/blob looks for exactly BLOB_READ_WRITE_TOKEN by default. Connecting
+   a store through the dashboard can instead name it after the store itself
+   (e.g. DOPPERU_READ_WRITE_TOKEN) to avoid collisions with other stores in
+   the same project — so look for that shape too before giving up. */
+function blobToken() {
+  if (process.env.BLOB_READ_WRITE_TOKEN) return process.env.BLOB_READ_WRITE_TOKEN;
+  const key = Object.keys(process.env).find((k) => /_READ_WRITE_TOKEN$/.test(k));
+  return key ? process.env[key] : undefined;
+}
+
 function setHeaders(res) {
   res.setHeader('Cache-Control', 'no-store, max-age=0');
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -55,7 +65,7 @@ function send(res, status, data) {
 
 async function readPlan() {
   try {
-    const meta = await head(KEY);
+    const meta = await head(KEY, { token: blobToken() });
     if (!meta || !meta.url) return null;
     const response = await fetch(meta.url + '?t=' + Date.now(), { cache: 'no-store' });
     if (!response.ok) throw new Error('storage_read_failed');
@@ -71,7 +81,7 @@ async function readPlan() {
 async function writePlan(plan) {
   await put(KEY, JSON.stringify(plan, null, 2), {
     access: 'public', addRandomSuffix: false, allowOverwrite: true,
-    contentType: 'application/json', cacheControlMaxAge: 60,
+    contentType: 'application/json', cacheControlMaxAge: 60, token: blobToken(),
   });
 }
 
@@ -154,7 +164,7 @@ function cleanBody(body) {
 
 function storageError(error) {
   const text = String((error && error.name) || '') + ' ' + String((error && error.message) || '');
-  if (!process.env.BLOB_READ_WRITE_TOKEN) return [503, { error: 'storage_not_configured', message: 'Vercel Blob is not connected. Connect a Blob store to this project and redeploy.' }];
+  if (!blobToken()) return [503, { error: 'storage_not_configured', message: 'Vercel Blob is not connected. Connect a Blob store to this project and redeploy.' }];
   if (/token|unauthorized|forbidden/i.test(text)) return [503, { error: 'storage_auth_failed', message: 'Vercel cannot access the connected Blob store. Reconnect it and redeploy.' }];
   return [503, { error: 'storage_unavailable', message: 'The shared storage could not be read or saved. Check the Vercel function logs.' }];
 }
@@ -165,9 +175,9 @@ export default async function handler(req, res) {
 
     const configured = editors();
     if (req.method === 'GET' && req.query && req.query.diag) return send(res, 200, {
-      build: '2026-09-09-scenario-delete', openMode: false,
+      build: '2026-09-09-blob-token-fix', openMode: false,
       PLAN_EDIT_KEYS_set: !!(process.env.PLAN_EDIT_KEYS || '').trim(),
-      BLOB_TOKEN_set: !!(process.env.BLOB_READ_WRITE_TOKEN || '').trim(),
+      BLOB_TOKEN_set: !!blobToken(),
       PUSHER_configured: !!(process.env.PUSHER_APP_ID && process.env.PUSHER_KEY
         && process.env.PUSHER_SECRET && process.env.PUSHER_CLUSTER),
       usableEditors: configured.length, names: configured.map((e) => e.name),
