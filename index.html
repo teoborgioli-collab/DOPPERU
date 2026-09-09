@@ -769,7 +769,10 @@ async function loadServer(){
 
 async function identifyByKey(key){
   try{
-    var r = await fetch(PLAN_API + "?who=1", {headers:{"X-Edit-Key":key}, cache:"no-store"});
+    /* a header value has to be ISO-8859-1 — a stray smart quote or emoji
+       from autocorrect would otherwise throw inside fetch() itself, before
+       any request even goes out. Percent-encoding sidesteps that. */
+    var r = await fetch(PLAN_API + "?who=1", {headers:{"X-Edit-Key":encodeURIComponent(key)}, cache:"no-store"});
     if (r.ok){ var v = await r.json(); return String(v.name || "").toLowerCase(); }
   } catch(e){}
   return "";
@@ -808,7 +811,7 @@ async function loadSeedFile(){
 async function saveToServer(label, key, force){
   var res = await fetch(PLAN_API, {
     method:"POST",
-    headers:{"Content-Type":"application/json", "X-Edit-Key":key || ""},
+    headers:{"Content-Type":"application/json", "X-Edit-Key":encodeURIComponent(key || "")},
     body: JSON.stringify({
       baseRev: serverRev, force: !!force, label: label || "",
       title:state.title, subtitle:state.subtitle, start: state.start, end: state.end,
