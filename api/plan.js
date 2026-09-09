@@ -73,7 +73,12 @@ async function readPlan() {
     if (!plan || !Array.isArray(plan.items)) throw new Error('invalid_stored_plan');
     return plan;
   } catch (error) {
-    if (error && (error.name === 'BlobNotFoundError' || error.message === 'Blob not found')) return null;
+    /* nothing saved yet is the expected, common case — the very first read
+       against a brand-new store included — so match loosely (exact error
+       shapes have drifted across @vercel/blob versions) rather than treat
+       it as a real storage failure */
+    const text = String((error && error.name) || '') + ' ' + String((error && error.message) || '');
+    if (/not\s*found/i.test(text)) return null;
     throw error;
   }
 }
@@ -175,7 +180,7 @@ export default async function handler(req, res) {
 
     const configured = editors();
     if (req.method === 'GET' && req.query && req.query.diag) return send(res, 200, {
-      build: '2026-09-09-blob-token-fix', openMode: false,
+      build: '2026-09-09-first-read-fix', openMode: false,
       PLAN_EDIT_KEYS_set: !!(process.env.PLAN_EDIT_KEYS || '').trim(),
       BLOB_TOKEN_set: !!blobToken(),
       PUSHER_configured: !!(process.env.PUSHER_APP_ID && process.env.PUSHER_KEY
