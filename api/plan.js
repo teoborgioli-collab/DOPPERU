@@ -188,7 +188,7 @@ export default async function handler(req, res) {
 
     const configured = editors();
     if (req.method === 'GET' && req.query && req.query.diag) return send(res, 200, {
-      build: '2026-09-09-merged-fix', openMode: false,
+      build: '2026-09-09-save-identity', openMode: false,
       PLAN_EDIT_KEYS_set: !!(process.env.PLAN_EDIT_KEYS || '').trim(),
       BLOB_TOKEN_set: !!blobToken(),
       PUSHER_configured: !!(process.env.PUSHER_APP_ID && process.env.PUSHER_KEY
@@ -223,6 +223,7 @@ export default async function handler(req, res) {
     const fields = cleanBody(body);
     const history = current ? [snapshot(current)].concat(current.history || []) : [];
     const plan = {
+      saveId: typeof body.saveId === 'string' ? body.saveId.slice(0, 80) : '',
       rev: currentRev + 1, updated: new Date().toISOString(), by: who, label: fields.label,
       title: fields.title, subtitle: fields.subtitle, start: fields.start, end: fields.end,
       defs: fields.defs, items: fields.items, scenarios: fields.scenarios,
