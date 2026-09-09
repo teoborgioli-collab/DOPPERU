@@ -169,9 +169,14 @@ function cleanBody(body) {
 
 function storageError(error) {
   const text = String((error && error.name) || '') + ' ' + String((error && error.message) || '');
-  if (!blobToken()) return [503, { error: 'storage_not_configured', message: 'Vercel Blob is not connected. Connect a Blob store to this project and redeploy.' }];
-  if (/token|unauthorized|forbidden/i.test(text)) return [503, { error: 'storage_auth_failed', message: 'Vercel cannot access the connected Blob store. Reconnect it and redeploy.' }];
-  return [503, { error: 'storage_unavailable', message: 'The shared storage could not be read or saved. Check the Vercel function logs.' }];
+  /* exposing the raw error here is a deliberate, temporary trade-off — this
+     is a two-person planner, not a public service, and it turns "check the
+     Vercel dashboard logs" into "read the on-screen notice" while this is
+     still being tracked down */
+  const raw = { name: (error && error.name) || null, message: (error && error.message) || null };
+  if (!blobToken()) return [503, { error: 'storage_not_configured', message: 'Vercel Blob is not connected. Connect a Blob store to this project and redeploy.', raw }];
+  if (/token|unauthorized|forbidden/i.test(text)) return [503, { error: 'storage_auth_failed', message: 'Vercel cannot access the connected Blob store. Reconnect it and redeploy.', raw }];
+  return [503, { error: 'storage_unavailable', message: 'The shared storage could not be read or saved. Check the Vercel function logs.', raw }];
 }
 
 export default async function handler(req, res) {
@@ -180,7 +185,7 @@ export default async function handler(req, res) {
 
     const configured = editors();
     if (req.method === 'GET' && req.query && req.query.diag) return send(res, 200, {
-      build: '2026-09-09-first-read-fix', openMode: false,
+      build: '2026-09-09-expose-raw-error', openMode: false,
       PLAN_EDIT_KEYS_set: !!(process.env.PLAN_EDIT_KEYS || '').trim(),
       BLOB_TOKEN_set: !!blobToken(),
       PUSHER_configured: !!(process.env.PUSHER_APP_ID && process.env.PUSHER_KEY
