@@ -67,7 +67,13 @@ async function readPlan() {
   try {
     const meta = await head(KEY, { token: blobToken() });
     if (!meta || !meta.url) return null;
-    const response = await fetch(meta.url + '?t=' + Date.now(), { cache: 'no-store' });
+    /* `cache: 'no-store'` only governs this function's own runtime — it says
+       nothing to the CDN sitting in front of the actual blob URL. Ask that
+       CDN directly not to hand back a cached copy too, since this read's
+       whole job is telling a fresh write apart from an old one. */
+    const response = await fetch(meta.url + '?t=' + Date.now(), {
+      cache: 'no-store', headers: { 'Cache-Control': 'no-cache' },
+    });
     if (!response.ok) throw new Error('storage_read_failed');
     const plan = await response.json();
     if (!plan || !Array.isArray(plan.items)) throw new Error('invalid_stored_plan');
@@ -188,7 +194,7 @@ export default async function handler(req, res) {
 
     const configured = editors();
     if (req.method === 'GET' && req.query && req.query.diag) return send(res, 200, {
-      build: '2026-09-09-save-identity', openMode: false,
+      build: '2026-09-09-slower-autosave', openMode: false,
       PLAN_EDIT_KEYS_set: !!(process.env.PLAN_EDIT_KEYS || '').trim(),
       BLOB_TOKEN_set: !!blobToken(),
       PUSHER_configured: !!(process.env.PUSHER_APP_ID && process.env.PUSHER_KEY
@@ -223,7 +229,6 @@ export default async function handler(req, res) {
     const fields = cleanBody(body);
     const history = current ? [snapshot(current)].concat(current.history || []) : [];
     const plan = {
-      saveId: typeof body.saveId === 'string' ? body.saveId.slice(0, 80) : '',
       rev: currentRev + 1, updated: new Date().toISOString(), by: who, label: fields.label,
       title: fields.title, subtitle: fields.subtitle, start: fields.start, end: fields.end,
       defs: fields.defs, items: fields.items, scenarios: fields.scenarios,
