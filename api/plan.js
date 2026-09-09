@@ -85,8 +85,11 @@ async function readPlan() {
 
 async function writePlan(plan) {
   await put(KEY, JSON.stringify(plan, null, 2), {
+    /* no caching at all — this file changes on every save, and a CDN
+       serving a cached pre-write copy for even a few seconds is exactly
+       what was making a fresh edit look like it "reverted" */
     access: 'public', addRandomSuffix: false, allowOverwrite: true,
-    contentType: 'application/json', cacheControlMaxAge: 60, token: blobToken(),
+    contentType: 'application/json', cacheControlMaxAge: 0, token: blobToken(),
   });
 }
 
@@ -185,7 +188,7 @@ export default async function handler(req, res) {
 
     const configured = editors();
     if (req.method === 'GET' && req.query && req.query.diag) return send(res, 200, {
-      build: '2026-09-09-not-exist-fix', openMode: false,
+      build: '2026-09-09-merged-fix', openMode: false,
       PLAN_EDIT_KEYS_set: !!(process.env.PLAN_EDIT_KEYS || '').trim(),
       BLOB_TOKEN_set: !!blobToken(),
       PUSHER_configured: !!(process.env.PUSHER_APP_ID && process.env.PUSHER_KEY
