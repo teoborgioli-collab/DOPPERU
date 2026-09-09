@@ -574,7 +574,7 @@ var FALLBACK_SEED = {
 
 /* The API is tried first; a plain static host without it falls back to the
    file next to this page. */
-var BUILD = "2026-09-09-blob-token-fix";   /* shown in the footer — check it after deploying */
+var BUILD = "2026-09-09-first-read-fix";   /* shown in the footer — check it after deploying */
 var PLAN_API = "/api/plan";
 var PLAN_FILE = "plan.json";
 
@@ -665,7 +665,8 @@ function plannedNights(){
    API, you edit on screen, and Save writes it back for everybody. Only the
    edit key is remembered locally, and only as a convenience. */
 var LS_KEY = LS + ":editkey";
-var fetchState = "pending";   // ok | missing | error | pending
+var fetchState = "pending";   // ok | missing | error | serverError | pending
+var serverErrorDetail = "";   // message from the server when fetchState is serverError
 var serverRev = 0;            // revision this screen was loaded from
 var dirty = false;            // unsaved edits on this screen
 var history_ = [];            // recent saves from the server
@@ -796,8 +797,17 @@ async function loadServer(){
       canPublish = true;         // API is live, nothing saved yet
       fetchState = "missing";
       return null;
+    } else {
+      /* the API exists and answered — just with an error (storage still
+         misconfigured, etc.) — a very different problem from no API at all,
+         and worth saying so rather than lumping it in with that */
+      canPublish = true;
+      fetchState = "serverError";
+      try { var detail = await res.json(); serverErrorDetail = (detail && detail.message) || ("Server error " + res.status); }
+      catch(e2){ serverErrorDetail = "Server error " + res.status; }
+      return null;
     }
-  } catch(e){ /* no API on this host */ }
+  } catch(e){ /* genuinely unreachable — no API on this host */ }
   return undefined;              // undefined = no API at all
 }
 
@@ -1034,6 +1044,11 @@ function renderNotices(){
       "<b>No API on this host</b>, so nothing can be saved for other people. "
       + "This page is showing the plan from <code>plan.json</code> and any change stays on "
       + "this screen until you reload."));
+  }
+  if (fetchState === "serverError"){
+    box.appendChild(notice("warn",
+      "<b>The API answered with an error</b>, not a missing API — " + esc(serverErrorDetail)
+      + " Check <code>/api/plan?diag=1</code> and the Vercel function logs."));
   }
 }
 
