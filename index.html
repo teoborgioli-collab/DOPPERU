@@ -1806,7 +1806,11 @@ async function doSave(label, force){
     if (key) lsSet(LS_KEY, key);
     $("keyRow").hidden = true;
     $("pubLabel").value = "";
-    render();
+    /* a save doesn't change anything on screen — state already held what we
+       just sent — so only refresh the bits that report on the save itself.
+       A full render() here would rebuild the whole itinerary and could steal
+       focus out from under you mid-type when an autosave lands. */
+    renderStatus(); renderNotices(); renderHistory();
     say("Saved as v" + v.rev + (v.by ? " by " + v.by : ""));
   } catch(e){
     saveError = (e.message === "bad_key" || e.message === "not_configured") ? e.message : null;
@@ -1891,13 +1895,39 @@ $("upPlan").addEventListener("change", function(e){
   e.target.value = "";
 });
 
-/* ---------- staying in sync ---------- */
+/* ---------- staying in sync ----------
+   render() rebuilds the whole itinerary from scratch, so picking up a
+   partner's update mid-browse would otherwise reset your scroll position
+   and blur whatever field you had focused. Capture and restore both around
+   the rebuild — cheap, and avoids a real DOM-diffing rewrite. */
+function captureFocus(){
+  var el = document.activeElement;
+  if (!el || el === document.body) return null;
+  var label = el.getAttribute("aria-label");
+  if (!label) return null;
+  var out = {label: label};
+  if ("selectionStart" in el){ out.start = el.selectionStart; out.end = el.selectionEnd; }
+  return out;
+}
+function restoreFocus(info){
+  if (!info) return;
+  var el;
+  try { el = document.querySelector('[aria-label="' + CSS.escape(info.label) + '"]'); } catch(e){ return; }
+  if (!el) return;
+  el.focus();
+  if ("selectionStart" in el && info.start != null){
+    try { el.setSelectionRange(info.start, info.end); } catch(e){}
+  }
+}
+
 async function poll(){
   if (!canPublish || document.hidden) return;
   var v = await loadServer();
   if (!v || (v.rev || 0) === serverRev) return;
   if (!dirty){
+    var focused = captureFocus(), scrollY = window.scrollY;
     adoptServer(v); syncDateInputs(); render();
+    restoreFocus(focused); window.scrollTo(0, scrollY);
     say("Updated to v" + v.rev + (v.by ? " by " + v.by : ""));
   } else {
     conflict = v; renderNotices();
