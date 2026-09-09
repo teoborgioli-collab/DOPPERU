@@ -18,30 +18,30 @@ img{max-width:100%}
 
 <style>
 :root{
-  --paper:#eef1ec; --surface:#f7f9f6; --sunk:#e7ebe5;
-  --ink:#141f19; --ink-soft:#3b4a42; --muted:#5f6e65;
-  --rule:#d2dad1; --rule-soft:#e2e8e0;
-  --coast:#3a5f8d; --lowland:#136349; --cloudforest:#1f7079; --puna:#8a6821; --city:#5d5a6b;
-  --link:#1f5f52; --focus:#c8792a;
-  --warn:#8a5a12; --warn-bg:#f6efe2; --bad:#9a2f3f; --bad-bg:#f7eaec; --ok:#1f6a52;
+  --paper:#f8f4ea; --surface:#fffdf7; --sunk:#efe8d7;
+  --ink:#2a231b; --ink-soft:#5b5142; --muted:#8c8271;
+  --rule:#ddd3bd; --rule-soft:#ece4d1;
+  --coast:#4a6fa0; --lowland:#4f7d52; --cloudforest:#3f8a87; --puna:#b8863f; --city:#8a5a72;
+  --link:#3d5a73; --focus:#c1683c;
+  --warn:#9c6b21; --warn-bg:#f5ecd9; --bad:#a13f3f; --bad-bg:#f7e9e6; --ok:#3f7a52;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --paper:#101512; --surface:#171e1a; --sunk:#1d251f;
-    --ink:#e5eae4; --ink-soft:#c2cdc4; --muted:#8f9d93;
-    --rule:#28322c; --rule-soft:#1f2823;
-    --coast:#82a8dc; --lowland:#4fb489; --cloudforest:#4fbcc4; --puna:#d3a851; --city:#a9a4bd;
-    --link:#6fc9b0; --focus:#e8a15c;
-    --warn:#e0ae5e; --warn-bg:#251e12; --bad:#ea8093; --bad-bg:#26161a; --ok:#5cbb98;
+    --paper:#1c1712; --surface:#241e17; --sunk:#2a231b;
+    --ink:#ede6d8; --ink-soft:#cbc0ac; --muted:#948a7a;
+    --rule:#3a3225; --rule-soft:#2e281e;
+    --coast:#8fb0e0; --lowland:#8fc492; --cloudforest:#7fd0cc; --puna:#e0b06f; --city:#c592ac;
+    --link:#8fb8d8; --focus:#f0a874;
+    --warn:#e0b06a; --warn-bg:#2b2313; --bad:#e08f8f; --bad-bg:#2c1c1a; --ok:#7fcf9c;
   }
 }
 :root[data-theme="dark"]{
-  --paper:#101512; --surface:#171e1a; --sunk:#1d251f;
-  --ink:#e5eae4; --ink-soft:#c2cdc4; --muted:#8f9d93;
-  --rule:#28322c; --rule-soft:#1f2823;
-  --coast:#82a8dc; --lowland:#4fb489; --cloudforest:#4fbcc4; --puna:#d3a851; --city:#a9a4bd;
-  --link:#6fc9b0; --focus:#e8a15c;
-  --warn:#e0ae5e; --warn-bg:#251e12; --bad:#ea8093; --bad-bg:#26161a; --ok:#5cbb98;
+  --paper:#1c1712; --surface:#241e17; --sunk:#2a231b;
+  --ink:#ede6d8; --ink-soft:#cbc0ac; --muted:#948a7a;
+  --rule:#3a3225; --rule-soft:#2e281e;
+  --coast:#8fb0e0; --lowland:#8fc492; --cloudforest:#7fd0cc; --puna:#e0b06f; --city:#c592ac;
+  --link:#8fb8d8; --focus:#f0a874;
+  --warn:#e0b06a; --warn-bg:#2b2313; --bad:#e08f8f; --bad-bg:#2c1c1a; --ok:#7fcf9c;
 }
 
 *{box-sizing:border-box}
@@ -59,6 +59,11 @@ button{font-family:inherit}
 
 /* masthead */
 .mast{border-bottom:2px solid var(--ink);padding-bottom:22px}
+.masthead-row{display:flex;gap:14px;align-items:flex-start;justify-content:space-between}
+.mastedit{margin-top:12px;flex:none}
+.titleedit{display:grid;gap:10px;max-width:720px;margin-top:14px;padding:14px;background:var(--sunk);border-radius:5px}
+.titleedit input,.titleedit textarea{margin:0;width:100%;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:8px 10px}
+.titleedit textarea{min-height:70px}
 h1{font-family:"Newsreader",Georgia,serif;font-weight:500;
   font-size:clamp(2.2rem,5.5vw,3.5rem);line-height:1.03;letter-spacing:-.015em;
   margin:.16em 0 .12em;text-wrap:balance}
@@ -143,7 +148,7 @@ h2{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:1.6rem;
 /* itinerary — each stop is a panel, its left edge coloured by elevation */
 .leg{display:grid;grid-template-columns:92px 1fr;gap:0 20px;align-items:start;
   background:var(--surface);border-left:3px solid var(--band);border-radius:0 7px 7px 0;
-  padding:18px 20px 18px 17px;margin-bottom:10px}
+  padding:22px 20px 22px 17px;margin-bottom:28px}
 .when{padding-top:3px}
 .when .day{font-family:"Newsreader",Georgia,serif;font-size:1.14rem;line-height:1.2;
   font-variant-numeric:tabular-nums;color:var(--ink)}
@@ -185,10 +190,30 @@ h2{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:1.6rem;
 /* activities */
 .acts{margin-top:16px;border-top:1px solid var(--rule)}
 .act{padding:10px 0 9px;border-bottom:1px solid var(--rule-soft)}
+.act.consensus-approved{background:color-mix(in srgb,var(--ok) 12%,transparent);box-shadow:-4px 0 0 var(--ok);padding-left:10px}
+.act.consensus-disapproved{background:color-mix(in srgb,var(--bad) 11%,transparent);box-shadow:-4px 0 0 var(--bad);padding-left:10px}
 .act:last-of-type{border-bottom:none}
 .ahead{display:flex;flex-wrap:wrap;gap:7px 10px;align-items:center}
 .asub{display:flex;flex-wrap:wrap;gap:7px 12px;align-items:center;margin-top:5px;
   padding-left:2px}
+.decision-row{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:center;margin-top:7px}
+.move-select{font:inherit;font-size:12px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:4px 7px}
+.vote-box{width:25px;height:25px;flex:none;line-height:1;font-size:14px;font-weight:700;
+  display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+  color:var(--muted);background:var(--paper);border:1.5px solid var(--rule);border-radius:5px}
+.vote-box:hover:not(:disabled){border-color:var(--muted)}
+.vote-box.approved{color:var(--surface);border-color:var(--ok);background:var(--ok)}
+.vote-box.disapproved{color:var(--surface);border-color:var(--bad);background:var(--bad)}
+.vote-box.partial-approved{color:var(--ink);border-color:var(--ok);
+  background:linear-gradient(135deg,var(--ok) 50%,var(--paper) 50%)}
+.vote-box.partial-disapproved{color:var(--ink);border-color:var(--bad);
+  background:linear-gradient(135deg,var(--bad) 50%,var(--paper) 50%)}
+.vote-box.conflict{color:var(--ink);border-color:var(--warn);
+  background:linear-gradient(135deg,var(--ok) 50%,var(--bad) 50%)}
+.vote-box:disabled{cursor:default;opacity:.6}
+.consensus{font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:.09em}
+.consensus.approved{color:var(--ok)}.consensus.disapproved{color:var(--bad)}.consensus.pending{color:var(--muted)}
+.move-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:7px}
 
 .dsel{font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;font-size:10.5px;
   text-transform:uppercase;letter-spacing:.11em;cursor:pointer;flex:none;
@@ -204,8 +229,8 @@ h2{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:1.6rem;
   font-weight:600;color:var(--ink);background:var(--paper);
   border:1px solid var(--link);border-radius:4px;padding:5px 8px}
 .at:focus{outline:none}
-.aedit{margin-top:7px}
-.aedit .au{width:100%;flex:none}
+.aedit{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:7px}
+.aedit .au{flex:1 1 260px}
 
 .st{font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;font-size:10px;
   text-transform:uppercase;letter-spacing:.11em;cursor:pointer;flex:none;
@@ -302,6 +327,16 @@ textarea::placeholder{color:var(--muted)}
 .check.bad .mark{color:var(--bad)} .check.warn .mark{color:var(--warn)}
 .check.ok .mark{color:var(--ok)}
 
+ .scenario-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 10px}
+.scenario-tabs .active{background:var(--ink);color:var(--paper,#fff)}
+.activity-card{padding:16px 0;border-bottom:1px solid var(--rule)}
+.activity-card p{color:var(--muted);font-size:14px;line-height:1.5}
+.activity-card select{max-width:100%;padding:7px;border:1px solid var(--rule);background:var(--surface);color:var(--ink);border-radius:4px;margin:0 6px 8px 0}
+#activitySearch{padding:9px;border:1px solid var(--rule);border-radius:4px}
+.fold{margin-top:38px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.fold summary{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;padding:15px 2px;font-family:"Newsreader",Georgia,serif;font-size:1.3rem;list-style:none}
+.fold summary::-webkit-details-marker{display:none}.fold summary::after{content:"+";font-family:"Archivo",sans-serif;color:var(--muted)}.fold[open] summary::after{content:"−"}
+.fold-body{padding:0 2px 18px}.fold .sub{margin-top:-5px}
 /* catalog */
 .cat{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:0 24px}
 .catgroup{border-top:1px solid var(--rule);padding-top:10px;margin-top:14px}
@@ -333,11 +368,14 @@ textarea::placeholder{color:var(--muted)}
 <div class="wrap">
   <header class="mast">
     <p class="lab">Peru &middot; 9–23 November 2026</p>
-    <h1>Fourteen Nights in Peru</h1>
-    <p class="dek">Add stops, set the nights, rewrite any of them, invent your own. Dates recompute
+    <div class="masthead-row"><div><h1 id="pageTitle">Fourteen Nights in Peru</h1>
+    <p class="dek" id="pageSubtitle">Add stops, set the nights, rewrite any of them, invent your own. Dates recompute
     as you go, and the checks below flag anything that will bite you — altitude, travel days, and
-    whether the plan still has a macaw in it.</p>
+    whether the plan still has a macaw in it.</p></div><button class="mini mastedit" id="editHeading" type="button">Edit heading</button></div>
+    <div class="titleedit" id="titleEdit" hidden><label class="fld"><span class="lab">Heading</span><input id="titleInput" maxlength="100"></label><label class="fld"><span class="lab">Subtitle</span><textarea id="subtitleInput" maxlength="400"></textarea></label><button class="mini" id="doneHeading" type="button">Done</button></div>
   </header>
+
+  <section class="scenarios" aria-label="Trip scenarios"><div id="scenarioTabs" class="scenario-tabs"></div><p class="sub">Explore another route. New options copy the current scenario; edits stay separate.</p></section>
 
   <div class="meter">
     <div class="stat"><span class="lab">Nights planned</span><span class="big" id="mNights">0</span></div>
@@ -357,17 +395,13 @@ textarea::placeholder{color:var(--muted)}
     <button class="btn primary" id="saveBtn" type="button">Save</button>
     <button class="btn" id="shareBtn" type="button">Share link</button>
     <button class="btn" id="reloadBtn" type="button">Reload</button>
-    <label class="namefld" id="nameFld" hidden>
-      <span class="lab">You</span>
-      <input type="text" id="pubName" placeholder="your name" maxlength="24">
-    </label>
     <span class="status" id="status">Loading…</span>
     <button class="mini" id="moreBtn" type="button" aria-expanded="false">More</button>
   </div>
 
   <div class="moremenu" id="moreMenu" hidden>
     <button class="mini" id="noteBtn" type="button">Save with a note…</button>
-    <button class="mini" id="resetPlan" type="button">Reset to starting plan</button>
+    <button class="mini" id="resetPlan" type="button">Reset current scenario</button>
     <button class="mini" id="dlPlan" type="button">Download a copy</button>
     <button class="mini" id="upBtn" type="button">Load from a file</button>
     <button class="mini drop" id="pubForget" type="button" hidden>Forget edit key</button>
@@ -393,17 +427,20 @@ textarea::placeholder{color:var(--muted)}
   <p class="sub">Recomputed live from the plan above.</p>
   <div id="checks"></div>
 
+  <details class="fold" id="activitiesFold"><summary id="activitiesTitle">Browse activities</summary><div class="fold-body">
+    <p class="sub">Find an idea and add it to a stop in this option.</p>
+    <div class="mkform"><input id="activitySearch" type="search" placeholder="Search activities or places" aria-label="Search activities"><select id="activityRegion" aria-label="Filter activities by region"><option value="">All regions</option></select></div>
+    <div id="activityCatalog" class="cat"></div><p id="activityFeedback" role="status" aria-live="polite"></p>
+  </div></details>
   <h2>Add a stop</h2>
-  <p class="sub">Travel times are from the nearest hub, and the night counts are the minimum that
-  makes the stop worth doing at all.</p>
+  <p class="sub">Choose a place or create your own.</p>
   <div id="catalog"></div>
 
-  <section id="historySection" hidden>
-    <h2>Earlier saves</h2>
+  <details class="fold" id="historySection" hidden><summary>Earlier saves</summary><div class="fold-body">
     <p class="sub">The last ten versions, newest first. Restoring one loads it onto this screen —
     it only becomes the shared plan when you save.</p>
     <div id="history"></div>
-  </section>
+  </div></details>
 
   <footer class="foot">
     <p>Distances and flight legs assume the usual routings: Lima is the hub for the north coast,
@@ -501,6 +538,9 @@ var STATUSES = [
   {v:"tobook",   label:"To book"},
   {v:"booked",   label:"Booked"}
 ];
+/* tap cycle for the little approval checkboxes: blank -> approved -> disapproved -> blank */
+var VOTE_CYCLE = ["", "approved", "disapproved"];
+var REVIEWERS = ["matteo", "levin"];
 function statusLabel(v){
   for (var i = 0; i < STATUSES.length; i++) if (STATUSES[i].v === v) return STATUSES[i].label;
   return "";
@@ -516,6 +556,8 @@ var FLAGS = [
 ];
 
 var FALLBACK_SEED = {
+  title:"Fourteen Nights in Peru",
+  subtitle:"Add stops, set the nights, rewrite any of them, invent your own. Dates recompute as you go, and the checks below flag anything that will bite you — altitude, travel days, and whether the plan still has a macaw in it.",
   start:"2026-11-09", end:"2026-11-23",
   defs:{},
   items:[
@@ -528,7 +570,7 @@ var FALLBACK_SEED = {
 
 /* The API is tried first; a plain static host without it falls back to the
    file next to this page. */
-var BUILD = "2026-09-08-final10";   /* shown in the footer — check it after deploying */
+var BUILD = "2026-09-08-vercel-key-only";   /* shown in the footer — check it after deploying */
 var PLAN_API = "/api/plan";
 var PLAN_FILE = "plan.json";
 var canPublish = false;
@@ -603,14 +645,50 @@ var history_ = [];            // recent saves from the server
 var conflict = null;          // the server version that beat us to it
 var editAct = null;           // the one activity whose link is open for editing
 var saveError = null;         // last save failure, shown until it is fixed
-var openMode = false;         // server accepts saves without a key
-var LS_NAME = LS + ":name";
+var openMode = false;         // this build is always key-only
+var currentEditor = "";       // key owner; each person can set only their own decision
+var autosaveTimer = null;     // pending debounced autosave, once a key is known
+var saving = false;           // a save is in flight — skip overlapping autosaves
 
 function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
 function lsSet(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
 function lsDel(k){ try { localStorage.removeItem(k); } catch(e){} }
 
+function scenarioCopy(p){ return {start:p.start, end:p.end, items:clone(p.items || []), defs:clone(p.defs || {})}; }
+function syncScenario(){
+  if (!state.scenarios) return;
+  var current = state.scenarios.find(function(p){ return p.id === state.activeScenario; });
+  if (current) Object.assign(current, scenarioCopy(state));
+}
+function allPlan(){ syncScenario(); return Object.assign(scenarioCopy(state), {title:state.title, subtitle:state.subtitle, scenarios:clone(state.scenarios), activeScenario:state.activeScenario}); }
+function renderScenarios(){
+  var tabs = document.getElementById("scenarioTabs"); tabs.textContent = "";
+  state.scenarios.forEach(function(p){
+    var b = document.createElement("button"); b.type = "button"; b.className = "btn" + (p.id === state.activeScenario ? " active" : "");
+    b.textContent = p.name; b.setAttribute("aria-pressed", String(p.id === state.activeScenario));
+    b.onclick = function(){ syncScenario(); Object.assign(state, scenarioCopy(p)); state.activeScenario = p.id; normaliseState(); editing = null; editAct = null; syncDateInputs(); commit(); };
+    tabs.appendChild(b);
+  });
+  var add = document.createElement("button"); add.type = "button"; add.className = "btn"; add.textContent = "+ Add option";
+  add.onclick = function(){
+    syncScenario();
+    var name = state.scenarios.length < 26 ? "Option " + String.fromCharCode(65 + state.scenarios.length) : "Option " + (state.scenarios.length + 1);
+    var p = Object.assign(scenarioCopy(state), {id:"scenario-" + Date.now() + "-" + Math.random().toString(36).slice(2,8), name:name});
+    state.scenarios.push(p); state.activeScenario = p.id; editing = null; editAct = null; commit();
+  };
+  add.disabled = state.scenarios.length >= 20; tabs.appendChild(add);
+  var rename = document.createElement("button"); rename.type = "button"; rename.className = "mini"; rename.textContent = "Rename scenario";
+  rename.onclick = function(){ var p = state.scenarios.find(function(p){return p.id === state.activeScenario;}); var n = window.prompt("Scenario name",p.name); if(n && n.trim()){p.name=n.trim().slice(0,40);commit();} };
+  tabs.appendChild(rename);
+}
 function normaliseState(){
+  if (typeof state.title !== "string" || !state.title.trim()) state.title = FALLBACK_SEED.title;
+  if (typeof state.subtitle !== "string") state.subtitle = FALLBACK_SEED.subtitle;
+  if (!Array.isArray(state.scenarios) || !state.scenarios.length){
+    state.scenarios = [Object.assign(scenarioCopy(state), {id:"main",name:"Main"})]; state.activeScenario = "main";
+  }
+  if (!state.scenarios.some(function(p){return p.id === state.activeScenario;})) state.activeScenario = state.scenarios[0].id;
+
   if (!state.defs || typeof state.defs !== "object") state.defs = {};
   if (!Array.isArray(state.items)) state.items = [];
   state.items = state.items.filter(function(it){ return !!resolve(it.id); });
@@ -621,17 +699,30 @@ function normaliseState(){
       .map(function(a){
         var st = typeof a.s === "string" ? a.s : "";
         if (!STATUSES.some(function(x){ return x.v === st; })) st = "";
+        var votes = a.votes && typeof a.votes === "object" ? a.votes : {};
         return {d: Math.max(0, parseInt(a.d, 10) || 0),
                 t: String(a.t).slice(0, 120),
                 u: typeof a.u === "string" ? a.u.slice(0, 500) : "",
                 s: st,
-                n: typeof a.n === "string" ? a.n.slice(0, 300) : ""};
+                n: typeof a.n === "string" ? a.n.slice(0, 300) : "",
+                votes:{matteo:["approved","unsure","disapproved"].includes(votes.matteo) ? votes.matteo : "", levin:["approved","unsure","disapproved"].includes(votes.levin) ? votes.levin : ""}};
       });
   });
 }
 
-/* every edit only marks the screen dirty — it is not stored anywhere yet */
-function save(){ dirty = true; }
+/* every edit marks the screen dirty, then — once a key is already known,
+   so this is not the first save of the session — queues a quiet autosave a
+   couple of seconds after you stop typing, so your partner sees it without
+   either of you pressing Save. */
+function save(){
+  dirty = true;
+  scheduleAutosave();
+}
+function scheduleAutosave(){
+  if (!canPublish || !lsGet(LS_KEY)) return;
+  clearTimeout(autosaveTimer);
+  autosaveTimer = setTimeout(function(){ if (!saving) doSave("", false); }, 2500);
+}
 
 function usablePlan(v){
   if (!v || !Array.isArray(v.items)) return null;
@@ -643,7 +734,7 @@ function adoptServer(v){
   publishedSeed = clone(v);
   serverRev = v.rev || 0;
   history_ = Array.isArray(v.history) ? v.history : [];
-  state = {start:v.start, end:v.end, items:clone(v.items), defs:clone(v.defs || {})};
+  state = clone(v);
   normaliseState();
   dirty = false;
   conflict = null;
@@ -652,7 +743,7 @@ function adoptServer(v){
 async function loadServer(){
   try {
     var res = await fetch(PLAN_API + "?t=" + Date.now(), {cache:"no-store"});
-    openMode = res.headers.get("x-plan-open") === "1";
+    openMode = false;
     if (res.ok){
       var v = usablePlan(await res.json());
       if (v){ fetchState = "ok"; canPublish = true; return v; }
@@ -663,6 +754,35 @@ async function loadServer(){
     }
   } catch(e){ /* no API on this host */ }
   return undefined;              // undefined = no API at all
+}
+
+async function identifyByKey(key){
+  try{
+    var r = await fetch(PLAN_API + "?who=1", {headers:{"X-Edit-Key":key}, cache:"no-store"});
+    if (r.ok){ var v = await r.json(); return String(v.name || "").toLowerCase(); }
+  } catch(e){}
+  return "";
+}
+async function identifyEditor(){
+  var key=lsGet(LS_KEY)||""; if(!key){currentEditor="";return;}
+  currentEditor = await identifyByKey(key);
+}
+
+/* asked for from the vote checkbox when no key is set yet — same key the Save
+   flow uses, just entered inline so a vote does not stall on a trip to Save */
+async function promptForEditor(){
+  var key = window.prompt("Enter your edit key to vote (Matteo or Levin's own key):");
+  if (key == null) return false;
+  key = key.trim();
+  if (!key) return false;
+  var name = await identifyByKey(key);
+  if (REVIEWERS.indexOf(name) === -1){
+    alert("That key wasn't recognised.");
+    return false;
+  }
+  lsSet(LS_KEY, key);
+  currentEditor = name;
+  return true;
 }
 
 /* the file in the repo is only the starting point, used until the first save */
@@ -680,19 +800,23 @@ async function saveToServer(label, key, force){
     headers:{"Content-Type":"application/json", "X-Edit-Key":key || ""},
     body: JSON.stringify({
       baseRev: serverRev, force: !!force, label: label || "",
-      by: openMode ? (lsGet(LS_NAME) || "") : undefined,
-      start: state.start, end: state.end,
-      items: state.items, defs: state.defs || {}
+      title:state.title, subtitle:state.subtitle, start: state.start, end: state.end,
+      items: state.items, defs: state.defs || {}, scenarios: allPlan().scenarios, activeScenario:state.activeScenario
     })
   });
   if (res.status === 401) throw new Error("bad_key");
-  if (res.status === 503) throw new Error("not_configured");
+
   if (res.status === 409){
     var body = await res.json();
     conflict = usablePlan(body.current);
     throw new Error("conflict");
   }
-  if (!res.ok) throw new Error("http_" + res.status);
+  if (!res.ok){
+    var detail = null;
+    try { detail = await res.json(); } catch(e){}
+    if (detail && detail.error === "invalid_edit_keys") throw new Error("not_configured");
+    throw new Error(detail && typeof detail.message === "string" ? detail.message : "Server error (" + res.status + "). Your edits are still here. Download a copy from More before reloading.");
+  }
   var v = usablePlan(await res.json());
   if (!v) throw new Error("bad_response");
   publishedSeed = clone(v);
@@ -734,23 +858,15 @@ function b64ToUtf8(s){
   return new TextDecoder().decode(bytes);
 }
 function packed(){
-  return JSON.stringify({
-    v:1, rev: serverRev,
-    start:state.start, end:state.end, items:state.items, defs:state.defs || {}
-  });
+  return JSON.stringify(Object.assign(allPlan(), {v:2, rev:serverRev}));
 }
 function adopt(obj){
   if (!obj || !Array.isArray(obj.items)) return false;
-  state = {
-    start: obj.start || FALLBACK_SEED.start,
-    end: obj.end || FALLBACK_SEED.end,
-    items: obj.items,
-    defs: (obj.defs && typeof obj.defs === "object") ? obj.defs : {}
-  };
-  normaliseState();
-  dirty = true;
-  return true;
+  state = clone(obj);
+  state.start = state.start || FALLBACK_SEED.start; state.end = state.end || FALLBACK_SEED.end;
+  normaliseState(); dirty = true; return true;
 }
+
 function planLink(){
   return location.origin + location.pathname + location.search
        + "#p=" + utf8ToB64(packed());
@@ -806,10 +922,8 @@ function renderStatus(){
   el.innerHTML = parts.join(" · ");
 
   if (sb) sb.disabled = !canPublish || !dirty;
-  var nf = document.getElementById("nameFld");
-  if (nf) nf.hidden = !canPublish || !openMode;
   var fg = document.getElementById("pubForget");
-  if (fg) fg.hidden = openMode || !lsGet(LS_KEY);
+  if (fg) fg.hidden = !lsGet(LS_KEY);
 }
 
 function notice(kind, html, actions){
@@ -858,10 +972,8 @@ function renderNotices(){
   }
   if (saveError === "not_configured"){
     box.appendChild(notice("warn",
-      "<b>The server refuses every save.</b> That is the old API — the current one lets anyone "
-      + "save when no keys are set. Replace <code>api/plan.js</code> with the current file, or "
-      + "set <code>PLAN_EDIT_KEYS</code> and redeploy. Open <code>/api/plan?diag=1</code>: if it "
-      + "returns the plan instead of a <code>build</code> field, the old API is still live."));
+      "<b>Saving is locked until both edit keys are configured.</b> Set <code>PLAN_EDIT_KEYS</code> "
+      + "in Vercel as <code>matteo:YOUR_KEY,levin:HIS_KEY</code>, apply it to Production, and redeploy."));
   }
 
   if (fetchState === "error"){
@@ -894,7 +1006,7 @@ function renderHistory(){
     var btn = document.createElement("button");
     btn.type = "button"; btn.className = "mini"; btn.textContent = "Restore";
     btn.onclick = function(){
-      state = {start:h.start, end:h.end, items:clone(h.items), defs:clone(h.defs || {})};
+      state = clone(h);
       normaliseState();
       dirty = true;
       syncDateInputs();
@@ -1055,6 +1167,9 @@ function activityBlock(it, S){
     var a = entry.a;
     var row = document.createElement("div");
     row.className = "act";
+    if (!a.votes) a.votes = {matteo:"",levin:""};
+    var consensus = a.votes.matteo && a.votes.matteo === a.votes.levin ? a.votes.matteo : "pending";
+    if (consensus === "approved" || consensus === "disapproved") row.classList.add("consensus-" + consensus);
 
     var head = document.createElement("div");
     head.className = "ahead";
@@ -1126,6 +1241,57 @@ function activityBlock(it, S){
     sub.appendChild(n);
     row.appendChild(sub);
 
+    var decisions = document.createElement("div"); decisions.className = "decision-row";
+    var mv = a.votes.matteo || "", lv = a.votes.levin || "";
+    var boxCls = "", boxSym = "";
+    if (mv === "approved" && lv === "approved"){ boxCls = "approved"; boxSym = "✓"; }
+    else if (mv === "disapproved" && lv === "disapproved"){ boxCls = "disapproved"; boxSym = "✕"; }
+    else if ((mv === "approved" && lv === "disapproved") || (mv === "disapproved" && lv === "approved")){ boxCls = "conflict"; boxSym = ""; }
+    else if (mv === "approved" || lv === "approved"){ boxCls = "partial-approved"; boxSym = "✓"; }
+    else if (mv === "disapproved" || lv === "disapproved"){ boxCls = "partial-disapproved"; boxSym = "✕"; }
+    var box = document.createElement("button");
+    box.type = "button";
+    box.className = "vote-box" + (boxCls ? " " + boxCls : "");
+    box.textContent = boxSym;
+    box.setAttribute("aria-label", "Decision on " + a.t + ". Matteo: " + (mv || "not voted")
+      + ". Levin: " + (lv || "not voted") + "."
+      + (currentEditor ? " Tap to change your own vote — it only counts fully once you both agree."
+                        : " Tap to enter your edit key and vote."));
+    box.onclick = async function(){
+      if (!currentEditor){
+        var ok = await promptForEditor();
+        if (!ok) return;
+      }
+      var cur = VOTE_CYCLE.indexOf(a.votes[currentEditor] || "");
+      a.votes[currentEditor] = VOTE_CYCLE[(cur + 1) % VOTE_CYCLE.length];
+      commit();
+    };
+    decisions.appendChild(box);
+    var c = document.createElement("span"); c.className="consensus "+consensus;
+    c.textContent = consensus === "approved" ? "Doppiproved 🎉" : consensus === "disapproved" ? "Both disapproved" : "Waiting for agreement";
+    decisions.appendChild(c); row.appendChild(decisions);
+
+    var move = document.createElement("div"); move.className="move-row";
+    var prev=document.createElement("button");prev.type="button";prev.className="mini";prev.textContent="↑";prev.title="Move activity up";prev.disabled=entry.i===0;
+    prev.onclick=function(){var j=entry.i,t=it.acts[j-1];it.acts[j-1]=it.acts[j];it.acts[j]=t;commit();};
+    var next=document.createElement("button");next.type="button";next.className="mini";next.textContent="↓";next.title="Move activity down";next.disabled=entry.i===it.acts.length-1;
+    next.onclick=function(){var j=entry.i,t=it.acts[j+1];it.acts[j+1]=it.acts[j];it.acts[j]=t;commit();};
+    var dest=document.createElement("select");dest.className="move-select";dest.setAttribute("aria-label","Move "+a.t+" to another stop or option");
+    var hold=document.createElement("option");hold.value="";hold.textContent="Move to…";dest.appendChild(hold);
+    state.scenarios.forEach(function(sc){var group=document.createElement("optgroup");group.label=sc.name;scenarioItems(sc).forEach(function(target,ti){if(sc.id===state.activeScenario&&target===it)return;var o=document.createElement("option");o.value=sc.id+"::"+ti;o.textContent=resolveForScenario(sc,target.id);group.appendChild(o);});if(group.children.length)dest.appendChild(group);});
+    dest.onchange=function(){if(!dest.value)return;var bits=dest.value.split("::"),sc=state.scenarios.find(function(x){return x.id===bits[0];}),target=sc&&scenarioItems(sc)[Number(bits[1])];if(!target)return;if(!target.acts)target.acts=[];target.acts.push(clone(a));it.acts.splice(entry.i,1);commit();};
+    var duplicate=document.createElement("button");duplicate.type="button";duplicate.className="mini";duplicate.textContent="Duplicate";
+    duplicate.setAttribute("aria-label","Duplicate "+a.t);
+    duplicate.onclick=function(){
+      var copy=clone(a);
+      copy.t=(copy.t+" (copy)").slice(0,120);
+      it.acts.splice(entry.i+1,0,copy);
+      commit();
+    };
+    move.appendChild(prev);move.appendChild(next);move.appendChild(dest);move.appendChild(duplicate);
+    move.hidden = editAct !== a;
+    row.appendChild(move);
+
     wrap.appendChild(row);
   });
 
@@ -1160,7 +1326,7 @@ function activityBlock(it, S){
     if (!title) { ti.focus(); return; }
     var url = ui.value.trim();
     if (url && !/^https?:\/\//i.test(url)) url = "https://" + url;
-    it.acts.push({d: newDay, t: title, u: url, s: newStatus, n: ""});
+    it.acts.push({d: newDay, t: title, u: url, s: newStatus, n: "", votes:{matteo:"",levin:""}});
     ti.value = ""; ui.value = "";
     commit();
   });
@@ -1171,6 +1337,10 @@ function activityBlock(it, S){
 
 /* ---------- render ---------- */
 function render(){
+  renderScenarios();
+  document.getElementById("pageTitle").textContent=state.title;
+  document.getElementById("pageSubtitle").textContent=state.subtitle;
+  renderActivities();
   var legs = document.getElementById("legs");
   legs.textContent = "";
   var cursor = parseD(state.start);
@@ -1422,9 +1592,52 @@ function renderChecks(endCursor){
   });
 }
 
+
+var ACTIVITIES = [
+  ["Lima", "Coast", "Explore Barranco", "A neighbourhood walk for art, cafés, and coastal views."],
+  ["Lima", "Coast", "Walk the Miraflores waterfront", "Leave a little time for a relaxed coastal walk."],
+  ["Arequipa", "Andes", "Salinas day trip", "An idea for a day outside Arequipa; check altitude and travel time."],
+  ["Arequipa", "Coast", "Birdwatching at Mejía", "A wetland outing to consider from Arequipa."],
+  ["Cusco", "Andes", "Explore Cusco", "Markets, streets, and a gentle day around town."],
+  ["Sacred Valley", "Andes", "Visit the Sacred Valley", "Choose villages and archaeological sites for a day out."],
+  ["Machu Picchu", "Andes", "Visit Machu Picchu", "Add ticket and transport details once your route is decided."],
+  ["Tambopata", "Amazon", "Macaw clay lick outing", "Discuss access, timing, and conditions with your lodge."],
+  ["Manu Road", "Amazon", "Cloud forest birdwatching", "An outing to plan with a local guide along the Manu Road."],
+  ["Máncora", "Coast", "Beach afternoon", "Keep an afternoon free by the water."],
+  ["Huanchaco", "Coast", "Surf session", "Add a lesson or a session to your coastal stay."],
+  ["Trujillo", "Coast", "Explore Chan Chan", "An archaeological outing to consider from Trujillo or Huanchaco."]
+];
+function renderActivities(){
+  var cat=$("activityCatalog");cat.textContent="";
+  var q=$("activitySearch").value.trim().toLowerCase(), region=$("activityRegion").value;
+  var ideas=ACTIVITIES.filter(function(a){return (!region || a[1]===region) && a.join(" ").toLowerCase().includes(q);});
+  if(!ideas.length){cat.textContent="No matching activities. Try another search, or add your own inside a stop.";return;}
+  ideas.forEach(function(a){
+    var card=document.createElement("div");card.className="activity-card";
+    var label=document.createElement("span");label.className="lab";label.textContent=a[0]+" · "+a[1];card.appendChild(label);
+    var title=document.createElement("h3");title.textContent=a[2];card.appendChild(title);
+    var desc=document.createElement("p");desc.textContent=a[3];card.appendChild(desc);
+    var target=document.createElement("select");target.setAttribute("aria-label","Stop for "+a[2]);
+    state.items.forEach(function(it,i){var o=document.createElement("option");o.value=i;o.textContent=resolve(it.id).name;target.appendChild(o);});
+    var preferred=state.items.findIndex(function(it){return resolve(it.id).name.toLowerCase()===a[0].toLowerCase();});if(preferred>=0)target.value=preferred;
+    var b=document.createElement("button");b.type="button";b.className="btn";
+    function refresh(){var it=state.items[Number(target.value)];var exists=it && (it.acts||[]).some(function(x){return x.t===a[2];});b.disabled=!it || exists;b.textContent=!it?"Add a stop first":exists?"Added":"Add activity";}
+    target.onchange=refresh;refresh();
+    b.onclick=function(){var it=state.items[Number(target.value)];if(!it)return;if(!it.acts)it.acts=[];it.acts.push({t:a[2],d:0,u:"",s:"",n:""});var msg=a[2]+" added to "+resolve(it.id).name+".";commit();$("activityFeedback").textContent=msg;};
+    card.appendChild(target);card.appendChild(b);cat.appendChild(card);
+  });
+}
+["Coast","Andes","Amazon"].forEach(function(r){var o=document.createElement("option");o.value=r;o.textContent=r;$("activityRegion").appendChild(o);});
+$("activitySearch").oninput=renderActivities;$("activityRegion").onchange=renderActivities;
+
 function customIds(){
   return Object.keys(state.defs || {}).filter(isCustom);
 }
+
+function resolveForScenario(sc,id){
+  var d=(sc.defs||{})[id]; return (d&&d.name)||(STOPS[id]&&STOPS[id].name)||"Stop";
+}
+function scenarioItems(sc){ return sc.id===state.activeScenario ? state.items : (sc.items||[]); }
 
 function catRow(id){
   var S = resolve(id), inPlan = idx(id) > -1;
@@ -1452,30 +1665,13 @@ function renderCatalog(){
   var cat = document.getElementById("catalog");
   cat.textContent = "";
 
-  GROUPS.forEach(function(g){
-    var ids = Object.keys(STOPS).filter(function(k){ return STOPS[k].region === g; });
-    if (!ids.length) return;
-    var wrap = document.createElement("div");
-    wrap.className = "catgroup";
-    var lab = document.createElement("span"); lab.className = "lab"; lab.textContent = g;
-    wrap.appendChild(lab);
-    var grid = document.createElement("div"); grid.className = "cat";
-    ids.forEach(function(id){ grid.appendChild(catRow(id)); });
-    wrap.appendChild(grid);
-    cat.appendChild(wrap);
-  });
-
-  var mine = customIds();
-  if (mine.length){
-    var w = document.createElement("div");
-    w.className = "catgroup";
-    var l = document.createElement("span"); l.className = "lab"; l.textContent = "Your own stops";
-    w.appendChild(l);
-    var g2 = document.createElement("div"); g2.className = "cat";
-    mine.forEach(function(id){ g2.appendChild(catRow(id)); });
-    w.appendChild(g2);
-    cat.appendChild(w);
-  }
+  var choose = document.createElement("select"); choose.setAttribute("aria-label", "Place to add");
+  var blank = document.createElement("option"); blank.value=""; blank.textContent="Choose a place…"; choose.appendChild(blank);
+  Object.keys(STOPS).concat(customIds()).forEach(function(id){ if(idx(id)>-1)return; var o=document.createElement("option");o.value=id;o.textContent=resolve(id).name;choose.appendChild(o); });
+  var add=document.createElement("button");add.type="button";add.className="btn";add.textContent="Add stop";add.disabled=true;
+  choose.onchange=function(){add.disabled=!choose.value;};
+  add.onclick=function(){var id=choose.value;if(!id)return;state.items.push({id:id,nights:resolve(id).min,note:"",acts:[]});commit();};
+  var row=document.createElement("div");row.className="mkform";row.appendChild(choose);row.appendChild(add);cat.appendChild(row);
 
   /* create-your-own */
   var mk = document.createElement("div");
@@ -1540,6 +1736,8 @@ function $(id){ return document.getElementById(id); }
 
 $("dStart").addEventListener("change", function(e){ state.start = e.target.value; commit(); });
 $("dEnd").addEventListener("change", function(e){ state.end = e.target.value; commit(); });
+$("editHeading").addEventListener("click",function(){ $("titleInput").value=state.title;$("subtitleInput").value=state.subtitle;$("titleEdit").hidden=false;$("titleInput").focus(); });
+$("doneHeading").addEventListener("click",function(){state.title=$("titleInput").value.trim()||FALLBACK_SEED.title;state.subtitle=$("subtitleInput").value.trim();$("titleEdit").hidden=true;commit();});
 
 $("moreBtn").addEventListener("click", function(){
   var m = $("moreMenu");
@@ -1550,7 +1748,7 @@ $("moreBtn").addEventListener("click", function(){
 $("resetPlan").addEventListener("click", function(){
   var keep = {};
   customIds().forEach(function(id){ keep[id] = state.defs[id]; });
-  state = clone(FALLBACK_SEED);
+  Object.assign(state, clone(FALLBACK_SEED));
   state.defs = Object.assign({}, state.defs || {}, keep);
   normaliseState();
   dirty = true; editing = null;
@@ -1558,16 +1756,15 @@ $("resetPlan").addEventListener("click", function(){
   say("Starting plan loaded — press Save to share it");
 });
 
-/* One share button. It hands over the key too when keys are switched on,
-   so nobody the link reaches ever has to type one. */
+/* Include the locally remembered key when available. */
 $("shareBtn").addEventListener("click", function(){
-  var key = openMode ? "" : (lsGet(LS_KEY) || "");
+  var key = lsGet(LS_KEY) || "";
   var url = location.origin + location.pathname
           + (key ? "#k=" + encodeURIComponent(key) : "");
   var box = $("linkBox");
   box.hidden = false; box.value = url; box.focus(); box.select();
   var msg = key ? "Copied — this link can edit the plan"
-                : "Copied — anyone with this link can edit the plan";
+                : "Copied — viewing only until an edit key is entered";
   if (navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(url).then(
       function(){ say(msg); }, function(){ say("Copy the link below"); });
@@ -1581,8 +1778,6 @@ $("reloadBtn").addEventListener("click", async function(){
   else { render(); say("Nothing saved yet"); }
 });
 
-$("pubName").addEventListener("input", function(e){ lsSet(LS_NAME, e.target.value.trim()); });
-
 /* ---------- saving ---------- */
 function say(msg){
   var el = $("status");
@@ -1592,7 +1787,7 @@ function say(msg){
 }
 
 async function doSave(label, force){
-  if (!openMode && !lsGet(LS_KEY) && !$("pubKey").value){
+  if (!lsGet(LS_KEY) && !$("pubKey").value){
     $("keyRow").hidden = false;
     $("pubKey").hidden = false;
     $("pubKey").focus();
@@ -1600,9 +1795,13 @@ async function doSave(label, force){
     return;
   }
   var key = lsGet(LS_KEY) || $("pubKey").value;
+  if (saving) return;
+  saving = true;
+  clearTimeout(autosaveTimer);
   say("Saving…");
   try {
     var v = await saveToServer(label, key, force);
+    currentEditor=String(v.by||"").toLowerCase();
     saveError = null;
     if (key) lsSet(LS_KEY, key);
     $("keyRow").hidden = true;
@@ -1626,6 +1825,8 @@ async function doSave(label, force){
     } else {
       say("Saving failed — " + e.message);
     }
+  } finally {
+    saving = false;
   }
 }
 
@@ -1634,7 +1835,7 @@ $("saveBtn").addEventListener("click", function(){ doSave("", false); });
 $("noteBtn").addEventListener("click", function(){
   var r = $("keyRow");
   r.hidden = !r.hidden;
-  $("pubKey").hidden = openMode || !!lsGet(LS_KEY);
+  $("pubKey").hidden = !!lsGet(LS_KEY);
   if (!r.hidden) $("pubLabel").focus();
 });
 $("pubCancel").addEventListener("click", function(){ $("keyRow").hidden = true; });
@@ -1702,7 +1903,7 @@ async function poll(){
     conflict = v; renderNotices();
   }
 }
-setInterval(poll, 20000);
+setInterval(poll, 6000);   /* short enough that two people editing together feel in sync */
 document.addEventListener("visibilitychange", function(){ if (!document.hidden) poll(); });
 window.addEventListener("beforeunload", function(e){
   if (dirty){ e.preventDefault(); e.returnValue = ""; }
@@ -1714,32 +1915,30 @@ async function init(){
   if (v === undefined){
     fetchState = "error";
     var seed = await loadSeedFile();
-    state = seed ? {start:seed.start, end:seed.end, items:seed.items, defs:seed.defs || {}}
+    state = seed ? clone(seed)
                  : clone(FALLBACK_SEED);
     normaliseState();
   } else if (v){
     adoptServer(v);
   } else {
     var seed2 = await loadSeedFile();
-    state = seed2 ? {start:seed2.start, end:seed2.end, items:seed2.items, defs:seed2.defs || {}}
+    state = seed2 ? clone(seed2)
                   : clone(FALLBACK_SEED);
     normaliseState();
     dirty = true;
   }
 
   if (readHash()) dirty = true;
+  await identifyEditor();
 
   document.getElementById("toolbar").hidden = false;
-  document.getElementById("pubName").value = lsGet(LS_NAME) || "";
   document.getElementById("buildline").textContent = "Build " + BUILD;
   syncDateInputs();
   render();
 
   setSaveLine(!canPublish
     ? "No server on this address, so this is a read-only copy. Changes stay on this screen until you reload."
-    : openMode
-      ? "The plan lives on the server. Everyone with the link sees the same one and can save — the last ten versions are kept, so nothing is lost for good."
-      : "The plan lives on the server. Everyone with the link sees the same one; saving needs the edit key, and Share link hands it over so nobody has to type it.");
+    : "The plan lives on the server. Everyone with the link can view it; saving always requires Matteo's or Levin's edit key.");
 }
 
 init();

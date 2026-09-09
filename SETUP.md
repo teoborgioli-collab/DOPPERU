@@ -21,12 +21,12 @@ api/plan.js      ← api is a FOLDER
    project. That adds `BLOB_READ_WRITE_TOKEN` on its own; you never touch it.
 4. Redeploy.
 
-That's it. **No password to set up.** Anyone with the address can save.
+Saving is deliberately disabled until both edit keys are configured.
 
 ### Check it worked
 
 Open `https://your-site.vercel.app/api/plan?diag=1`. You should get JSON with
-`"openMode": true`. If you get Vercel's own 404 page instead, `api/plan.js` is
+`"openMode": false`, `"usableEditors": 2`, and both names. If you get Vercel's own 404 page instead, `api/plan.js` is
 in the wrong place or `package.json` is missing.
 
 The page itself prints its build at the bottom — handy for confirming a deploy
@@ -53,6 +53,12 @@ it can be changed in place — click a piece of text and type.
 
 Anything marked **To book** is collected in the Checks panel above the
 itinerary, so the outstanding bookings are always in one place.
+
+Activities can also be moved up or down, moved to another stop, or moved into
+a stop in a different option tab. Open **Edit** on an activity to duplicate its
+full contents. **Browse activities** and **Earlier saves**
+are collapsed until needed so the main itinerary stays compact. The page
+heading and subtitle can be changed with **Edit heading**.
 
 **Edit stop** (name, kind, elevation, travel time, minimum nights) is for
 correcting the stop itself, and for the ones you invent. The Checks panel reads
@@ -86,7 +92,7 @@ The last ten versions are listed at the bottom of the page with who saved them
 and when. **Restore** puts one back on your screen; it becomes the shared plan
 only once you save it. Nothing is ever lost for good.
 
-## Optional: lock it with a key
+## Required edit keys
 
 The address is not really secret — Vercel domains show up in public
 certificate-transparency logs. If that bothers you, add one environment
@@ -94,11 +100,11 @@ variable (Settings → Environment Variables, all environments, then redeploy):
 
 | Name | Value |
 |---|---|
-| `PLAN_EDIT_KEYS` | `matteo:dopperu2026,gast:tambopata26` |
+| `PLAN_EDIT_KEYS` | `matteo:dopperu2026,levin:tambopata26` |
 
-One `name:key` pair per person, comma-separated, **at least 4 characters per
-key**, no spaces around the commas and colons. Reading stays open to anyone
-with the link; only saving needs a key.
+Both `matteo` and `levin` must be present, comma-separated, with **at least 4
+characters per key**. Reading stays open to anyone with the link; saving never
+works without one of these keys.
 
 A short word like `doppi` is fine here — the address already has to be known,
 and the last ten versions are always restorable. A long random key is stronger,
@@ -111,19 +117,29 @@ Then:
   immediately without typing anything. That link can edit — send it the way you
   would send a password.
 - Each save is labelled with the name belonging to the key that was used.
+- Activity decisions are tied to those names: Matteo's key edits Matteo's field,
+  and Levin's key edits Levin's field. An activity turns fully green or red only
+  when both people make the same final decision.
 - To revoke one person: remove their pair, redeploy. Everyone else is
   unaffected. They get *"That edit key was not accepted"* and the page clears
   the stored key.
 - **More → Forget edit key** wipes it from a shared or borrowed machine.
 
-**To switch the password off again:** delete `PLAN_EDIT_KEYS` (or add
-`PLAN_OPEN` = `true`) and redeploy. As long as `PLAN_EDIT_KEYS` exists, the key
-is required — that is the usual reason a page still asks for one.
-
 ## Notes
 
-- `PLAN_OPEN=true` forces open mode even when keys are configured.
+- `PLAN_OPEN` and `PLAN_EDIT_KEY` are ignored. Only `PLAN_EDIT_KEYS` is accepted.
+- Missing or invalid key configuration refuses all saves instead of allowing anonymous writes.
 - Hosted somewhere without the API (GitHub Pages, Netlify Drop), the page reads
   `plan.json` read-only and hides the toolbar's save controls.
 - `?diag=1` reports what the server sees — key names and lengths, never the
   keys themselves.
+
+
+## Save errors
+
+Edit keys and storage credentials are separate. Even with edit keys configured,
+Vercel needs `BLOB_READ_WRITE_TOKEN` from a connected **public** Blob store to save.
+Ensure environment variables apply to the deployed environment, then redeploy.
+The new API reports storage configuration failures on screen rather than `http_500`.
+If saving still fails, inspect `/api/plan?diag=1` and the Vercel function logs.
+Before reloading after a failed save, use **More → Download a copy** to keep edits.
