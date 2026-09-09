@@ -621,6 +621,12 @@ function defOf(id){
   if (!state.defs[id]) state.defs[id] = {};
   return state.defs[id];
 }
+/* activities need a stable id (unlike stops, not human-chosen) purely so a
+   conflict on save can be merged item-by-item instead of always asking you
+   to pick a whole side — see mergePlan() below */
+function newActId(){
+  return "a" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
 function newId(){
   var n = 1;
   while (STOPS["x" + n] || (state.defs && state.defs["x" + n])) n++;
@@ -711,7 +717,8 @@ function normaliseState(){
         var st = typeof a.s === "string" ? a.s : "";
         if (!STATUSES.some(function(x){ return x.v === st; })) st = "";
         var votes = a.votes && typeof a.votes === "object" ? a.votes : {};
-        return {d: Math.max(0, parseInt(a.d, 10) || 0),
+        return {id: typeof a.id === "string" && a.id ? a.id : newActId(),
+                d: Math.max(0, parseInt(a.d, 10) || 0),
                 t: String(a.t).slice(0, 120),
                 u: typeof a.u === "string" ? a.u.slice(0, 500) : "",
                 s: st,
@@ -732,7 +739,7 @@ function save(){
 function scheduleAutosave(){
   if (!canPublish || !lsGet(LS_KEY)) return;
   clearTimeout(autosaveTimer);
-  autosaveTimer = setTimeout(function(){ if (!saving) doSave("", false); }, 2500);
+  autosaveTimer = setTimeout(function(){ if (!saving) doSave("", false); }, 1200);
 }
 
 function usablePlan(v){
@@ -1298,6 +1305,7 @@ function activityBlock(it, S){
     duplicate.setAttribute("aria-label","Duplicate "+a.t);
     duplicate.onclick=function(){
       var copy=clone(a);
+      copy.id=newActId();
       copy.t=(copy.t+" (copy)").slice(0,120);
       it.acts.splice(entry.i+1,0,copy);
       commit();
@@ -1340,7 +1348,7 @@ function activityBlock(it, S){
     if (!title) { ti.focus(); return; }
     var url = ui.value.trim();
     if (url && !/^https?:\/\//i.test(url)) url = "https://" + url;
-    it.acts.push({d: newDay, t: title, u: url, s: newStatus, n: "", votes:{matteo:"",levin:""}});
+    it.acts.push({id: newActId(), d: newDay, t: title, u: url, s: newStatus, n: "", votes:{matteo:"",levin:""}});
     ti.value = ""; ui.value = "";
     commit();
   });
@@ -1637,7 +1645,7 @@ function renderActivities(){
     var b=document.createElement("button");b.type="button";b.className="btn";
     function refresh(){var it=state.items[Number(target.value)];var exists=it && (it.acts||[]).some(function(x){return x.t===a[2];});b.disabled=!it || exists;b.textContent=!it?"Add a stop first":exists?"Added":"Add activity";}
     target.onchange=refresh;refresh();
-    b.onclick=function(){var it=state.items[Number(target.value)];if(!it)return;if(!it.acts)it.acts=[];it.acts.push({t:a[2],d:0,u:"",s:"",n:""});var msg=a[2]+" added to "+resolve(it.id).name+".";commit();$("activityFeedback").textContent=msg;};
+    b.onclick=function(){var it=state.items[Number(target.value)];if(!it)return;if(!it.acts)it.acts=[];it.acts.push({id:newActId(),t:a[2],d:0,u:"",s:"",n:"",votes:{matteo:"",levin:""}});var msg=a[2]+" added to "+resolve(it.id).name+".";commit();$("activityFeedback").textContent=msg;};
     card.appendChild(target);card.appendChild(b);cat.appendChild(card);
   });
 }
@@ -1800,6 +1808,118 @@ function say(msg){
   setTimeout(renderStatus, 4000);
 }
 
+/* ---------- merging a save conflict ----------
+   Two people co-editing live now means a save conflict (someone else saved
+   first) can happen constantly, not just occasionally — autosave alone
+   would turn every one of those into an interrupting "pick a side" prompt.
+   Most of the time the two edits do not actually overlap (you touched
+   Lima's note, they voted on an Arequipa activity), so try a 3-way merge
+   first — base is the plan as of your last successful load/save
+   (publishedSeed), "mine" is your unsaved screen, "theirs" is what the
+   server has now. Anything genuinely ambiguous (the same field changed
+   differently on both sides, or reordering that does not agree) bails out
+   to CONFLICT, which falls straight back to today's manual banner — so a
+   failed merge is never less safe than not merging at all. */
+var CONFLICT = {conflict: true};
+function sameJSON(a, b){ return JSON.stringify(a === undefined ? null : a) === JSON.stringify(b === undefined ? null : b); }
+function mergeField(base, mine, theirs){
+  if (sameJSON(mine, theirs)) return mine;
+  if (sameJSON(mine, base)) return theirs;
+  if (sameJSON(theirs, base)) return mine;
+  return CONFLICT;
+}
+function indexById(arr){
+  var m = {};
+  (arr || []).forEach(function(x){ if (x && x.id != null) m[x.id] = x; });
+  return m;
+}
+function mergeById(baseArr, mineArr, theirArr, mergeOne){
+  var b = indexById(baseArr), m = indexById(mineArr), t = indexById(theirArr);
+  var ids = [], seen = {};
+  (mineArr || []).concat(theirArr || []).forEach(function(x){
+    if (x && x.id != null && !seen[x.id]){ seen[x.id] = 1; ids.push(x.id); }
+  });
+  var out = [];
+  for (var i = 0; i < ids.length; i++){
+    var id = ids[i], bb = b[id], mm = m[id], tt = t[id];
+    if (!mm && !tt) continue;                    // gone on both sides
+    if (!bb){                                     // new since base
+      if (mm && tt) { if (sameJSON(mm, tt)) out.push(mm); else return CONFLICT; }
+      else out.push(mm || tt);
+      continue;
+    }
+    if (!mm || !tt){                              // removed on exactly one side
+      if (!sameJSON(mm || tt, bb)) return CONFLICT;  // and edited on the other — needs a person
+      continue;
+    }
+    var merged = mergeOne(bb, mm, tt);
+    if (merged === CONFLICT) return CONFLICT;
+    out.push(merged);
+  }
+  return out;
+}
+function mergeVotes(base, mine, theirs){
+  base = base || {}; mine = mine || {}; theirs = theirs || {};
+  var out = {}, bad = false;
+  ["matteo", "levin"].forEach(function(p){
+    var r = mergeField(base[p] || "", mine[p] || "", theirs[p] || "");
+    if (r === CONFLICT) bad = true; else out[p] = r;
+  });
+  return bad ? CONFLICT : out;
+}
+function mergeAct(base, mine, theirs){
+  var out = {id: mine.id}, bad = false;
+  ["d", "t", "u", "s", "n"].forEach(function(f){
+    var r = mergeField(base[f], mine[f], theirs[f]);
+    if (r === CONFLICT) bad = true; else out[f] = r;
+  });
+  var votes = mergeVotes(base.votes, mine.votes, theirs.votes);
+  if (votes === CONFLICT) bad = true; else out.votes = votes;
+  return bad ? CONFLICT : out;
+}
+function mergeItem(base, mine, theirs){
+  var out = {id: mine.id}, bad = false;
+  ["nights", "note", "vibe"].forEach(function(f){
+    var r = mergeField(base[f], mine[f], theirs[f]);
+    if (r === CONFLICT) bad = true; else out[f] = r;
+  });
+  var acts = mergeById(base.acts, mine.acts, theirs.acts, mergeAct);
+  if (acts === CONFLICT) bad = true; else out.acts = acts;
+  return bad ? CONFLICT : out;
+}
+function mergeItemsArray(baseItems, mineItems, theirItems){
+  function ids(arr){ return (arr || []).map(function(x){ return x && x.id; }).filter(Boolean); }
+  var mineIds = ids(mineItems), theirIds = ids(theirItems);
+  var mineShared = mineIds.filter(function(id){ return theirIds.indexOf(id) > -1; });
+  var theirShared = theirIds.filter(function(id){ return mineIds.indexOf(id) > -1; });
+  if (mineShared.join("|") !== theirShared.join("|")) return CONFLICT;   // reordered differently — a person should look
+  return mergeById(baseItems, mineItems, theirItems, mergeItem);
+}
+function mergeDefs(baseDefs, mineDefs, theirDefs){
+  baseDefs = baseDefs || {}; mineDefs = mineDefs || {}; theirDefs = theirDefs || {};
+  var keys = {}, out = {}, bad = false;
+  Object.keys(mineDefs).concat(Object.keys(theirDefs)).forEach(function(k){ keys[k] = 1; });
+  Object.keys(keys).forEach(function(k){
+    var r = mergeField(baseDefs[k], mineDefs[k], theirDefs[k]);
+    if (r === CONFLICT) bad = true; else if (r !== undefined) out[k] = r;
+  });
+  return bad ? CONFLICT : out;
+}
+function mergePlan(base, mine, theirs){
+  if (!base || !mine || !theirs) return null;
+  if ((mine.scenarios || []).length > 1 || (theirs.scenarios || []).length > 1) return null;  // more than one option tab — too easy to get wrong quietly
+  var items = mergeItemsArray(base.items, mine.items, theirs.items);
+  if (items === CONFLICT) return null;
+  var defs = mergeDefs(base.defs, mine.defs, theirs.defs);
+  if (defs === CONFLICT) return null;
+  var title = mergeField(base.title, mine.title, theirs.title);
+  var subtitle = mergeField(base.subtitle, mine.subtitle, theirs.subtitle);
+  var start = mergeField(base.start, mine.start, theirs.start);
+  var end = mergeField(base.end, mine.end, theirs.end);
+  if ([title, subtitle, start, end].indexOf(CONFLICT) > -1) return null;
+  return {items: items, defs: defs, title: title, subtitle: subtitle, start: start, end: end};
+}
+
 async function doSave(label, force){
   if (!lsGet(LS_KEY) && !$("pubKey").value){
     $("keyRow").hidden = false;
@@ -1835,8 +1955,25 @@ async function doSave(label, force){
       render();
       say("That edit key was not accepted");
     } else if (e.message === "conflict"){
-      render();
-      say("Somebody saved first — see the notice below");
+      var merged = mergePlan(publishedSeed, state, conflict);
+      if (merged){
+        Object.assign(state, merged);
+        serverRev = conflict.rev;
+        try {
+          var v2 = await saveToServer(label, key, true);
+          currentEditor = String(v2.by || "").toLowerCase();
+          saveError = null;
+          $("keyRow").hidden = true; $("pubLabel").value = "";
+          renderStatus(); renderNotices(); renderHistory();
+          say("Merged with " + (v2.by || "the other save") + " — v" + v2.rev);
+        } catch (e2){
+          render();
+          say("Somebody saved first — see the notice below");
+        }
+      } else {
+        render();
+        say("Somebody saved first — see the notice below");
+      }
     } else if (e.message === "not_configured"){
       render();
       say("The server refuses saves — see the notice below");
@@ -1943,8 +2080,30 @@ async function poll(){
     adoptServer(v); syncDateInputs(); render();
     restoreFocus(focused); window.scrollTo(0, scrollY);
     say("Updated to v" + v.rev + (v.by ? " by " + v.by : ""));
-  } else {
-    conflict = v; renderNotices();
+  } else if (!saving) {
+    /* you have unsaved edits and they just saved too — try the same 3-way
+       merge doSave() uses on a conflict, so this doesn't interrupt you
+       every few seconds while you're both actively using it together */
+    var key = lsGet(LS_KEY);
+    var mergedFromPoll = key ? mergePlan(publishedSeed, state, v) : null;
+    if (mergedFromPoll){
+      Object.assign(state, mergedFromPoll);
+      serverRev = v.rev;
+      saving = true;
+      clearTimeout(autosaveTimer);
+      try {
+        var v3 = await saveToServer("", key, true);
+        currentEditor = String(v3.by || "").toLowerCase();
+        renderStatus(); renderNotices(); renderHistory();
+        say("Merged with " + (v3.by || "the other save") + " — v" + v3.rev);
+      } catch (e3){
+        renderNotices();   /* saveToServer already set `conflict` on a fresh 409 */
+      } finally {
+        saving = false;
+      }
+    } else {
+      conflict = v; renderNotices();
+    }
   }
 }
 setInterval(poll, 6000);   /* backstop — catches anything missed if the push below is skipped, drops, or was never configured */
