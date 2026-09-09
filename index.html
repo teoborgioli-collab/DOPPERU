@@ -574,7 +574,7 @@ var FALLBACK_SEED = {
 
 /* The API is tried first; a plain static host without it falls back to the
    file next to this page. */
-var BUILD = "2026-09-09-not-exist-fix";   /* shown in the footer — check it after deploying */
+var BUILD = "2026-09-09-merged-fix";   /* shown in the footer — check it after deploying */
 var PLAN_API = "/api/plan";
 var PLAN_FILE = "plan.json";
 
@@ -765,7 +765,7 @@ function save(){
   scheduleAutosave();
 }
 function scheduleAutosave(){
-  if (!canPublish || !lsGet(LS_KEY)) return;
+  if (!canPublish || !lsGet(LS_KEY) || conflict) return;
   clearTimeout(autosaveTimer);
   autosaveTimer = setTimeout(function(){ if (!saving) doSave("", false); }, 1200);
 }
@@ -1983,10 +1983,12 @@ async function doSave(label, force){
   var key = lsGet(LS_KEY) || $("pubKey").value;
   if (saving) return;
   saving = true;
+  var savedOK = false;
   clearTimeout(autosaveTimer);
   say("Saving…");
   try {
     var v = await saveToServer(label, key, force);
+    savedOK = true;
     currentEditor=String(v.by||"").toLowerCase();
     saveError = null;
     if (key) lsSet(LS_KEY, key);
@@ -2008,23 +2010,27 @@ async function doSave(label, force){
       render();
       say("That edit key was not accepted");
     } else if (e.message === "conflict"){
-      var merged = mergePlan(publishedSeed, state, conflict);
+      var merged = editingField() ? null : mergePlan(publishedSeed, state, conflict);
       if (merged){
         Object.assign(state, merged);
         serverRev = conflict.rev;
+        publishedSeed = clone(conflict);
+        syncScenario();
+        render(); // Rebind every input to the merged objects before editing can resume.
         try {
-          var v2 = await saveToServer(label, key, true);
+          var v2 = await saveToServer(label, key, false);
+          savedOK = true;
           currentEditor = String(v2.by || "").toLowerCase();
           saveError = null;
           $("keyRow").hidden = true; $("pubLabel").value = "";
           renderStatus(); renderNotices(); renderHistory();
           say("Merged with " + (v2.by || "the other save") + " — v" + v2.rev);
         } catch (e2){
-          render();
+          renderStatus(); renderNotices();
           say("Somebody saved first — see the notice below");
         }
       } else {
-        render();
+        renderStatus(); renderNotices();
         say("Somebody saved first — see the notice below");
       }
     } else if (e.message === "not_configured"){
@@ -2035,6 +2041,7 @@ async function doSave(label, force){
     }
   } finally {
     saving = false;
+    if (savedOK && dirty && !conflict) scheduleAutosave();
   }
 }
 
@@ -2124,41 +2131,33 @@ function restoreFocus(info){
   }
 }
 
-async function poll(){
-  if (!canPublish || document.hidden) return;
-  var v = await loadServer();
-  if (!v || (v.rev || 0) === serverRev) return;
-  if (!dirty){
-    var focused = captureFocus(), scrollY = window.scrollY;
-    adoptServer(v); syncDateInputs(); render();
-    restoreFocus(focused); window.scrollTo(0, scrollY);
-    say("Updated to v" + v.rev + (v.by ? " by " + v.by : ""));
-  } else if (!saving) {
-    /* you have unsaved edits and they just saved too — try the same 3-way
-       merge doSave() uses on a conflict, so this doesn't interrupt you
-       every few seconds while you're both actively using it together */
-    var key = lsGet(LS_KEY);
-    var mergedFromPoll = key ? mergePlan(publishedSeed, state, v) : null;
-    if (mergedFromPoll){
-      Object.assign(state, mergedFromPoll);
-      serverRev = v.rev;
-      saving = true;
-      clearTimeout(autosaveTimer);
-      try {
-        var v3 = await saveToServer("", key, true);
-        currentEditor = String(v3.by || "").toLowerCase();
-        renderStatus(); renderNotices(); renderHistory();
-        say("Merged with " + (v3.by || "the other save") + " — v" + v3.rev);
-      } catch (e3){
-        renderNotices();   /* saveToServer already set `conflict` on a fresh 409 */
-      } finally {
-        saving = false;
-      }
-    } else {
-      conflict = v; renderNotices();
-    }
-  }
+function editingField(){
+  var el = document.activeElement;
+  return !!(el && (el.matches("input, textarea, select") || el.isContentEditable));
 }
+var polling = false;
+async function poll(){
+  if (!canPublish || document.hidden || saving || polling) return;
+  polling = true;
+  var seq = editSeq, rev = serverRev;
+  try {
+    var v = await loadServer();
+    // A read begun before a save/edit must never replace newer local state.
+    if (!v || saving || serverRev !== rev || editSeq !== seq || (v.rev || 0) <= serverRev) return;
+    if (dirty){
+      // Do not replace objects underneath live input event handlers.
+      // The next save can merge, or show the genuine conflict for a person.
+      conflict = v; renderNotices();
+      return;
+    }
+    if (editingField()) return; // Includes text not submitted yet in an add form.
+    var scrollY = window.scrollY;
+    adoptServer(v); syncDateInputs(); render();
+    window.scrollTo(0, scrollY);
+    say("Updated to v" + v.rev + (v.by ? " by " + v.by : ""));
+  } finally { polling = false; }
+}
+
 setInterval(poll, 6000);   /* backstop — catches anything missed if the push below is skipped, drops, or was never configured */
 document.addEventListener("visibilitychange", function(){ if (!document.hidden) poll(); });
 window.addEventListener("beforeunload", function(e){
