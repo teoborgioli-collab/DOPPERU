@@ -1,21 +1,15 @@
 import { head } from '@vercel/blob';
 import { handleUpload } from '@vercel/blob/client';
 
-/* The guide files live in the same Blob store as the plan (just under their
-   own filenames) rather than a separate store — connecting a second store
-   did not generate its own read-write token, only a STORE_ID and a webhook
-   key, and chasing exactly how Vercel's multi-store token model works
-   wasn't worth it when reusing the store we already know works avoids the
-   question entirely. Nothing here is linked from any public page; the only
-   way to ever learn a file's URL is to already hold one of the two edit
-   keys. Two formats are supported, keyed by the "file" query/pathname
-   param: the PDF (viewed in a new browser tab) and an EPUB (rendered
-   in-app with epub.js, for the reflowable reading experience a PDF doesn't
-   give you). */
-const GUIDE_FILES = {
-  pdf: { path: 'guide.pdf', contentType: 'application/pdf' },
-  epub: { path: 'guide.epub', contentType: 'application/epub+zip' },
-};
+/* The guide PDF lives in the same Blob store as the plan (just under a
+   different filename) rather than a separate store — connecting a second
+   store did not generate its own read-write token, only a STORE_ID and a
+   webhook key, and chasing exactly how Vercel's multi-store token model
+   works wasn't worth it when reusing the store we already know works avoids
+   the question entirely. Nothing here is linked from any public page; the
+   only way to ever learn the file's URL is to already hold one of the two
+   edit keys. */
+const GUIDE_PATH = 'guide.pdf';
 
 function editors() {
   const out = [];
@@ -80,10 +74,9 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
       const who = whoIs(headerKey(req));
       if (!who) return send(res, 401, { error: 'bad_key' });
-      const format = GUIDE_FILES[req.query && req.query.file] ? req.query.file : 'pdf';
-      const meta = await head(GUIDE_FILES[format].path, { token: guideToken() }).catch(() => null);
+      const meta = await head(GUIDE_PATH, { token: guideToken() }).catch(() => null);
       if (!meta || !meta.url) {
-        return send(res, 404, { error: 'no_guide_yet', message: 'No ' + format.toUpperCase() + ' has been uploaded yet.' });
+        return send(res, 404, { error: 'no_guide_yet', message: 'No guide has been uploaded yet.' });
       }
       return send(res, 200, { url: meta.url, uploadedAt: meta.uploadedAt || null, size: meta.size || null });
     }
@@ -104,18 +97,16 @@ export default async function handler(req, res) {
         onBeforeGenerateToken: async (pathname, clientPayload) => {
           const who = whoIs(String(clientPayload || ''));
           if (!who) throw new Error('bad_key');
-          const entry = Object.values(GUIDE_FILES).find((f) => f.path === pathname);
-          if (!entry) throw new Error('bad_pathname');
           return {
-            pathname: entry.path,
-            allowedContentTypes: [entry.contentType],
+            pathname: GUIDE_PATH,
+            allowedContentTypes: ['application/pdf'],
             addRandomSuffix: false,
             allowOverwrite: true,
             tokenPayload: JSON.stringify({ by: who }),
           };
         },
         onUploadCompleted: async ({ blob, tokenPayload }) => {
-          console.log('Guide file uploaded:', blob.url, tokenPayload || '');
+          console.log('Guide PDF uploaded:', blob.url, tokenPayload || '');
         },
       });
       return send(res, 200, jsonResponse);

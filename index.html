@@ -17,11 +17,12 @@ img{max-width:100%}
 .discovery-card{display:flex;flex-direction:column;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--surface)}.discovery-cover{padding:18px;min-height:96px;display:flex;align-items:end;justify-content:space-between;color:#394b42;background:#dce6dc}.discovery-cover[data-kind="Culture"]{background:#ebe0cf;color:#6b5033}.discovery-cover[data-kind="Food"]{background:#eed9cd;color:#7a4933}.discovery-cover[data-kind="Water & coast"]{background:#dce7e9;color:#385d68}.discovery-cover[data-kind="Adventure"]{background:#e8ddc3;color:#73582e}.discovery-cover .ordinal{font-family:Georgia,serif;font-size:38px;opacity:.5}.discovery-cover .lab{color:inherit}
 .discovery-body{padding:18px;display:flex;flex:1;flex-direction:column}.discovery-body h3{margin:8px 0 10px;font-size:21px;line-height:1.2}.discovery-body p{font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 14px}.discovery-body .detail-link{align-self:start;padding:0;border:0;background:none;text-decoration:underline;text-underline-offset:4px;color:var(--link);font:inherit;font-size:13px;cursor:pointer;margin:auto 0 18px}.discovery-add{display:flex;gap:8px;align-items:stretch}.discovery-add select{min-width:0;width:100%;font:inherit;font-size:13px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px}.discovery-add .btn{flex:none;padding:8px 12px}.discovery-body .place{font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:600;color:var(--ink-soft)}
 .activity-dialog{border:1px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);padding:28px;max-width:600px;width:calc(100% - 32px);max-height:90vh;overflow:auto}.activity-dialog::backdrop{background:rgba(24,32,27,.55)}.dialog-close{display:block;margin:0 0 24px auto}.activity-dialog h2{margin:12px 0}.activity-dialog p{line-height:1.65}
-.guide-controls{display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap}.guide-controls .mini{cursor:pointer}
-.epub-dialog{border:1px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);padding:20px;max-width:900px;width:calc(100% - 32px);height:85vh;display:flex;flex-direction:column}.epub-dialog::backdrop{background:rgba(24,32,27,.55)}
-.epub-toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:14px}.epub-toolbar h3{margin:6px 0}
-#epubViewer{flex:1;border:1px solid var(--rule);background:white;overflow:hidden;border-radius:4px}
-.epub-nav{display:flex;justify-content:space-between;gap:12px;margin-top:14px}
+.guide-controls{display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap}.guide-controls .mini{cursor:pointer}.discovery-group{border-bottom:1px solid var(--rule)}
+.discovery-group summary{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;padding:13px 2px;font-size:15px;font-weight:500;list-style:none}
+.discovery-group summary::-webkit-details-marker{display:none}
+.discovery-group summary::after{content:"+";color:var(--muted)}
+.discovery-group[open] summary::after{content:"−"}
+.discovery-group .discovery-grid{padding-bottom:18px}
 @media(max-width:900px){.discovery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.discovery-head{display:block}}@media(max-width:600px){.discovery-grid{grid-template-columns:1fr}.discovery-tools{grid-template-columns:1fr 1fr}.discovery-search{grid-column:1/-1}.discovery-count{display:block}.discovery-count span{display:block;margin-bottom:6px}}
 
 </style>
@@ -488,11 +489,12 @@ textarea{margin-top:18px;padding:12px 13px;min-height:54px;line-height:1.65}
 .discovery-card{display:flex;flex-direction:column;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--surface)}.discovery-cover{padding:18px;min-height:96px;display:flex;align-items:end;justify-content:space-between;color:#394b42;background:#dce6dc}.discovery-cover[data-kind="Culture"]{background:#ebe0cf;color:#6b5033}.discovery-cover[data-kind="Food"]{background:#eed9cd;color:#7a4933}.discovery-cover[data-kind="Water & coast"]{background:#dce7e9;color:#385d68}.discovery-cover[data-kind="Adventure"]{background:#e8ddc3;color:#73582e}.discovery-cover .ordinal{font-family:Georgia,serif;font-size:38px;opacity:.5}.discovery-cover .lab{color:inherit}
 .discovery-body{padding:18px;display:flex;flex:1;flex-direction:column}.discovery-body h3{margin:8px 0 10px;font-size:21px;line-height:1.2}.discovery-body p{font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 14px}.discovery-body .detail-link{align-self:start;padding:0;border:0;background:none;text-decoration:underline;text-underline-offset:4px;color:var(--link);font:inherit;font-size:13px;cursor:pointer;margin:auto 0 18px}.discovery-add{display:flex;gap:8px;align-items:stretch}.discovery-add select{min-width:0;width:100%;font:inherit;font-size:13px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px}.discovery-add .btn{flex:none;padding:8px 12px}.discovery-body .place{font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:600;color:var(--ink-soft)}
 .activity-dialog{border:1px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);padding:28px;max-width:600px;width:calc(100% - 32px);max-height:90vh;overflow:auto}.activity-dialog::backdrop{background:rgba(24,32,27,.55)}.dialog-close{display:block;margin:0 0 24px auto}.activity-dialog h2{margin:12px 0}.activity-dialog p{line-height:1.65}
-.guide-controls{display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap}.guide-controls .mini{cursor:pointer}
-.epub-dialog{border:1px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);padding:20px;max-width:900px;width:calc(100% - 32px);height:85vh;display:flex;flex-direction:column}.epub-dialog::backdrop{background:rgba(24,32,27,.55)}
-.epub-toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:14px}.epub-toolbar h3{margin:6px 0}
-#epubViewer{flex:1;border:1px solid var(--rule);background:white;overflow:hidden;border-radius:4px}
-.epub-nav{display:flex;justify-content:space-between;gap:12px;margin-top:14px}
+.guide-controls{display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap}.guide-controls .mini{cursor:pointer}.discovery-group{border-bottom:1px solid var(--rule)}
+.discovery-group summary{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;padding:13px 2px;font-size:15px;font-weight:500;list-style:none}
+.discovery-group summary::-webkit-details-marker{display:none}
+.discovery-group summary::after{content:"+";color:var(--muted)}
+.discovery-group[open] summary::after{content:"−"}
+.discovery-group .discovery-grid{padding-bottom:18px}
 @media(max-width:900px){.discovery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.discovery-head{display:block}}@media(max-width:600px){.discovery-grid{grid-template-columns:1fr}.discovery-tools{grid-template-columns:1fr 1fr}.discovery-search{grid-column:1/-1}.discovery-count{display:block}.discovery-count span{display:block;margin-bottom:6px}}
 
 </style>
@@ -570,7 +572,7 @@ textarea{margin-top:18px;padding:12px 13px;min-height:54px;line-height:1.65}
   </div></details>
 
   <section id="activitiesFold" class="discovery" aria-labelledby="activitiesTitle">
-    <div class="discovery-head"><div><p class="lab">A little inspiration for the journey</p><h2 id="activitiesTitle">Make room for something good.</h2><p class="sub">A collection of places, small adventures, and slower moments. Pick an idea, then make it part of your trip.</p></div><div class="guide-controls"><button class="btn" type="button" id="openGuide">Open the guide (PDF)</button><label class="mini">Upload / replace PDF<input type="file" id="guideFile" accept="application/pdf" hidden></label><button class="btn" type="button" id="openEpub">Read the guide (EPUB)</button><label class="mini">Upload / replace EPUB<input type="file" id="epubFile" accept=".epub,application/epub+zip" hidden></label><span id="guideStatus" role="status" aria-live="polite" class="sub"></span></div></div>
+    <div class="discovery-head"><div><p class="lab">A little inspiration for the journey</p><h2 id="activitiesTitle">Make room for something good.</h2><p class="sub">A collection of places, small adventures, and slower moments. Pick an idea, then make it part of your trip.</p></div><div class="guide-controls"><button class="btn" type="button" id="openGuide">Open the guide</button><label class="mini">Upload / replace PDF<input type="file" id="guideFile" accept="application/pdf" hidden></label><span id="guideStatus" role="status" aria-live="polite" class="sub"></span></div></div>
     <div class="discovery-tools"><label class="discovery-search"><span class="lab">Find your next idea</span><input id="activitySearch" type="search" placeholder="Try food, Cusco, birds…" aria-label="Search activities"></label><label><span class="lab">Where</span><select id="activityRegion" aria-label="Filter activities by region"><option value="">Everywhere</option></select></label><label><span class="lab">Your route</span><select id="activityRoute" aria-label="Filter activities by route"><option value="">All ideas</option><option value="route">Places in this scenario</option></select></label></div>
     <div id="activityCategories" class="discovery-categories" aria-label="Activity categories"></div>
     <div class="discovery-count"><span id="activityCount" role="status"></span><span>Ideas to explore · details to confirm before booking</span></div>
@@ -589,7 +591,6 @@ textarea{margin-top:18px;padding:12px 13px;min-height:54px;line-height:1.65}
   </footer>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js"></script>
 <script>
 (function(){
 "use strict";
@@ -709,7 +710,7 @@ var FALLBACK_SEED = {
 
 /* The API is tried first; a plain static host without it falls back to the
    file next to this page. */
-var BUILD = "2026-09-10-guide-new-tab";   /* shown in the footer — check it after deploying */
+var BUILD = "2026-09-10-catalogue-live";   /* shown in the footer — check it after deploying */
 var PLAN_API = "/api/plan";
 var PLAN_FILE = "plan.json";
 var canPublish = false;
@@ -1841,6 +1842,71 @@ var activityKindByTitle = {
   "Learn to surf in Huanchaco":"Water & coast", "Visit the Tumbas Reales museum":"Culture", "Tour Chan Chan":"Culture",
   "Boat to the Islas Ballestas":"Water & coast", "Fly over the Nazca Lines":"Culture", "Go whale watching near Máncora":"Water & coast"
 };
+
+/* the handful of activities above are hand-written, with their own original
+   descriptions — worth keeping as literal code. Everything past that first
+   batch (the guide's "Expanded catalogue" and "Regional catalogue
+   expansion" sections) is hundreds of entries with no bespoke description,
+   and previously got hand-copied into this array too — which is exactly
+   how it silently fell out of sync with ACTIVITY-SOURCES.md the moment
+   that file grew past what anyone was willing to re-paste by hand. Instead,
+   read that file directly at load time and derive the rest from it, so the
+   two can never drift apart again. */
+var GUIDE_REGION_BY_CITY = {
+  "Lima":"Coast","Piura":"Coast","Talara":"Coast","Tumbes":"Coast","Máncora":"Coast",
+  "Barranca":"Coast","Casma":"Coast","Chiclayo":"Coast","Lunahuaná":"Coast","Nazca":"Coast","Trujillo":"Coast",
+  "Arequipa":"Andes","Cusco":"Andes","Sacred Valley":"Andes","Cusco southern valley":"Andes",
+  "Machu Picchu":"Andes","Quillabamba":"Andes","Colca Canyon":"Andes","Ayacucho":"Andes",
+  "Cajamarca":"Andes","Chachapoyas":"Andes","Huaraz":"Andes","Puno":"Andes","Tarma":"Andes",
+  "Iquitos":"Amazon","Oxapampa":"Amazon","Pucallpa":"Amazon","Tarapoto":"Amazon","Tingo María":"Amazon"
+};
+function guideCategoryFor(title){
+  var t = title.toLowerCase();
+  if (t.indexOf("eat at") === 0) return "Food";
+  if (["bird","vicuña","vicuna","wildlife","spectacled bear","condor","crocodil","monkey","macaw"].some(function(k){ return t.indexOf(k) > -1; })) return "Nature";
+  if (["hike","trek","climb","walk to"].some(function(k){ return t.indexOf(k) > -1; })) return "Adventure";
+  if (["surf","sandboard","kitesurf","snorkel","dive","beach","playa","kayak","raft","boat","laguna","island","isla ","reed boats"].some(function(k){ return t.indexOf(k) > -1; })) return "Water & coast";
+  return "Culture";
+}
+function guideDescFor(city){
+  return "Listed in the guide's " + city + " chapter — check current hours, prices, and access before visiting.";
+}
+async function loadExpandedActivities(){
+  try {
+    var r = await fetch("ACTIVITY-SOURCES.md?t=" + Date.now(), {cache:"no-store"});
+    if (!r.ok) return;
+    var text = await r.text();
+    var reRegional = /^- (.+?) [—-] (.+?), (.+?): PDF page (\d+)\.$/;
+    var reExpanded = /^- (.+?) \((.+?)\): PDF page (\d+)\.$/;
+    var section = null, added = 0;
+    text.split("\n").forEach(function(raw){
+      var line = raw.trim();
+      if (line.indexOf("## ") === 0){
+        section = line.indexOf("Expanded catalogue") > -1 ? "expanded"
+                : line.indexOf("Regional catalogue expansion") > -1 ? "regional" : null;
+        return;
+      }
+      if (!section || line.indexOf("- ") !== 0) return;
+      var m, title, city, sub, page;
+      if (section === "regional"){
+        m = reRegional.exec(line);
+        if (!m) return;
+        title = m[1]; city = m[2]; sub = m[3]; page = parseInt(m[4], 10);
+      } else {
+        m = reExpanded.exec(line);
+        if (!m) return;
+        title = m[1]; city = m[2]; sub = city; page = parseInt(m[3], 10);
+      }
+      if (activityKindByTitle.hasOwnProperty(title)) return;   // a hand-written version already covers this one
+      var region = GUIDE_REGION_BY_CITY[sub] || GUIDE_REGION_BY_CITY[city] || "Andes";
+      ACTIVITIES.push([city, region, title, guideDescFor(city), page]);
+      activityKindByTitle[title] = guideCategoryFor(title);
+      added++;
+    });
+    if (added) renderActivities();
+  } catch(e){ /* the hand-picked activities above still work fine on their own */ }
+}
+
 function searchKey(t){return String(t).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();}
 function matchingStop(a,it){
   var place=searchKey(a[0]),name=searchKey(resolve(it.id).name);
@@ -1873,23 +1939,50 @@ function activityDetail(a){
 
   $("activityDialog").showModal();
 }
+function activityCard(a){
+  var card=document.createElement("article");card.className="discovery-card";
+  var cover=document.createElement("div");cover.className="discovery-cover";cover.dataset.kind=activityKindByTitle[a[2]];
+  var kind=document.createElement("span");kind.className="lab";kind.textContent=activityKindByTitle[a[2]];cover.appendChild(kind);
+  var num=document.createElement("span");num.className="ordinal";num.setAttribute("aria-hidden","true");num.textContent=String(ACTIVITIES.indexOf(a)+1).padStart(2,"0");cover.appendChild(num);card.appendChild(cover);
+  var body=document.createElement("div");body.className="discovery-body";
+  var place=document.createElement("span");place.className="place";place.textContent=a[0]+(a[4]?" · p. "+a[4]:"");body.appendChild(place);
+  var h=document.createElement("h3");h.textContent=a[2];body.appendChild(h);
+  var desc=document.createElement("p");desc.textContent=a[3];body.appendChild(desc);
+  var detail=document.createElement("button");detail.className="detail-link";detail.type="button";detail.textContent="Explore this idea ↗";detail.setAttribute("aria-label","Explore "+a[2]);detail.onclick=function(){activityDetail(a);};body.appendChild(detail);
+  body.appendChild(activityPicker(a));card.appendChild(body);
+  return card;
+}
+/* grouped into a collapsible section per place — a flat grid of 500+ cards
+   is not something anyone scrolls through; a search or category pick still
+   searches/filters across every group at once, it just also opens whatever
+   groups still have a match left in them so nothing is hidden behind an
+   extra click while you're actively narrowing things down */
 function renderActivities(){
   var cat=$("activityCatalog");cat.textContent="";
   var q=searchKey($("activitySearch").value.trim()),region=$("activityRegion").value,route=$("activityRoute").value;
+  var filtering = !!(q || region || route || catalogueCategory!=="All");
   var ideas=ACTIVITIES.filter(function(a){return (!region||a[1]===region)&&(catalogueCategory==="All"||activityKindByTitle[a[2]]===catalogueCategory)&&searchKey(a.join(" ")+" "+activityKindByTitle[a[2]]).includes(q)&&(!route||state.items.some(function(it){return matchingStop(a,it);}));});
   $("activityCount").textContent=ideas.length+" "+(ideas.length===1?"idea":"ideas")+" to explore";
   if(!ideas.length){var empty=document.createElement("p");empty.className="empty";empty.textContent="No ideas here yet. Try another category or place, or clear your search.";cat.appendChild(empty);return;}
+
+  var groups={}, order=[];
   ideas.forEach(function(a){
-    var card=document.createElement("article");card.className="discovery-card";
-    var cover=document.createElement("div");cover.className="discovery-cover";cover.dataset.kind=activityKindByTitle[a[2]];
-    var kind=document.createElement("span");kind.className="lab";kind.textContent=activityKindByTitle[a[2]];cover.appendChild(kind);
-    var num=document.createElement("span");num.className="ordinal";num.setAttribute("aria-hidden","true");num.textContent=String(ACTIVITIES.indexOf(a)+1).padStart(2,"0");cover.appendChild(num);card.appendChild(cover);
-    var body=document.createElement("div");body.className="discovery-body";
-    var place=document.createElement("span");place.className="place";place.textContent=a[0]+(a[4]?" · p. "+a[4]:"");body.appendChild(place);
-    var h=document.createElement("h3");h.textContent=a[2];body.appendChild(h);
-    var desc=document.createElement("p");desc.textContent=a[3];body.appendChild(desc);
-    var detail=document.createElement("button");detail.className="detail-link";detail.type="button";detail.textContent="Explore this idea ↗";detail.setAttribute("aria-label","Explore "+a[2]);detail.onclick=function(){activityDetail(a);};body.appendChild(detail);
-    body.appendChild(activityPicker(a));card.appendChild(body);cat.appendChild(card);
+    if(!groups[a[0]]){groups[a[0]]=[];order.push(a[0]);}
+    groups[a[0]].push(a);
+  });
+  order.sort(function(x,y){return groups[y].length-groups[x].length || x.localeCompare(y);});
+
+  order.forEach(function(place){
+    var list=groups[place];
+    var details=document.createElement("details");details.className="discovery-group";
+    if(filtering || list.length<=6) details.open=true;
+    var summary=document.createElement("summary");
+    summary.textContent=place+" ("+list.length+(list.length===1?" idea":" ideas")+")";
+    details.appendChild(summary);
+    var grid=document.createElement("div");grid.className="discovery-grid";
+    list.forEach(function(a){ grid.appendChild(activityCard(a)); });
+    details.appendChild(grid);
+    cat.appendChild(details);
   });
 }
 ["All"].concat(activityKinds).forEach(function(kind){var b=document.createElement("button");b.type="button";b.textContent=kind;b.setAttribute("aria-pressed",String(kind==="All"));b.onclick=function(){catalogueCategory=kind;Array.from($("activityCategories").children).forEach(function(x){x.setAttribute("aria-pressed",String(x===b));});renderActivities();};$("activityCategories").appendChild(b);});
@@ -1962,6 +2055,7 @@ $("guideFile").addEventListener("change", async function(){
     $("guideStatus").textContent = "Upload failed — " + (e && e.message ? e.message : "unknown error");
   }
 });
+
 
 function customIds(){
   return Object.keys(state.defs || {}).filter(isCustom);
@@ -2439,6 +2533,7 @@ async function init(){
   document.getElementById("buildline").textContent = "Build " + BUILD;
   syncDateInputs();
   render();
+  loadExpandedActivities();   /* fire-and-forget — re-renders the catalogue itself once it's parsed */
 
   setSaveLine(!canPublish
     ? "No server on this address, so this is a read-only copy. Changes stay on this screen until you reload."
