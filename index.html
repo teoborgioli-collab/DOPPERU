@@ -16,7 +16,8 @@ img{max-width:100%}
 .discovery-count{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted);margin:24px 0 14px}.discovery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .discovery-card{display:flex;flex-direction:column;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--surface)}.discovery-cover{padding:18px;min-height:96px;display:flex;align-items:end;justify-content:space-between;color:#394b42;background:#dce6dc}.discovery-cover[data-kind="Culture"]{background:#ebe0cf;color:#6b5033}.discovery-cover[data-kind="Food"]{background:#eed9cd;color:#7a4933}.discovery-cover[data-kind="Water & coast"]{background:#dce7e9;color:#385d68}.discovery-cover[data-kind="Adventure"]{background:#e8ddc3;color:#73582e}.discovery-cover .ordinal{font-family:Georgia,serif;font-size:38px;opacity:.5}.discovery-cover .lab{color:inherit}
 .discovery-body{padding:18px;display:flex;flex:1;flex-direction:column}.discovery-body h3{margin:8px 0 10px;font-size:21px;line-height:1.2}.discovery-body p{font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 14px}.discovery-body .detail-link{align-self:start;padding:0;border:0;background:none;text-decoration:underline;text-underline-offset:4px;color:var(--link);font:inherit;font-size:13px;cursor:pointer;margin:auto 0 18px}.discovery-add{display:flex;gap:8px;align-items:stretch}.discovery-add select{min-width:0;width:100%;font:inherit;font-size:13px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px}.discovery-add .btn{flex:none;padding:8px 12px}.discovery-body .place{font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:600;color:var(--ink-soft)}
-.activity-dialog,.guide-dialog{border:1px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);padding:28px;max-width:600px;width:calc(100% - 32px);max-height:90vh;overflow:auto}.activity-dialog::backdrop,.guide-dialog::backdrop{background:rgba(24,32,27,.55)}.dialog-close{display:block;margin:0 0 24px auto}.activity-dialog h2{margin:12px 0}.activity-dialog p{line-height:1.65}.guide-dialog{max-width:1100px}.guide-toolbar{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:20px}.guide-toolbar h3{margin:6px 0}.guide-dialog iframe{width:100%;height:65vh;border:1px solid var(--rule);background:white}.guide-dialog iframe[hidden]{display:none}#guideWelcome p{max-width:65ch;line-height:1.6}
+.activity-dialog{border:1px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);padding:28px;max-width:600px;width:calc(100% - 32px);max-height:90vh;overflow:auto}.activity-dialog::backdrop{background:rgba(24,32,27,.55)}.dialog-close{display:block;margin:0 0 24px auto}.activity-dialog h2{margin:12px 0}.activity-dialog p{line-height:1.65}
+.guide-controls{display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap}.guide-controls .mini{cursor:pointer}
 @media(max-width:900px){.discovery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.discovery-head{display:block}}@media(max-width:600px){.discovery-grid{grid-template-columns:1fr}.discovery-tools{grid-template-columns:1fr 1fr}.discovery-search{grid-column:1/-1}.discovery-count{display:block}.discovery-count span{display:block;margin-bottom:6px}}
 
 </style>
@@ -482,7 +483,8 @@ textarea{margin-top:18px;padding:12px 13px;min-height:54px;line-height:1.65}
 .discovery-count{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted);margin:24px 0 14px}.discovery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .discovery-card{display:flex;flex-direction:column;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--surface)}.discovery-cover{padding:18px;min-height:96px;display:flex;align-items:end;justify-content:space-between;color:#394b42;background:#dce6dc}.discovery-cover[data-kind="Culture"]{background:#ebe0cf;color:#6b5033}.discovery-cover[data-kind="Food"]{background:#eed9cd;color:#7a4933}.discovery-cover[data-kind="Water & coast"]{background:#dce7e9;color:#385d68}.discovery-cover[data-kind="Adventure"]{background:#e8ddc3;color:#73582e}.discovery-cover .ordinal{font-family:Georgia,serif;font-size:38px;opacity:.5}.discovery-cover .lab{color:inherit}
 .discovery-body{padding:18px;display:flex;flex:1;flex-direction:column}.discovery-body h3{margin:8px 0 10px;font-size:21px;line-height:1.2}.discovery-body p{font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 14px}.discovery-body .detail-link{align-self:start;padding:0;border:0;background:none;text-decoration:underline;text-underline-offset:4px;color:var(--link);font:inherit;font-size:13px;cursor:pointer;margin:auto 0 18px}.discovery-add{display:flex;gap:8px;align-items:stretch}.discovery-add select{min-width:0;width:100%;font:inherit;font-size:13px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px}.discovery-add .btn{flex:none;padding:8px 12px}.discovery-body .place{font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:600;color:var(--ink-soft)}
-.activity-dialog,.guide-dialog{border:1px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);padding:28px;max-width:600px;width:calc(100% - 32px);max-height:90vh;overflow:auto}.activity-dialog::backdrop,.guide-dialog::backdrop{background:rgba(24,32,27,.55)}.dialog-close{display:block;margin:0 0 24px auto}.activity-dialog h2{margin:12px 0}.activity-dialog p{line-height:1.65}.guide-dialog{max-width:1100px}.guide-toolbar{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:20px}.guide-toolbar h3{margin:6px 0}.guide-dialog iframe{width:100%;height:65vh;border:1px solid var(--rule);background:white}.guide-dialog iframe[hidden]{display:none}#guideWelcome p{max-width:65ch;line-height:1.6}
+.activity-dialog{border:1px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);padding:28px;max-width:600px;width:calc(100% - 32px);max-height:90vh;overflow:auto}.activity-dialog::backdrop{background:rgba(24,32,27,.55)}.dialog-close{display:block;margin:0 0 24px auto}.activity-dialog h2{margin:12px 0}.activity-dialog p{line-height:1.65}
+.guide-controls{display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap}.guide-controls .mini{cursor:pointer}
 @media(max-width:900px){.discovery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.discovery-head{display:block}}@media(max-width:600px){.discovery-grid{grid-template-columns:1fr}.discovery-tools{grid-template-columns:1fr 1fr}.discovery-search{grid-column:1/-1}.discovery-count{display:block}.discovery-count span{display:block;margin-bottom:6px}}
 
 </style>
@@ -560,7 +562,7 @@ textarea{margin-top:18px;padding:12px 13px;min-height:54px;line-height:1.65}
   </div></details>
 
   <section id="activitiesFold" class="discovery" aria-labelledby="activitiesTitle">
-    <div class="discovery-head"><div><p class="lab">A little inspiration for the journey</p><h2 id="activitiesTitle">Make room for something good.</h2><p class="sub">A collection of places, small adventures, and slower moments. Pick an idea, then make it part of your trip.</p></div><button class="btn" type="button" id="openGuide">Open the guide</button></div>
+    <div class="discovery-head"><div><p class="lab">A little inspiration for the journey</p><h2 id="activitiesTitle">Make room for something good.</h2><p class="sub">A collection of places, small adventures, and slower moments. Pick an idea, then make it part of your trip.</p></div><div class="guide-controls"><button class="btn" type="button" id="openGuide">Open the guide</button><label class="mini">Upload / replace PDF<input type="file" id="guideFile" accept="application/pdf" hidden></label><span id="guideStatus" role="status" aria-live="polite" class="sub"></span></div></div>
     <div class="discovery-tools"><label class="discovery-search"><span class="lab">Find your next idea</span><input id="activitySearch" type="search" placeholder="Try food, Cusco, birds…" aria-label="Search activities"></label><label><span class="lab">Where</span><select id="activityRegion" aria-label="Filter activities by region"><option value="">Everywhere</option></select></label><label><span class="lab">Your route</span><select id="activityRoute" aria-label="Filter activities by route"><option value="">All ideas</option><option value="route">Places in this scenario</option></select></label></div>
     <div id="activityCategories" class="discovery-categories" aria-label="Activity categories"></div>
     <div class="discovery-count"><span id="activityCount" role="status"></span><span>Ideas to explore · details to confirm before booking</span></div>
@@ -568,19 +570,6 @@ textarea{margin-top:18px;padding:12px 13px;min-height:54px;line-height:1.65}
     <p id="activityFeedback" role="status" aria-live="polite"></p>
   </section>
   <dialog id="activityDialog" class="activity-dialog"><button class="mini dialog-close" type="button" id="closeActivity">Close ×</button><div id="activityDetails"></div></dialog>
-
-  <dialog id="guideDialog" class="guide-dialog">
-    <button class="mini dialog-close" type="button" id="closeGuide">Close ×</button>
-    <div class="guide-toolbar">
-      <h3>Guide</h3>
-      <label class="mini" style="cursor:pointer">Upload / replace PDF<input type="file" id="guideFile" accept="application/pdf" hidden></label>
-    </div>
-    <div id="guideWelcome" hidden>
-      <p>No guide has been uploaded yet. Only Matteo or Levin, with their edit key, can add one — use <b>Upload / replace PDF</b> above.</p>
-    </div>
-    <p id="guideStatus" role="status" aria-live="polite" class="sub"></p>
-    <iframe id="guideFrame" title="Guide PDF" hidden></iframe>
-  </dialog>
 
 
   <footer class="foot">
@@ -711,7 +700,7 @@ var FALLBACK_SEED = {
 
 /* The API is tried first; a plain static host without it falls back to the
    file next to this page. */
-var BUILD = "2026-09-10-guide-shared-store";   /* shown in the footer — check it after deploying */
+var BUILD = "2026-09-10-guide-new-tab";   /* shown in the footer — check it after deploying */
 var PLAN_API = "/api/plan";
 var PLAN_FILE = "plan.json";
 var canPublish = false;
@@ -1789,47 +1778,732 @@ function renderChecks(endCursor){
 
 
 var ACTIVITIES = [
-  ["Lima", "Coast", "Explore Barranco", "A neighbourhood walk for art, cafés, and coastal views."],
-  ["Lima", "Coast", "Walk the Miraflores waterfront", "Leave a little time for a relaxed coastal walk."],
-  ["Arequipa", "Andes", "Salinas day trip", "An idea for a day outside Arequipa; check altitude and travel time."],
-  ["Arequipa", "Coast", "Birdwatching at Mejía", "A wetland outing to consider from Arequipa."],
-  ["Cusco", "Andes", "Explore Cusco", "Markets, streets, and a gentle day around town."],
-  ["Sacred Valley", "Andes", "Visit the Sacred Valley", "Choose villages and archaeological sites for a day out."],
-  ["Machu Picchu", "Andes", "Visit Machu Picchu", "Add ticket and transport details once your route is decided."],
-  ["Tambopata", "Amazon", "Macaw clay lick outing", "Discuss access, timing, and conditions with your lodge."],
-  ["Manu Road", "Amazon", "Cloud forest birdwatching", "An outing to plan with a local guide along the Manu Road."],
-  ["Máncora", "Coast", "Beach afternoon", "Keep an afternoon free by the water."],
-  ["Huanchaco", "Coast", "Surf session", "Add a lesson or a session to your coastal stay."],
-  ["Trujillo", "Coast", "Explore Chan Chan", "An archaeological outing to consider from Trujillo or Huanchaco."],
-  ["Arequipa", "Andes", "Visit Santa Catalina monastery", "Explore the monastery complex within Arequipa.", 13],
-  ["Arequipa", "Andes", "See Arequipa cathedral", "Add the cathedral and Plaza de Armas to a city walk.", 35],
-  ["Sacred Valley", "Andes", "Explore Ollantaytambo", "Visit the archaeological site and its terraces.", 21],
-  ["Lima", "Coast", "Browse a Lima food market", "Choose a market in Miraflores or Magdalena for a food-focused outing.", 28],
-  ["Lima", "Coast", "Take a Peruvian cooking class", "Look for a class featuring ceviche or lomo saltado.", 28],
-  ["Colca Canyon", "Andes", "Visit Colca villages", "Consider Chivay or Yanque when planning time in the Colca Valley.", 25],
-  ["Lima", "Coast", "Walk Lima’s historic centre", "Explore the architecture of the old city.", 35],
-  ["Huacachina", "Coast", "Try sandboarding", "Add a sandboarding outing if your route includes Huacachina.", 30],
-  ["Cusco", "Andes", "Tour Sacsayhuamán fortress", "Walk the massive Inca stone terraces on the hill above Cusco.", 209],
-  ["Cusco", "Andes", "Visit Qorikancha sun temple", "See the Inca temple that once anchored the empire's ceremonial road network.", 206],
-  ["Cusco", "Andes", "Take a Cusco chocolate workshop", "Join a hands-on chocolate or Peruvian cooking class in the city centre.", 217],
-  ["Sacred Valley", "Andes", "Browse Pisac's artisan market", "Shop for textiles and crafts at Pisac's covered market hall.", 224],
-  ["Sacred Valley", "Andes", "Hike Pisac's Inca ruins", "Walk the terraced hillside ruins above Pisac town.", 225],
-  ["Sacred Valley", "Andes", "Visit Moray's terraces", "See the Inca's circular terraced amphitheatre, once used to test crops at different altitudes.", 228],
-  ["Sacred Valley", "Andes", "Tour the Salineras de Maras", "Walk past thousands of salt pans that have been worked by hand for centuries.", 229],
-  ["Sacred Valley", "Andes", "Watch weaving in Chinchero", "See Quechua weavers demonstrate spinning and dyeing wool by hand.", 226],
-  ["Sacred Valley", "Andes", "Climb Huayna Picchu", "Book the separate permit to climb the steep peak behind the Machu Picchu ruins.", 238],
-  ["Sacred Valley", "Andes", "Hike to Intipunku", "Walk about an hour from the citadel to the Inca Trail's Sun Gate viewpoint.", 236],
-  ["Puno", "Andes", "Boat to the Uros islands", "Visit the floating reed islands built and inhabited by the Uros people.", 187],
-  ["Puno", "Andes", "See the Sillustani towers", "Visit pre-Inca funerary towers overlooking a lake near Puno.", 190],
-  ["Tambopata", "Amazon", "Paddle Lago Sandoval", "Take a guided canoe trip on this jungle oxbow lake to spot caimans and macaws.", 432],
-  ["Tambopata", "Amazon", "Watch macaws at a clay lick", "Head out before dawn to see macaws and parrots feed at a riverside clay bank.", 434],
-  ["Chaparrí", "Coast", "Hike the Ruta de los Osos", "Follow a trail past a rescue and release station for endangered Andean spectacled bears.", 313],
-  ["Huanchaco", "Coast", "Learn to surf in Huanchaco", "Take a lesson at this long-running surf town near Trujillo.", 306],
-  ["Chiclayo", "Coast", "Visit the Tumbas Reales museum", "See the gold burial goods of the Moche ruler known as the Lord of Sipán.", 310],
-  ["Trujillo", "Coast", "Tour Chan Chan", "Explore the largest adobe city in the Americas, built by the Chimú.", 308],
-  ["Paracas", "Coast", "Boat to the Islas Ballestas", "See sea lions and seabirds, and the Candelabra geoglyph, from the water.", 120],
-  ["Nazca", "Coast", "Fly over the Nazca Lines", "Take a small-plane flight to see the animal and figure geoglyphs from above.", 131],
-  ["Máncora", "Coast", "Go whale watching near Máncora", "Book a boat trip from nearby Los Órganos to see humpback whales (July–October).", 319]
+  [
+    "Lima",
+    "Coast",
+    "Explore Barranco",
+    "A neighbourhood walk for art, cafés, and coastal views."
+  ],
+  [
+    "Lima",
+    "Coast",
+    "Walk the Miraflores waterfront",
+    "Leave a little time for a relaxed coastal walk."
+  ],
+  [
+    "Arequipa",
+    "Andes",
+    "Salinas day trip",
+    "An idea for a day outside Arequipa; check altitude and travel time."
+  ],
+  [
+    "Arequipa",
+    "Coast",
+    "Birdwatching at Mejía",
+    "A wetland outing to consider from Arequipa."
+  ],
+  [
+    "Cusco",
+    "Andes",
+    "Explore Cusco",
+    "Markets, streets, and a gentle day around town."
+  ],
+  [
+    "Sacred Valley",
+    "Andes",
+    "Visit the Sacred Valley",
+    "Choose villages and archaeological sites for a day out."
+  ],
+  [
+    "Machu Picchu",
+    "Andes",
+    "Visit Machu Picchu",
+    "Add ticket and transport details once your route is decided."
+  ],
+  [
+    "Manu Road",
+    "Amazon",
+    "Cloud forest birdwatching",
+    "An outing to plan with a local guide along the Manu Road."
+  ],
+  [
+    "Máncora",
+    "Coast",
+    "Beach afternoon",
+    "Keep an afternoon free by the water."
+  ],
+  [
+    "Arequipa",
+    "Andes",
+    "Visit Santa Catalina monastery",
+    "Explore the monastery complex within Arequipa.",
+    13,
+    "pdf"
+  ],
+  [
+    "Arequipa",
+    "Andes",
+    "See Arequipa cathedral",
+    "Add the cathedral and Plaza de Armas to a city walk.",
+    35,
+    "pdf"
+  ],
+  [
+    "Sacred Valley",
+    "Andes",
+    "Explore Ollantaytambo",
+    "Visit the archaeological site and its terraces.",
+    21,
+    "pdf"
+  ],
+  [
+    "Lima",
+    "Coast",
+    "Browse a Lima food market",
+    "Choose a market in Miraflores or Magdalena for a food-focused outing.",
+    28,
+    "pdf"
+  ],
+  [
+    "Lima",
+    "Coast",
+    "Take a Peruvian cooking class",
+    "Look for a class featuring ceviche or lomo saltado.",
+    28,
+    "pdf"
+  ],
+  [
+    "Colca Canyon",
+    "Andes",
+    "Visit Colca villages",
+    "Consider Chivay or Yanque when planning time in the Colca Valley.",
+    25,
+    "pdf"
+  ],
+  [
+    "Lima",
+    "Coast",
+    "Walk Lima’s historic centre",
+    "Explore the architecture of the old city.",
+    35,
+    "pdf"
+  ],
+  [
+    "Huacachina",
+    "Coast",
+    "Try sandboarding",
+    "Add a sandboarding outing if your route includes Huacachina.",
+    30,
+    "pdf"
+  ],
+  [
+    "Cusco",
+    "Andes",
+    "Tour Sacsayhuamán fortress",
+    "Walk the massive Inca stone terraces on the hill above Cusco.",
+    209,
+    "print"
+  ],
+  [
+    "Cusco",
+    "Andes",
+    "Visit Qorikancha sun temple",
+    "See the Inca temple that once anchored the empire's ceremonial road network.",
+    206,
+    "print"
+  ],
+  [
+    "Cusco",
+    "Andes",
+    "Take a Cusco chocolate workshop",
+    "Join a hands-on chocolate or Peruvian cooking class in the city centre.",
+    217,
+    "print"
+  ],
+  [
+    "Sacred Valley",
+    "Andes",
+    "Browse Pisac's artisan market",
+    "Shop for textiles and crafts at Pisac's covered market hall.",
+    224,
+    "print"
+  ],
+  [
+    "Sacred Valley",
+    "Andes",
+    "Hike Pisac's Inca ruins",
+    "Walk the terraced hillside ruins above Pisac town.",
+    225,
+    "print"
+  ],
+  [
+    "Sacred Valley",
+    "Andes",
+    "Visit Moray's terraces",
+    "See the Inca's circular terraced amphitheatre, once used to test crops at different altitudes.",
+    228,
+    "print"
+  ],
+  [
+    "Sacred Valley",
+    "Andes",
+    "Tour the Salineras de Maras",
+    "Walk past thousands of salt pans that have been worked by hand for centuries.",
+    229,
+    "print"
+  ],
+  [
+    "Sacred Valley",
+    "Andes",
+    "Watch weaving in Chinchero",
+    "See Quechua weavers demonstrate spinning and dyeing wool by hand.",
+    226,
+    "print"
+  ],
+  [
+    "Machu Picchu",
+    "Andes",
+    "Climb Huayna Picchu",
+    "Book the separate permit to climb the steep peak behind the Machu Picchu ruins.",
+    238,
+    "print"
+  ],
+  [
+    "Machu Picchu",
+    "Andes",
+    "Hike to Intipunku",
+    "Plan the Sun Gate route with the matching Machu Picchu ticket; check seasonal availability before booking.",
+    236,
+    "print"
+  ],
+  [
+    "Puno",
+    "Andes",
+    "Boat to the Uros islands",
+    "Visit the floating reed islands built and inhabited by the Uros people.",
+    187,
+    "print"
+  ],
+  [
+    "Puno",
+    "Andes",
+    "See the Sillustani towers",
+    "Visit pre-Inca funerary towers overlooking a lake near Puno.",
+    190,
+    "print"
+  ],
+  [
+    "Tambopata",
+    "Amazon",
+    "Paddle Lago Sandoval",
+    "Take a guided canoe trip on this jungle oxbow lake to spot caimans and macaws.",
+    432,
+    "print"
+  ],
+  [
+    "Tambopata",
+    "Amazon",
+    "Watch macaws at a clay lick",
+    "Head out before dawn to see macaws and parrots feed at a riverside clay bank.",
+    434,
+    "print"
+  ],
+  [
+    "Chaparrí",
+    "Coast",
+    "Hike the Ruta de los Osos",
+    "Follow a trail past a rescue and release station for endangered Andean spectacled bears.",
+    313,
+    "print"
+  ],
+  [
+    "Huanchaco",
+    "Coast",
+    "Learn to surf in Huanchaco",
+    "Take a lesson at this long-running surf town near Trujillo.",
+    306,
+    "print"
+  ],
+  [
+    "Chiclayo",
+    "Coast",
+    "Visit the Tumbas Reales museum",
+    "See the gold burial goods of the Moche ruler known as the Lord of Sipán.",
+    310,
+    "print"
+  ],
+  [
+    "Trujillo",
+    "Coast",
+    "Tour Chan Chan",
+    "Explore the largest adobe city in the Americas, built by the Chimú.",
+    308,
+    "print"
+  ],
+  [
+    "Paracas",
+    "Coast",
+    "Boat to the Islas Ballestas",
+    "See sea lions and seabirds, and the Candelabra geoglyph, from the water.",
+    120,
+    "print"
+  ],
+  [
+    "Nazca",
+    "Coast",
+    "Fly over the Nazca Lines",
+    "Take a small-plane flight to see the animal and figure geoglyphs from above.",
+    131,
+    "print"
+  ],
+  [
+    "Máncora",
+    "Coast",
+    "Go whale watching near Máncora",
+    "Book a boat trip from nearby Los Órganos to see humpback whales (July–October).",
+    319,
+    "print"
+  ],
+  [
+    "Lima",
+    "Coast",
+    "Discover Museo Larco",
+    "Explore pre-Columbian ceramics and metalwork in a historic mansion.",
+    135,
+    "pdf"
+  ],
+  [
+    "Lima",
+    "Coast",
+    "Visit Huaca Pucllana",
+    "See an adobe ceremonial pyramid surrounded by modern Miraflores.",
+    158,
+    "pdf"
+  ],
+  [
+    "Lima",
+    "Coast",
+    "Explore Pachacámac",
+    "Make an archaeological outing to the coastal sanctuary south of Lima.",
+    170,
+    "pdf"
+  ],
+  [
+    "Lima",
+    "Coast",
+    "Visit San Francisco's catacombs",
+    "Explore the monastery and its underground burial spaces on a guided visit.",
+    111,
+    "pdf"
+  ],
+  [
+    "Lima",
+    "Coast",
+    "Spend an afternoon at MALI",
+    "Discover Peruvian art inside the Museo de Arte de Lima.",
+    126,
+    "pdf"
+  ],
+  [
+    "Arequipa",
+    "Andes",
+    "Watch the light at Yanahuara",
+    "Frame Arequipa's volcanoes through the viewpoint's stone arches.",
+    283,
+    "pdf"
+  ],
+  [
+    "Cusco",
+    "Andes",
+    "Browse San Pedro market",
+    "Explore the produce stalls and juice counters of Cusco's central market.",
+    405,
+    "pdf"
+  ],
+  [
+    "Cusco",
+    "Andes",
+    "Wander San Blas",
+    "Set aside time for the lanes and small creative spaces of San Blas.",
+    471,
+    "pdf"
+  ],
+  [
+    "Cusco",
+    "Andes",
+    "Visit Cusco's planetarium",
+    "Spend an evening learning about the sky and Andean astronomy.",
+    391,
+    "pdf"
+  ],
+  [
+    "Cusco",
+    "Andes",
+    "Explore Puka Pukara",
+    "Visit the stone archaeological site above Cusco.",
+    391,
+    "pdf"
+  ],
+  [
+    "Cusco",
+    "Andes",
+    "Visit Andahuaylillas church",
+    "Make a southern-valley outing to see the church's decorated interior.",
+    461,
+    "pdf"
+  ],
+  [
+    "Cusco",
+    "Andes",
+    "Look for birds at Huacarpay",
+    "Explore the southern valley's wetland birdlife with a local guide.",
+    461,
+    "pdf"
+  ],
+  [
+    "Cusco",
+    "Andes",
+    "Raft the Urubamba",
+    "Plan a guided rafting outing with a local operator who can advise on river conditions.",
+    461,
+    "pdf"
+  ],
+  [
+    "Puno",
+    "Andes",
+    "Discover Taquile's textile traditions",
+    "Visit the island and learn about its distinctive textile culture.",
+    345,
+    "pdf"
+  ],
+  [
+    "Puno",
+    "Andes",
+    "Stay with hosts on Amantaní",
+    "Arrange a community homestay and spend time experiencing island life.",
+    346,
+    "pdf"
+  ],
+  [
+    "Puno",
+    "Andes",
+    "Explore Lampa",
+    "Take a detour to the town known for its pink buildings and historic church.",
+    347,
+    "pdf"
+  ],
+  [
+    "Paracas",
+    "Coast",
+    "Explore the Paracas reserve",
+    "Discover where desert landscapes meet the Pacific on the Paracas peninsula.",
+    217,
+    "pdf"
+  ],
+  [
+    "Nazca",
+    "Coast",
+    "See the Cantalloc aqueducts",
+    "Explore the ancient water infrastructure around Nazca.",
+    240,
+    "pdf"
+  ],
+  [
+    "Nazca",
+    "Coast",
+    "Explore Cahuachi",
+    "Visit the remains of a Nazca ceremonial centre in the desert.",
+    254,
+    "pdf"
+  ],
+  [
+    "Nazca",
+    "Coast",
+    "Visit Chauchilla cemetery",
+    "See the desert burial site and learn about local funerary history.",
+    256,
+    "pdf"
+  ],
+  [
+    "Nazca",
+    "Andes",
+    "Look for vicuñas at Pampas Galeras",
+    "Plan a highland outing from Nazca to the vicuña reserve.",
+    254,
+    "pdf"
+  ],
+  [
+    "Trujillo",
+    "Coast",
+    "Visit Huaca de la Luna",
+    "Add a visit to the Moche archaeological site outside Trujillo.",
+    543,
+    "pdf"
+  ],
+  [
+    "Trujillo",
+    "Coast",
+    "Explore El Brujo",
+    "Discover the archaeological complex near Magdalena de Cao.",
+    567,
+    "pdf"
+  ],
+  [
+    "Chiclayo",
+    "Coast",
+    "Explore Túcume's pyramids",
+    "Visit the adobe pyramid landscape in the Lambayeque region.",
+    575,
+    "pdf"
+  ],
+  [
+    "Chiclayo",
+    "Coast",
+    "Browse Chiclayo's market",
+    "Explore regional ingredients and food stalls in the city market.",
+    575,
+    "pdf"
+  ],
+  [
+    "Huaraz",
+    "Andes",
+    "Hike to Laguna 69",
+    "Plan a high-altitude mountain-lake hike with time to acclimatise first.",
+    629,
+    "pdf"
+  ],
+  [
+    "Huaraz",
+    "Andes",
+    "Visit the Llanganuco lakes",
+    "Make a mountain scenery outing into Huascarán National Park.",
+    629,
+    "pdf"
+  ],
+  [
+    "Huaraz",
+    "Andes",
+    "Explore Chavín de Huántar",
+    "Travel to the archaeological site across the mountains from Huaraz.",
+    656,
+    "pdf"
+  ],
+  [
+    "Huaraz",
+    "Andes",
+    "See the ice at Pastoruri",
+    "Visit the high-altitude ice landscape and learn about its retreat.",
+    640,
+    "pdf"
+  ],
+  [
+    "Huaraz",
+    "Andes",
+    "Walk the Santa Cruz trek",
+    "Set aside several days for a supported trek through the Cordillera Blanca.",
+    629,
+    "pdf"
+  ],
+  [
+    "Huaraz",
+    "Andes",
+    "Discover Chacas",
+    "Explore this mountain town on the eastern side of the Cordillera Blanca.",
+    656,
+    "pdf"
+  ],
+  [
+    "Chachapoyas",
+    "Andes",
+    "Hike to Gocta waterfall",
+    "Follow a cloud-forest trail toward the two-tier waterfall.",
+    724,
+    "pdf"
+  ],
+  [
+    "Chachapoyas",
+    "Andes",
+    "See the sarcophagi of Karajía",
+    "Visit the cliffside funerary monuments of the Chachapoya culture.",
+    691,
+    "pdf"
+  ],
+  [
+    "Chachapoyas",
+    "Andes",
+    "Visit Museo Leymebamba",
+    "Learn about the region's funerary traditions through the museum's archaeological collection.",
+    711,
+    "pdf"
+  ],
+  [
+    "Chachapoyas",
+    "Andes",
+    "Explore Kuélap",
+    "Plan a visit to the hilltop archaeological complex, checking access before travelling.",
+    691,
+    "pdf"
+  ],
+  [
+    "Chachapoyas",
+    "Andes",
+    "See the mausoleums of Revash",
+    "Look for the small painted funerary buildings set into a cliff.",
+    715,
+    "pdf"
+  ],
+  [
+    "Chachapoyas",
+    "Andes",
+    "Trek to Laguna de los Cóndores",
+    "Arrange a guided multi-day trek to the remote lake and its archaeological landscape.",
+    717,
+    "pdf"
+  ],
+  [
+    "Cajamarca",
+    "Andes",
+    "Relax at Baños del Inca",
+    "Make time for the thermal-bath area outside Cajamarca.",
+    701,
+    "pdf"
+  ],
+  [
+    "Cajamarca",
+    "Andes",
+    "Explore Cumbemayo",
+    "Discover a highland landscape of rock formations and ancient waterworks.",
+    709,
+    "pdf"
+  ],
+  [
+    "Cajamarca",
+    "Andes",
+    "Visit Kuntur Wasi",
+    "Explore the hilltop temple remains and archaeological museum.",
+    708,
+    "pdf"
+  ],
+  [
+    "Iquitos",
+    "Amazon",
+    "Explore Pacaya-Samiria by boat",
+    "Arrange a guided reserve trip to experience flooded forest and river habitats.",
+    767,
+    "pdf"
+  ],
+  [
+    "Iquitos",
+    "Amazon",
+    "Browse Belén market",
+    "Explore the busy market's regional ingredients with a local guide.",
+    761,
+    "pdf"
+  ],
+  [
+    "Iquitos",
+    "Amazon",
+    "Unwind beside Laguna Quistococha",
+    "Set aside a relaxed lakeside outing near Iquitos.",
+    767,
+    "pdf"
+  ],
+  [
+    "Pucallpa",
+    "Amazon",
+    "Boat on Laguna Yarinacocha",
+    "Explore the lagoon's shoreline and wildlife with a local boat guide.",
+    773,
+    "pdf"
+  ],
+  [
+    "Oxapampa",
+    "Amazon",
+    "Discover Pozuzo",
+    "Make an excursion to the valley town with Austrian and German heritage.",
+    783,
+    "pdf"
+  ],
+  [
+    "Tarma",
+    "Andes",
+    "Explore Tarmatambo",
+    "Discover archaeological remains above the valley near Tarma.",
+    495,
+    "pdf"
+  ],
+  [
+    "Ayacucho",
+    "Andes",
+    "Explore the Wari archaeological site",
+    "Visit the remains of the former Wari capital outside Ayacucho.",
+    531,
+    "pdf"
+  ],
+  [
+    "Ayacucho",
+    "Andes",
+    "Visit Quinua",
+    "Add this highland village to an outing beyond Ayacucho.",
+    530,
+    "pdf"
+  ],
+  [
+    "Lunahuaná",
+    "Coast",
+    "Raft the Cañete valley",
+    "Arrange a guided whitewater outing from Lunahuaná.",
+    209,
+    "pdf"
+  ],
+  [
+    "Barranca",
+    "Coast",
+    "Explore ancient Caral",
+    "Walk among the pyramids and plazas of the archaeological city.",
+    560,
+    "pdf"
+  ],
+  [
+    "Casma",
+    "Coast",
+    "Discover Chankillo",
+    "Visit the ancient solar observatory and its desert setting.",
+    561,
+    "pdf"
+  ],
+  [
+    "Tarapoto",
+    "Amazon",
+    "Take a trip to Lamas",
+    "Explore the hill town and its unusual modern castle.",
+    738,
+    "pdf"
+  ],
+  [
+    "Tarapoto",
+    "Amazon",
+    "Visit Ahuashiyacu waterfall",
+    "Make a forest outing to the waterfall in the Cordillera Escalera area.",
+    739,
+    "pdf"
+  ],
+  [
+    "Tarapoto",
+    "Amazon",
+    "Walk to Huacamaillo waterfall",
+    "Arrange a guided walk involving river crossings to reach the falls.",
+    739,
+    "pdf"
+  ],
+  [
+    "Tingo María",
+    "Amazon",
+    "Explore Tingo María National Park",
+    "Discover forested mountains, caves and waterfalls with a local guide.",
+    490,
+    "pdf"
+  ]
 ];
 var catalogueCategory = "All";
 var activityKinds = ["Culture","Nature","Adventure","Food","Water & coast"];
@@ -1843,10 +2517,65 @@ var activityKindByTitle = {
   "Learn to surf in Huanchaco":"Water & coast", "Visit the Tumbas Reales museum":"Culture", "Tour Chan Chan":"Culture",
   "Boat to the Islas Ballestas":"Water & coast", "Fly over the Nazca Lines":"Culture", "Go whale watching near Máncora":"Water & coast"
 };
+activityKindByTitle["Discover Museo Larco"] = "Culture";
+activityKindByTitle["Visit Huaca Pucllana"] = "Culture";
+activityKindByTitle["Explore Pachac\u00e1mac"] = "Culture";
+activityKindByTitle["Visit San Francisco's catacombs"] = "Culture";
+activityKindByTitle["Spend an afternoon at MALI"] = "Culture";
+activityKindByTitle["Watch the light at Yanahuara"] = "Nature";
+activityKindByTitle["Browse San Pedro market"] = "Food";
+activityKindByTitle["Wander San Blas"] = "Culture";
+activityKindByTitle["Visit Cusco's planetarium"] = "Nature";
+activityKindByTitle["Explore Puka Pukara"] = "Culture";
+activityKindByTitle["Visit Andahuaylillas church"] = "Culture";
+activityKindByTitle["Look for birds at Huacarpay"] = "Nature";
+activityKindByTitle["Raft the Urubamba"] = "Adventure";
+activityKindByTitle["Discover Taquile's textile traditions"] = "Culture";
+activityKindByTitle["Stay with hosts on Amantan\u00ed"] = "Culture";
+activityKindByTitle["Explore Lampa"] = "Culture";
+activityKindByTitle["Explore the Paracas reserve"] = "Nature";
+activityKindByTitle["See the Cantalloc aqueducts"] = "Culture";
+activityKindByTitle["Explore Cahuachi"] = "Culture";
+activityKindByTitle["Visit Chauchilla cemetery"] = "Culture";
+activityKindByTitle["Look for vicu\u00f1as at Pampas Galeras"] = "Nature";
+activityKindByTitle["Visit Huaca de la Luna"] = "Culture";
+activityKindByTitle["Explore El Brujo"] = "Culture";
+activityKindByTitle["Explore T\u00facume's pyramids"] = "Culture";
+activityKindByTitle["Browse Chiclayo's market"] = "Food";
+activityKindByTitle["Hike to Laguna 69"] = "Adventure";
+activityKindByTitle["Visit the Llanganuco lakes"] = "Nature";
+activityKindByTitle["Explore Chav\u00edn de Hu\u00e1ntar"] = "Culture";
+activityKindByTitle["See the ice at Pastoruri"] = "Nature";
+activityKindByTitle["Walk the Santa Cruz trek"] = "Adventure";
+activityKindByTitle["Discover Chacas"] = "Culture";
+activityKindByTitle["Hike to Gocta waterfall"] = "Adventure";
+activityKindByTitle["See the sarcophagi of Karaj\u00eda"] = "Culture";
+activityKindByTitle["Visit Museo Leymebamba"] = "Culture";
+activityKindByTitle["Explore Ku\u00e9lap"] = "Culture";
+activityKindByTitle["See the mausoleums of Revash"] = "Culture";
+activityKindByTitle["Trek to Laguna de los C\u00f3ndores"] = "Adventure";
+activityKindByTitle["Relax at Ba\u00f1os del Inca"] = "Water & coast";
+activityKindByTitle["Explore Cumbemayo"] = "Culture";
+activityKindByTitle["Visit Kuntur Wasi"] = "Culture";
+activityKindByTitle["Explore Pacaya-Samiria by boat"] = "Nature";
+activityKindByTitle["Browse Bel\u00e9n market"] = "Food";
+activityKindByTitle["Unwind beside Laguna Quistococha"] = "Water & coast";
+activityKindByTitle["Boat on Laguna Yarinacocha"] = "Water & coast";
+activityKindByTitle["Discover Pozuzo"] = "Culture";
+activityKindByTitle["Explore Tarmatambo"] = "Culture";
+activityKindByTitle["Explore the Wari archaeological site"] = "Culture";
+activityKindByTitle["Visit Quinua"] = "Culture";
+activityKindByTitle["Raft the Ca\u00f1ete valley"] = "Adventure";
+activityKindByTitle["Explore ancient Caral"] = "Culture";
+activityKindByTitle["Discover Chankillo"] = "Culture";
+activityKindByTitle["Take a trip to Lamas"] = "Culture";
+activityKindByTitle["Visit Ahuashiyacu waterfall"] = "Nature";
+activityKindByTitle["Walk to Huacamaillo waterfall"] = "Adventure";
+activityKindByTitle["Explore Tingo Mar\u00eda National Park"] = "Nature";
 function searchKey(t){return String(t).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();}
 function matchingStop(a,it){
   var place=searchKey(a[0]),name=searchKey(resolve(it.id).name);
-  return name===place || (place==="sacred valley" && it.id==="valley") || (place==="machu picchu" && it.id==="cusco") || (place==="tambopata" && it.id==="tambopata");
+  return name===place || (place==="puno" && it.id==="puno") || (place==="mancora" && it.id==="mancora") || (place==="trujillo" && it.id==="huanchaco") || (place==="manu road" && it.id==="wayqecha") || (place==="sacred valley" && it.id==="valley") || (place==="machu picchu" && it.id==="cusco") || (place==="tambopata" && it.id==="tambopata");
 }
 function activityPicker(a){
   var row=document.createElement("div");row.className="discovery-add";
@@ -1867,7 +2596,7 @@ function activityDetail(a){
   var p=document.createElement("p");p.textContent=a[3];box.appendChild(p);
   if (a[4]){
     var ref=document.createElement("p");ref.className="sub";
-    ref.textContent="Guidebook reference: Lonely Planet Peru, p. "+a[4]+" — open your own copy to that page for the full write-up.";
+    ref.textContent="Guidebook reference: Lonely Planet Peru, "+(a[5]==="pdf"?"PDF page ":"printed p. ")+a[4]+" — open your own copy to that page for the full write-up.";
     box.appendChild(ref);
   }
   var note=document.createElement("p");note.className="sub";note.textContent="Add this idea to a stop, then choose its day and add booking details in your itinerary.";box.appendChild(note);
@@ -1887,7 +2616,7 @@ function renderActivities(){
     var kind=document.createElement("span");kind.className="lab";kind.textContent=activityKindByTitle[a[2]];cover.appendChild(kind);
     var num=document.createElement("span");num.className="ordinal";num.setAttribute("aria-hidden","true");num.textContent=String(ACTIVITIES.indexOf(a)+1).padStart(2,"0");cover.appendChild(num);card.appendChild(cover);
     var body=document.createElement("div");body.className="discovery-body";
-    var place=document.createElement("span");place.className="place";place.textContent=a[0]+(a[4]?" · p. "+a[4]:"");body.appendChild(place);
+    var place=document.createElement("span");place.className="place";place.textContent=a[0]+(a[4]?" · "+(a[5]==="pdf"?"PDF ":"p. ")+a[4]:"");body.appendChild(place);
     var h=document.createElement("h3");h.textContent=a[2];body.appendChild(h);
     var desc=document.createElement("p");desc.textContent=a[3];body.appendChild(desc);
     var detail=document.createElement("button");detail.className="detail-link";detail.type="button";detail.textContent="Explore this idea ↗";detail.setAttribute("aria-label","Explore "+a[2]);detail.onclick=function(){activityDetail(a);};body.appendChild(detail);
@@ -1900,40 +2629,51 @@ $("activitySearch").oninput=renderActivities;$("activityRegion").onchange=render
 $("closeActivity").onclick=function(){$("activityDialog").close();};
 
 /* ---------- guide PDF ----------
-   Same edit-key auth as everything else, a separate Blob store from the
-   plan's, and the file itself never passes through our own server — the
-   browser uploads straight to Blob storage, and downloads come from Blob's
-   URL directly once the API has confirmed the request holds a real key. */
+   Same edit-key auth as everything else. The file never passes through our
+   own server either way: uploads go straight from the browser to Blob
+   storage, and viewing opens Blob's URL directly in a new tab — the
+   browser's own native PDF viewer, full screen, with real search — rather
+   than a cramped custom reader embedded in a dialog. */
 async function guideKey(){
   if (lsGet(LS_KEY)) return lsGet(LS_KEY);
   var ok = await promptForEditor();
   return ok ? lsGet(LS_KEY) : "";
 }
 async function openGuide(){
-  $("guideDialog").showModal();
-  $("guideWelcome").hidden = true; $("guideFrame").hidden = true;
+  /* the new tab has to open synchronously, in direct response to the click,
+     or Safari/Chrome's popup blocker treats it as unsolicited once an
+     await has happened first — so open it blank now and fill it in once
+     the authenticated URL comes back */
+  var tab = window.open("", "_blank");
   $("guideStatus").textContent = "Loading…";
   var key = await guideKey();
-  if (!key){ $("guideStatus").textContent = "An edit key is needed to view the guide."; return; }
+  if (!key){
+    $("guideStatus").textContent = "An edit key is needed to view the guide.";
+    if (tab) tab.close();
+    return;
+  }
   try {
     var r = await fetch("/api/guide", {headers:{"X-Edit-Key":encodeURIComponent(key)}, cache:"no-store"});
     if (r.status === 404){
-      $("guideStatus").textContent = ""; $("guideWelcome").hidden = false; return;
+      $("guideStatus").textContent = "No guide uploaded yet — use Upload / replace PDF.";
+      if (tab) tab.close();
+      return;
     }
     if (!r.ok){
       var detail = null; try { detail = await r.json(); } catch(e){}
       $("guideStatus").textContent = (detail && detail.message) || ("Could not load the guide (" + r.status + ").");
+      if (tab) tab.close();
       return;
     }
     var body = await r.json();
-    $("guideFrame").src = body.url; $("guideFrame").hidden = false;
+    if (tab) tab.location = body.url; else window.open(body.url, "_blank");
     $("guideStatus").textContent = "";
   } catch(e){
     $("guideStatus").textContent = "Could not reach the guide right now.";
+    if (tab) tab.close();
   }
 }
 $("openGuide").onclick = openGuide;
-$("closeGuide").onclick = function(){ $("guideDialog").close(); $("guideFrame").src = "about:blank"; };
 $("guideFile").addEventListener("change", async function(){
   var file = this.files && this.files[0];
   this.value = "";
@@ -1948,8 +2688,7 @@ $("guideFile").addEventListener("change", async function(){
       handleUploadUrl: "/api/guide",
       clientPayload: key,
     });
-    $("guideStatus").textContent = "Uploaded — loading it now…";
-    await openGuide();
+    $("guideStatus").textContent = "Uploaded — click Open the guide to view it.";
   } catch(e){
     $("guideStatus").textContent = "Upload failed — " + (e && e.message ? e.message : "unknown error");
   }

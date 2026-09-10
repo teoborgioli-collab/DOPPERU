@@ -49,3 +49,65 @@ its back-of-book index — these should match what's printed on the page.
 - Boat to the Islas Ballestas: p. 120.
 - Fly over the Nazca Lines: p. 131.
 - Go whale watching near Máncora: p. 319.
+
+## Expanded catalogue (2026-09-10)
+
+55 new ideas with original summaries. All new references are 1-based PDF page positions in the supplied guide.pdf, not printed page numbers. The PDF is not bundled. Existing printed references are inherited and have not been revalidated. Removed three overlapping starter entries. Saved itinerary activities remain unchanged.
+
+- Discover Museo Larco (Lima): PDF page 135.
+- Visit Huaca Pucllana (Lima): PDF page 158.
+- Explore Pachacámac (Lima): PDF page 170.
+- Visit San Francisco's catacombs (Lima): PDF page 111.
+- Spend an afternoon at MALI (Lima): PDF page 126.
+- Watch the light at Yanahuara (Arequipa): PDF page 283.
+- Browse San Pedro market (Cusco): PDF page 405.
+- Wander San Blas (Cusco): PDF page 471.
+- Visit Cusco's planetarium (Cusco): PDF page 391.
+- Explore Puka Pukara (Cusco): PDF page 391.
+- Visit Andahuaylillas church (Cusco): PDF page 461.
+- Look for birds at Huacarpay (Cusco): PDF page 461.
+- Raft the Urubamba (Cusco): PDF page 461.
+- Discover Taquile's textile traditions (Puno): PDF page 345.
+- Stay with hosts on Amantaní (Puno): PDF page 346.
+- Explore Lampa (Puno): PDF page 347.
+- Explore the Paracas reserve (Paracas): PDF page 217.
+- See the Cantalloc aqueducts (Nazca): PDF page 240.
+- Explore Cahuachi (Nazca): PDF page 254.
+- Visit Chauchilla cemetery (Nazca): PDF page 256.
+- Look for vicuñas at Pampas Galeras (Nazca): PDF page 254.
+- Visit Huaca de la Luna (Trujillo): PDF page 543.
+- Explore El Brujo (Trujillo): PDF page 567.
+- Explore Túcume's pyramids (Chiclayo): PDF page 575.
+- Browse Chiclayo's market (Chiclayo): PDF page 575.
+- Hike to Laguna 69 (Huaraz): PDF page 629.
+- Visit the Llanganuco lakes (Huaraz): PDF page 629.
+- Explore Chavín de Huántar (Huaraz): PDF page 656.
+- See the ice at Pastoruri (Huaraz): PDF page 640.
+- Walk the Santa Cruz trek (Huaraz): PDF page 629.
+- Discover Chacas (Huaraz): PDF page 656.
+- Hike to Gocta waterfall (Chachapoyas): PDF page 724.
+- See the sarcophagi of Karajía (Chachapoyas): PDF page 691.
+- Visit Museo Leymebamba (Chachapoyas): PDF page 711.
+- Explore Kuélap (Chachapoyas): PDF page 691.
+- See the mausoleums of Revash (Chachapoyas): PDF page 715.
+- Trek to Laguna de los Cóndores (Chachapoyas): PDF page 717.
+- Relax at Baños del Inca (Cajamarca): PDF page 701.
+- Explore Cumbemayo (Cajamarca): PDF page 709.
+- Visit Kuntur Wasi (Cajamarca): PDF page 708.
+- Explore Pacaya-Samiria by boat (Iquitos): PDF page 767.
+- Browse Belén market (Iquitos): PDF page 761.
+- Unwind beside Laguna Quistococha (Iquitos): PDF page 767.
+- Boat on Laguna Yarinacocha (Pucallpa): PDF page 773.
+- Discover Pozuzo (Oxapampa): PDF page 783.
+- Explore Tarmatambo (Tarma): PDF page 495.
+- Explore the Wari archaeological site (Ayacucho): PDF page 531.
+- Visit Quinua (Ayacucho): PDF page 530.
+- Raft the Cañete valley (Lunahuaná): PDF page 209.
+- Explore ancient Caral (Barranca): PDF page 560.
+- Discover Chankillo (Casma): PDF page 561.
+- Take a trip to Lamas (Tarapoto): PDF page 738.
+- Visit Ahuashiyacu waterfall (Tarapoto): PDF page 739.
+- Walk to Huacamaillo waterfall (Tarapoto): PDF page 739.
+- Explore Tingo María National Park (Tingo María): PDF page 490.
+
+Intipunku wording checked against https://www.machupicchu.gob.pe/circuits-and-routes/?lang=en on 2026-09-10. No current prices, opening hours, or availability are asserted for new ideas.
