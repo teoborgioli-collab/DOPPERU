@@ -175,10 +175,9 @@ export default async function handler(req, res) {
 
     const configured = editors();
     if (req.method === 'GET' && req.query && req.query.diag) return send(res, 200, {
-      build: '2026-09-10-catalogue-and-guide', openMode: false,
+      build: '2026-09-10-guide-shared-store', openMode: false,
       PLAN_EDIT_KEYS_set: !!(process.env.PLAN_EDIT_KEYS || '').trim(),
       BLOB_TOKEN_set: !!blobToken(),
-      GUIDE_BLOB_TOKEN_set: !!(process.env.GUIDE_BLOB_TOKEN || '').trim(),
       usableEditors: configured.length, names: configured.map((e) => e.name),
     });
     if (configured.length !== 2 || !configured.some((e) => e.name === 'matteo') || !configured.some((e) => e.name === 'levin')) {

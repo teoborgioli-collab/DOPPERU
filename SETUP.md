@@ -180,27 +180,27 @@ the Lonely Planet Peru guide. These changes still require Save.
 ### Guide PDF viewer (2026-09-10)
 
 **Open the guide** in that section opens an in-app viewer for your own guide
-PDF — gated behind the same edit key as everything else, hosted in its own
-Blob store kept separate from the plan's. The file is never linked anywhere
-public; the API only ever hands its URL to a request that already proved it
-holds one of the two edit keys.
+PDF — gated behind the same edit key as everything else. It stores the file
+in the *same* Blob store the plan already uses (just as `guide.pdf` next to
+`plan.json`), so **no extra setup is needed beyond what saving the plan
+already requires** — if saving the plan works, this works too.
 
-Setup, in Vercel:
+(An earlier version of this doc had you connect a second, dedicated Blob
+store for the guide. That turned out not to generate its own read-write
+token — only a `STORE_ID` and a webhook key — so rather than chase exactly
+how Vercel's multi-store token model works, this reuses the existing store
+instead. If you already connected that second store, it's unused now and
+safe to disconnect or leave alone.)
 
-1. **Storage** tab → **Create Database** → **Blob** → give it a distinct name
-   (e.g. `guide`) so it's obviously separate from the plan's store → connect
-   it to this project. This auto-adds an env var — something like
-   `GUIDE_READ_WRITE_TOKEN`, prefixed with whatever you named the store.
-2. **Settings → Environment Variables** → add one more variable named
-   **exactly** `GUIDE_BLOB_TOKEN`, and paste in the *same value* the
-   auto-added variable from step 1 got. (This app looks for the token under
-   this specific name rather than guessing at a prefix, since there are now
-   two Blob stores connected to one project and guessing would be ambiguous.)
-3. Redeploy.
-4. In the app, open **Open the guide** → **Upload / replace PDF** → pick your
-   PDF. It uploads straight from your browser to Blob storage (not through
-   Vercel's function, so its ~4.5 MB request limit doesn't apply) — this can
-   take a little while on a big file. Re-uploading replaces the previous one.
+The file is never linked anywhere public; the API only ever hands its URL to
+a request that already proved it holds one of the two edit keys.
+
+To use it: open the app → **Open the guide** → **Upload / replace PDF** →
+pick your PDF. It uploads straight from your browser to Blob storage (not
+through Vercel's function, so its ~4.5 MB request limit doesn't apply) — this
+can take a little while on a big file. Re-uploading replaces the previous
+one. After that, either of you can open it from any device by clicking
+**Open the guide** and entering your edit key — no re-uploading needed.
 
 Until `GUIDE_BLOB_TOKEN` is set, **Open the guide** shows a message saying so
 rather than failing silently. This is new and has not been exercised against

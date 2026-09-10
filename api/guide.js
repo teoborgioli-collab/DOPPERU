@@ -38,8 +38,14 @@ function headerKey(req) {
   try { return decodeURIComponent(raw); } catch (error) { return raw; }
 }
 
+/* same lookup as plan.js's blobToken() — @vercel/blob looks for exactly
+   BLOB_READ_WRITE_TOKEN by default; connecting a store through the
+   dashboard can instead name it after the store, so check for that shape
+   too before giving up */
 function guideToken() {
-  return process.env.GUIDE_BLOB_TOKEN || undefined;
+  if (process.env.BLOB_READ_WRITE_TOKEN) return process.env.BLOB_READ_WRITE_TOKEN;
+  const key = Object.keys(process.env).find((k) => /_READ_WRITE_TOKEN$/.test(k));
+  return key ? process.env[key] : undefined;
 }
 
 function setHeaders(res) {
@@ -61,7 +67,7 @@ export default async function handler(req, res) {
     if (!guideToken()) {
       return send(res, 503, {
         error: 'guide_not_configured',
-        message: 'Set GUIDE_BLOB_TOKEN in Vercel to a dedicated Blob store\'s read-write token, then redeploy.',
+        message: 'No Blob read-write token found. Connect a Blob store to this project (Storage tab) and redeploy — the plan already needs one, so if saving works, this should too.',
       });
     }
 
