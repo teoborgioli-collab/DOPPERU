@@ -597,7 +597,7 @@ textarea{margin-top:18px;padding:12px 13px;min-height:54px;line-height:1.65}
   </div></details>
 
   <section id="activitiesFold" class="discovery" aria-labelledby="activitiesTitle">
-    <div class="discovery-head"><div><p class="lab">A little inspiration for the journey</p><h2 id="activitiesTitle">Make room for something good.</h2><p class="sub">A collection of places, small adventures, and slower moments. Pick an idea, then make it part of your trip.</p></div><div class="guide-controls"><button class="btn" type="button" id="openGuide">Open the guide</button><label class="mini">Upload / replace PDF<input type="file" id="guideFile" accept="application/pdf" hidden></label><span id="guideStatus" role="status" aria-live="polite" class="sub"></span></div></div>
+    <div class="discovery-head"><div><p class="lab">A little inspiration for the journey</p><h2 id="activitiesTitle">Make room for something good.</h2><p class="sub">A collection of places, small adventures, and slower moments. Pick an idea, then make it part of your trip.</p></div><div class="guide-controls"><button class="btn" type="button" id="openGuide">Open the guide</button><label class="mini">Upload / replace PDF<input type="file" id="guideFile" accept="application/pdf" hidden></label><button class="btn" type="button" id="openEpub">Read the guide (EPUB)</button><label class="mini">Upload / replace EPUB<input type="file" id="epubFile" accept=".epub,application/epub+zip" hidden></label><span id="guideStatus" role="status" aria-live="polite" class="sub"></span></div></div>
     <div class="discovery-tools"><label class="discovery-search"><span class="lab">Find your next idea</span><input id="activitySearch" type="search" placeholder="Try food, Cusco, birds…" aria-label="Search activities"></label><label><span class="lab">Where</span><select id="activityRegion" aria-label="Filter activities by region"><option value="">Everywhere</option></select></label><label><span class="lab">Your route</span><select id="activityRoute" aria-label="Filter activities by route"><option value="">All ideas</option><option value="route">Places in this scenario</option></select></label></div>
     <div id="activityCategories" class="discovery-categories" aria-label="Activity categories"></div>
     <div class="discovery-count"><span id="activityCount" role="status"></span><span>Ideas to explore · details to confirm before booking</span></div>
@@ -736,7 +736,7 @@ var FALLBACK_SEED = {
 
 /* The API is tried first; a plain static host without it falls back to the
    file next to this page. */
-var BUILD = "2026-09-10-checks-list-view";   /* shown in the footer — check it after deploying */
+var BUILD = "2026-09-10-epub-reader-link";   /* shown in the footer — check it after deploying */
 var PLAN_API = "/api/plan";
 var PLAN_FILE = "plan.json";
 var canPublish = false;
@@ -2041,6 +2041,69 @@ $("guideFile").addEventListener("change", async function(){
   }
 });
 
+/* ---------- guide EPUB ----------
+   Same auth and Blob store as the PDF, a different filename — but reading
+   an EPUB happens in a separate, dedicated reader app rather than in here.
+   That app takes a "?url=" pointing at the file and opens it directly; set
+   READER_URL below once you've deployed it (see SETUP.md → Guide EPUB
+   reader). Leave it blank and the button just explains that, rather than
+   failing confusingly. */
+var READER_URL = "https://reader-inky-five.vercel.app/";
+async function openEpub(){
+  if (!READER_URL){
+    $("guideStatus").textContent = "No reader app configured yet — see SETUP.md → Guide EPUB reader.";
+    return;
+  }
+  var tab = window.open("", "_blank");   /* open synchronously so it isn't treated as an unsolicited popup once the fetch below finishes */
+  $("guideStatus").textContent = "Loading the EPUB…";
+  var key = await guideKey();
+  if (!key){ $("guideStatus").textContent = "An edit key is needed to read the guide."; if (tab) tab.close(); return; }
+  try {
+    var r = await fetch("/api/guide?file=epub", {headers:{"X-Edit-Key":encodeURIComponent(key)}, cache:"no-store"});
+    if (r.status === 404){
+      /* nothing uploaded through this app yet — still open the reader on
+         its own rather than erroring, since it can be used directly too
+         (drag-and-drop, its own picker) */
+      $("guideStatus").textContent = "Opening the reader — no EPUB uploaded here yet, so it'll open empty. Use Upload / replace EPUB to attach one for next time.";
+      if (tab) tab.location = READER_URL; else window.open(READER_URL, "_blank");
+      return;
+    }
+    if (!r.ok){
+      var detail = null; try { detail = await r.json(); } catch(e){}
+      $("guideStatus").textContent = (detail && detail.message) || ("Could not load the EPUB (" + r.status + ").");
+      if (tab) tab.close();
+      return;
+    }
+    var body = await r.json();
+    $("guideStatus").textContent = "";
+    var readerUrl = READER_URL + (READER_URL.indexOf("?") > -1 ? "&" : "?") + "url=" + encodeURIComponent(body.url);
+    if (tab) tab.location = readerUrl; else window.open(readerUrl, "_blank");
+  } catch(e){
+    $("guideStatus").textContent = "Could not open the EPUB right now.";
+    if (tab) tab.close();
+  }
+}
+$("openEpub").onclick = openEpub;
+$("epubFile").addEventListener("change", async function(){
+  var file = this.files && this.files[0];
+  this.value = "";
+  if (!file) return;
+  var key = await guideKey();
+  if (!key) return;
+  $("guideStatus").textContent = "Uploading " + file.name + " — this is a big file, it may take a while…";
+  try {
+    var mod = await import("https://esm.sh/@vercel/blob@2.0.0/client");
+    await mod.upload("guide.epub", file, {
+      access: "public",
+      handleUploadUrl: "/api/guide",
+      clientPayload: key,
+      multipart: true,   /* a plain single-request upload risks failing outright on a flaky connection with a file this size — multipart only has to retry the one chunk that dropped */
+    });
+    $("guideStatus").textContent = "Uploaded — click Read the guide (EPUB) to open it.";
+  } catch(e){
+    $("guideStatus").textContent = "Upload failed — " + (e && e.message ? e.message : "unknown error");
+  }
+});
 
 function customIds(){
   return Object.keys(state.defs || {}).filter(isCustom);

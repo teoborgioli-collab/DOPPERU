@@ -202,8 +202,42 @@ can take a little while on a big file. Re-uploading replaces the previous
 one. After that, either of you can open it from any device by clicking
 **Open the guide** and entering your edit key — no re-uploading needed.
 
-Until `GUIDE_BLOB_TOKEN` is set, **Open the guide** shows a message saying so
-rather than failing silently. This is new and has not been exercised against
-a live Blob store yet — if the upload or the viewer errors, the message it
-shows should say exactly what went wrong; send that back verbatim rather than
-just "it doesn't work" so it can actually be fixed.
+If Blob storage isn't configured, **Open the guide** shows a message saying
+so rather than failing silently — the same storage that already backs the
+plan and the PDF; there's nothing separate to set up for this.
+
+### Guide EPUB reader (2026-09-10)
+
+**Read the guide (EPUB)** works differently from the PDF: a browser can't
+display an EPUB natively the way it can a PDF, so instead of rendering it
+inside this app, that button opens your EPUB in a **separate, dedicated
+reader app** — a plain static page (`index.html` + `package.json` +
+`vercel.json`) that reads the file entirely in the browser, no server, no
+upload. This app just stores the file and points the reader at it.
+
+Setup:
+
+1. Deploy the reader app to its own Vercel project — put its three files in
+   a repo (or a folder in this same repo, deployed as a separate Vercel
+   project pointed at that folder), import it at vercel.com/new, framework
+   **Other**, no build step, no environment variables. You'll get a URL like
+   `https://your-reader.vercel.app`.
+2. In **this** app's `index.html`, find `var READER_URL = "";` near the
+   guide EPUB code and put that URL in the quotes (no trailing slash needed).
+3. Redeploy this app (the planner). `GUIDE_BLOB_TOKEN` from an earlier
+   version of this doc is not needed — the EPUB uses the same storage the
+   PDF and the plan already use.
+4. In the app: **Upload / replace EPUB** → pick your file. Like the PDF
+   upload, this goes straight from your browser to Blob storage (multipart,
+   since an EPUB can be much bigger than a PDF), so it can take a while.
+5. **Read the guide (EPUB)** opens a new tab at your reader app with the
+   file's link attached — the reader fetches it and opens straight to
+   reading, no manual "Open EPUB" step needed there.
+
+Leave `READER_URL` blank and the button just explains that it isn't set up
+yet, instead of failing confusingly.
+
+The reader app also still works completely on its own — open it directly,
+drag and drop any EPUB onto it, and it works fully offline after the first
+load. That's unrelated to this integration; the `?url=` handling was added
+specifically so this app could hand it a file automatically.
