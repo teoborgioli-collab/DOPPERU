@@ -130,37 +130,16 @@ Then:
 
 ## Live updates
 
-By default the page re-checks the server every 6 seconds, so a save by one of
-you shows up for the other within a few seconds without either of you doing
-anything. If that's fast enough, skip this section entirely — nothing below
-is required.
+The page re-checks the server every 6 seconds, so a save by one of you shows
+up for the other within a few seconds without either of you doing anything.
 
-To make it instant instead (push rather than poll), connect a free
-[Pusher](https://pusher.com) Channels app:
-
-1. pusher.com → sign up → **Create app** → any name, any cluster close to you.
-   Pick **Channels**.
-2. On the app's **App Keys** tab you'll see four values: `app_id`, `key`,
-   `secret`, `cluster`.
-3. In Vercel → Settings → Environment Variables, add all four, exactly named:
-
-   | Name | Value |
-   |---|---|
-   | `PUSHER_APP_ID` | from the App Keys tab |
-   | `PUSHER_KEY` | from the App Keys tab |
-   | `PUSHER_SECRET` | from the App Keys tab |
-   | `PUSHER_CLUSTER` | from the App Keys tab, e.g. `eu`, `us2` |
-
-4. In `index.html`, find `PUSHER_KEY` and `PUSHER_CLUSTER` near the top of the
-   `<script>` block and paste in the same **key** and **cluster** values (not
-   the app id or secret — those stay server-side only). These two are not
-   secret; they only let a browser listen, not publish.
-5. `npm install` (adds the `pusher` package) if you install dependencies
-   locally, then commit and redeploy.
-
-Leave `PUSHER_KEY` blank in `index.html` (or skip steps 1–4 altogether) and
-everything keeps working exactly as before — the page just falls back to the
-6-second poll, silently.
+An earlier version of this app pushed updates instantly via Pusher. That's
+been removed (2026-09-10) — now that saving is a deliberate Save-button press
+rather than something that happens automatically on every edit, saves are
+infrequent enough that a plain 6-second poll is not worth trading for an
+extra external service and its secrets. If `PUSHER_*` environment variables
+are still set in Vercel from before, they're simply unused now — safe to
+remove whenever you like, nothing reads them.
 
 ## Notes
 
@@ -193,8 +172,38 @@ so they stop running the previous autosave code.
 
 ## Activity catalogue and guide
 
-The catalogue is at the bottom of the planner. Filter 20 activities by category,
+The catalogue is at the bottom of the planner. Filter 41 activities by category,
 region, current scenario, or search. Explore an idea for details and add it to a
-chosen stop. These changes still require Save.
+chosen stop — most now show a page reference (`p. N`) into your own copy of
+the Lonely Planet Peru guide. These changes still require Save.
 
-The catalogue does not include a book reader or guide links.
+### Guide PDF viewer (2026-09-10)
+
+**Open the guide** in that section opens an in-app viewer for your own guide
+PDF — gated behind the same edit key as everything else, hosted in its own
+Blob store kept separate from the plan's. The file is never linked anywhere
+public; the API only ever hands its URL to a request that already proved it
+holds one of the two edit keys.
+
+Setup, in Vercel:
+
+1. **Storage** tab → **Create Database** → **Blob** → give it a distinct name
+   (e.g. `guide`) so it's obviously separate from the plan's store → connect
+   it to this project. This auto-adds an env var — something like
+   `GUIDE_READ_WRITE_TOKEN`, prefixed with whatever you named the store.
+2. **Settings → Environment Variables** → add one more variable named
+   **exactly** `GUIDE_BLOB_TOKEN`, and paste in the *same value* the
+   auto-added variable from step 1 got. (This app looks for the token under
+   this specific name rather than guessing at a prefix, since there are now
+   two Blob stores connected to one project and guessing would be ambiguous.)
+3. Redeploy.
+4. In the app, open **Open the guide** → **Upload / replace PDF** → pick your
+   PDF. It uploads straight from your browser to Blob storage (not through
+   Vercel's function, so its ~4.5 MB request limit doesn't apply) — this can
+   take a little while on a big file. Re-uploading replaces the previous one.
+
+Until `GUIDE_BLOB_TOKEN` is set, **Open the guide** shows a message saying so
+rather than failing silently. This is new and has not been exercised against
+a live Blob store yet — if the upload or the viewer errors, the message it
+shows should say exactly what went wrong; send that back verbatim rather than
+just "it doesn't work" so it can actually be fixed.

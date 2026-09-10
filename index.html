@@ -22,7 +22,7 @@ img{max-width:100%}
 </style>
 </head>
 <body>
-<title>Fourteen Nights in Peru</title>
+<title>Dopperu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap">
@@ -560,7 +560,7 @@ textarea{margin-top:18px;padding:12px 13px;min-height:54px;line-height:1.65}
   </div></details>
 
   <section id="activitiesFold" class="discovery" aria-labelledby="activitiesTitle">
-    <div class="discovery-head"><div><p class="lab">A little inspiration for the journey</p><h2 id="activitiesTitle">Make room for something good.</h2><p class="sub">A collection of places, small adventures, and slower moments. Pick an idea, then make it part of your trip.</p></div></div>
+    <div class="discovery-head"><div><p class="lab">A little inspiration for the journey</p><h2 id="activitiesTitle">Make room for something good.</h2><p class="sub">A collection of places, small adventures, and slower moments. Pick an idea, then make it part of your trip.</p></div><button class="btn" type="button" id="openGuide">Open the guide</button></div>
     <div class="discovery-tools"><label class="discovery-search"><span class="lab">Find your next idea</span><input id="activitySearch" type="search" placeholder="Try food, Cusco, birds…" aria-label="Search activities"></label><label><span class="lab">Where</span><select id="activityRegion" aria-label="Filter activities by region"><option value="">Everywhere</option></select></label><label><span class="lab">Your route</span><select id="activityRoute" aria-label="Filter activities by route"><option value="">All ideas</option><option value="route">Places in this scenario</option></select></label></div>
     <div id="activityCategories" class="discovery-categories" aria-label="Activity categories"></div>
     <div class="discovery-count"><span id="activityCount" role="status"></span><span>Ideas to explore · details to confirm before booking</span></div>
@@ -568,6 +568,19 @@ textarea{margin-top:18px;padding:12px 13px;min-height:54px;line-height:1.65}
     <p id="activityFeedback" role="status" aria-live="polite"></p>
   </section>
   <dialog id="activityDialog" class="activity-dialog"><button class="mini dialog-close" type="button" id="closeActivity">Close ×</button><div id="activityDetails"></div></dialog>
+
+  <dialog id="guideDialog" class="guide-dialog">
+    <button class="mini dialog-close" type="button" id="closeGuide">Close ×</button>
+    <div class="guide-toolbar">
+      <h3>Guide</h3>
+      <label class="mini" style="cursor:pointer">Upload / replace PDF<input type="file" id="guideFile" accept="application/pdf" hidden></label>
+    </div>
+    <div id="guideWelcome" hidden>
+      <p>No guide has been uploaded yet. Only Matteo or Levin, with their edit key, can add one — use <b>Upload / replace PDF</b> above.</p>
+    </div>
+    <p id="guideStatus" role="status" aria-live="polite" class="sub"></p>
+    <iframe id="guideFrame" title="Guide PDF" hidden></iframe>
+  </dialog>
 
 
   <footer class="foot">
@@ -579,10 +592,6 @@ textarea{margin-top:18px;padding:12px 13px;min-height:54px;line-height:1.65}
   </footer>
 </div>
 
-<!-- Optional: instant "your partner just saved" push, instead of waiting for
-     the periodic poll. Harmless if PUSHER_KEY below is left blank — the poll
-     keeps working on its own. See SETUP.md → Live updates. -->
-<script src="https://js.pusher.com/8.4/pusher.min.js"></script>
 <script>
 (function(){
 "use strict";
@@ -702,16 +711,9 @@ var FALLBACK_SEED = {
 
 /* The API is tried first; a plain static host without it falls back to the
    file next to this page. */
-var BUILD = "2026-09-10-catalogue-no-reader";   /* shown in the footer — check it after deploying */
+var BUILD = "2026-09-10-catalogue-and-guide";   /* shown in the footer — check it after deploying */
 var PLAN_API = "/api/plan";
 var PLAN_FILE = "plan.json";
-
-/* Pusher app key + cluster are not secret — they only let a browser subscribe
-   to the public "plan" channel, not publish to it — so they are hardcoded
-   here rather than fetched. Leave PUSHER_KEY blank to skip this entirely and
-   rely on the plain periodic poll below. See SETUP.md → Live updates. */
-var PUSHER_KEY = "d3a49a4ea3ebef2979fc";
-var PUSHER_CLUSTER = "eu";
 var canPublish = false;
 var publishedSeed = clone(FALLBACK_SEED);
 var state = clone(FALLBACK_SEED);
@@ -1806,12 +1808,40 @@ var ACTIVITIES = [
   ["Lima", "Coast", "Take a Peruvian cooking class", "Look for a class featuring ceviche or lomo saltado.", 28],
   ["Colca Canyon", "Andes", "Visit Colca villages", "Consider Chivay or Yanque when planning time in the Colca Valley.", 25],
   ["Lima", "Coast", "Walk Lima’s historic centre", "Explore the architecture of the old city.", 35],
-  ["Huacachina", "Coast", "Try sandboarding", "Add a sandboarding outing if your route includes Huacachina.", 30]
+  ["Huacachina", "Coast", "Try sandboarding", "Add a sandboarding outing if your route includes Huacachina.", 30],
+  ["Cusco", "Andes", "Tour Sacsayhuamán fortress", "Walk the massive Inca stone terraces on the hill above Cusco.", 209],
+  ["Cusco", "Andes", "Visit Qorikancha sun temple", "See the Inca temple that once anchored the empire's ceremonial road network.", 206],
+  ["Cusco", "Andes", "Take a Cusco chocolate workshop", "Join a hands-on chocolate or Peruvian cooking class in the city centre.", 217],
+  ["Sacred Valley", "Andes", "Browse Pisac's artisan market", "Shop for textiles and crafts at Pisac's covered market hall.", 224],
+  ["Sacred Valley", "Andes", "Hike Pisac's Inca ruins", "Walk the terraced hillside ruins above Pisac town.", 225],
+  ["Sacred Valley", "Andes", "Visit Moray's terraces", "See the Inca's circular terraced amphitheatre, once used to test crops at different altitudes.", 228],
+  ["Sacred Valley", "Andes", "Tour the Salineras de Maras", "Walk past thousands of salt pans that have been worked by hand for centuries.", 229],
+  ["Sacred Valley", "Andes", "Watch weaving in Chinchero", "See Quechua weavers demonstrate spinning and dyeing wool by hand.", 226],
+  ["Sacred Valley", "Andes", "Climb Huayna Picchu", "Book the separate permit to climb the steep peak behind the Machu Picchu ruins.", 238],
+  ["Sacred Valley", "Andes", "Hike to Intipunku", "Walk about an hour from the citadel to the Inca Trail's Sun Gate viewpoint.", 236],
+  ["Puno", "Andes", "Boat to the Uros islands", "Visit the floating reed islands built and inhabited by the Uros people.", 187],
+  ["Puno", "Andes", "See the Sillustani towers", "Visit pre-Inca funerary towers overlooking a lake near Puno.", 190],
+  ["Tambopata", "Amazon", "Paddle Lago Sandoval", "Take a guided canoe trip on this jungle oxbow lake to spot caimans and macaws.", 432],
+  ["Tambopata", "Amazon", "Watch macaws at a clay lick", "Head out before dawn to see macaws and parrots feed at a riverside clay bank.", 434],
+  ["Chaparrí", "Coast", "Hike the Ruta de los Osos", "Follow a trail past a rescue and release station for endangered Andean spectacled bears.", 313],
+  ["Huanchaco", "Coast", "Learn to surf in Huanchaco", "Take a lesson at this long-running surf town near Trujillo.", 306],
+  ["Chiclayo", "Coast", "Visit the Tumbas Reales museum", "See the gold burial goods of the Moche ruler known as the Lord of Sipán.", 310],
+  ["Trujillo", "Coast", "Tour Chan Chan", "Explore the largest adobe city in the Americas, built by the Chimú.", 308],
+  ["Paracas", "Coast", "Boat to the Islas Ballestas", "See sea lions and seabirds, and the Candelabra geoglyph, from the water.", 120],
+  ["Nazca", "Coast", "Fly over the Nazca Lines", "Take a small-plane flight to see the animal and figure geoglyphs from above.", 131],
+  ["Máncora", "Coast", "Go whale watching near Máncora", "Book a boat trip from nearby Los Órganos to see humpback whales (July–October).", 319]
 ];
 var catalogueCategory = "All";
 var activityKinds = ["Culture","Nature","Adventure","Food","Water & coast"];
 var activityKindByTitle = {
-  "Explore Barranco":"Culture", "Walk the Miraflores waterfront":"Water & coast", "Salinas day trip":"Nature", "Birdwatching at Mejía":"Nature", "Explore Cusco":"Culture", "Visit the Sacred Valley":"Culture", "Visit Machu Picchu":"Culture", "Macaw clay lick outing":"Nature", "Cloud forest birdwatching":"Nature", "Beach afternoon":"Water & coast", "Surf session":"Water & coast", "Explore Chan Chan":"Culture", "Visit Santa Catalina monastery":"Culture", "See Arequipa cathedral":"Culture", "Explore Ollantaytambo":"Culture", "Browse a Lima food market":"Food", "Take a Peruvian cooking class":"Food", "Visit Colca villages":"Culture", "Walk Lima’s historic centre":"Culture", "Try sandboarding":"Adventure"
+  "Explore Barranco":"Culture", "Walk the Miraflores waterfront":"Water & coast", "Salinas day trip":"Nature", "Birdwatching at Mejía":"Nature", "Explore Cusco":"Culture", "Visit the Sacred Valley":"Culture", "Visit Machu Picchu":"Culture", "Macaw clay lick outing":"Nature", "Cloud forest birdwatching":"Nature", "Beach afternoon":"Water & coast", "Surf session":"Water & coast", "Explore Chan Chan":"Culture", "Visit Santa Catalina monastery":"Culture", "See Arequipa cathedral":"Culture", "Explore Ollantaytambo":"Culture", "Browse a Lima food market":"Food", "Take a Peruvian cooking class":"Food", "Visit Colca villages":"Culture", "Walk Lima’s historic centre":"Culture", "Try sandboarding":"Adventure",
+  "Tour Sacsayhuamán fortress":"Culture", "Visit Qorikancha sun temple":"Culture", "Take a Cusco chocolate workshop":"Food",
+  "Browse Pisac's artisan market":"Culture", "Hike Pisac's Inca ruins":"Culture", "Visit Moray's terraces":"Culture",
+  "Tour the Salineras de Maras":"Culture", "Watch weaving in Chinchero":"Culture", "Climb Huayna Picchu":"Adventure",
+  "Hike to Intipunku":"Adventure", "Boat to the Uros islands":"Culture", "See the Sillustani towers":"Culture",
+  "Paddle Lago Sandoval":"Nature", "Watch macaws at a clay lick":"Nature", "Hike the Ruta de los Osos":"Nature",
+  "Learn to surf in Huanchaco":"Water & coast", "Visit the Tumbas Reales museum":"Culture", "Tour Chan Chan":"Culture",
+  "Boat to the Islas Ballestas":"Water & coast", "Fly over the Nazca Lines":"Culture", "Go whale watching near Máncora":"Water & coast"
 };
 function searchKey(t){return String(t).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();}
 function matchingStop(a,it){
@@ -1835,6 +1865,11 @@ function activityDetail(a){
   var place=document.createElement("p");place.className="lab";place.textContent=a[0]+" · "+activityKindByTitle[a[2]];box.appendChild(place);
   var h=document.createElement("h2");h.textContent=a[2];box.appendChild(h);
   var p=document.createElement("p");p.textContent=a[3];box.appendChild(p);
+  if (a[4]){
+    var ref=document.createElement("p");ref.className="sub";
+    ref.textContent="Guidebook reference: Lonely Planet Peru, p. "+a[4]+" — open your own copy to that page for the full write-up.";
+    box.appendChild(ref);
+  }
   var note=document.createElement("p");note.className="sub";note.textContent="Add this idea to a stop, then choose its day and add booking details in your itinerary.";box.appendChild(note);
   box.appendChild(activityPicker(a));
 
@@ -1852,7 +1887,7 @@ function renderActivities(){
     var kind=document.createElement("span");kind.className="lab";kind.textContent=activityKindByTitle[a[2]];cover.appendChild(kind);
     var num=document.createElement("span");num.className="ordinal";num.setAttribute("aria-hidden","true");num.textContent=String(ACTIVITIES.indexOf(a)+1).padStart(2,"0");cover.appendChild(num);card.appendChild(cover);
     var body=document.createElement("div");body.className="discovery-body";
-    var place=document.createElement("span");place.className="place";place.textContent=a[0];body.appendChild(place);
+    var place=document.createElement("span");place.className="place";place.textContent=a[0]+(a[4]?" · p. "+a[4]:"");body.appendChild(place);
     var h=document.createElement("h3");h.textContent=a[2];body.appendChild(h);
     var desc=document.createElement("p");desc.textContent=a[3];body.appendChild(desc);
     var detail=document.createElement("button");detail.className="detail-link";detail.type="button";detail.textContent="Explore this idea ↗";detail.setAttribute("aria-label","Explore "+a[2]);detail.onclick=function(){activityDetail(a);};body.appendChild(detail);
@@ -1863,6 +1898,62 @@ function renderActivities(){
 ["Coast","Andes","Amazon"].forEach(function(r){var o=document.createElement("option");o.value=r;o.textContent=r;$("activityRegion").appendChild(o);});
 $("activitySearch").oninput=renderActivities;$("activityRegion").onchange=renderActivities;$("activityRoute").onchange=renderActivities;
 $("closeActivity").onclick=function(){$("activityDialog").close();};
+
+/* ---------- guide PDF ----------
+   Same edit-key auth as everything else, a separate Blob store from the
+   plan's, and the file itself never passes through our own server — the
+   browser uploads straight to Blob storage, and downloads come from Blob's
+   URL directly once the API has confirmed the request holds a real key. */
+async function guideKey(){
+  if (lsGet(LS_KEY)) return lsGet(LS_KEY);
+  var ok = await promptForEditor();
+  return ok ? lsGet(LS_KEY) : "";
+}
+async function openGuide(){
+  $("guideDialog").showModal();
+  $("guideWelcome").hidden = true; $("guideFrame").hidden = true;
+  $("guideStatus").textContent = "Loading…";
+  var key = await guideKey();
+  if (!key){ $("guideStatus").textContent = "An edit key is needed to view the guide."; return; }
+  try {
+    var r = await fetch("/api/guide", {headers:{"X-Edit-Key":encodeURIComponent(key)}, cache:"no-store"});
+    if (r.status === 404){
+      $("guideStatus").textContent = ""; $("guideWelcome").hidden = false; return;
+    }
+    if (!r.ok){
+      var detail = null; try { detail = await r.json(); } catch(e){}
+      $("guideStatus").textContent = (detail && detail.message) || ("Could not load the guide (" + r.status + ").");
+      return;
+    }
+    var body = await r.json();
+    $("guideFrame").src = body.url; $("guideFrame").hidden = false;
+    $("guideStatus").textContent = "";
+  } catch(e){
+    $("guideStatus").textContent = "Could not reach the guide right now.";
+  }
+}
+$("openGuide").onclick = openGuide;
+$("closeGuide").onclick = function(){ $("guideDialog").close(); $("guideFrame").src = "about:blank"; };
+$("guideFile").addEventListener("change", async function(){
+  var file = this.files && this.files[0];
+  this.value = "";
+  if (!file) return;
+  var key = await guideKey();
+  if (!key) return;
+  $("guideStatus").textContent = "Uploading " + file.name + "…";
+  try {
+    var mod = await import("https://esm.sh/@vercel/blob@2.0.0/client");
+    await mod.upload("guide.pdf", file, {
+      access: "public",
+      handleUploadUrl: "/api/guide",
+      clientPayload: key,
+    });
+    $("guideStatus").textContent = "Uploaded — loading it now…";
+    await openGuide();
+  } catch(e){
+    $("guideStatus").textContent = "Upload failed — " + (e && e.message ? e.message : "unknown error");
+  }
+});
 
 function customIds(){
   return Object.keys(state.defs || {}).filter(isCustom);
@@ -2176,7 +2267,7 @@ async function doSave(label, force){
         render(); // Rebind every input to the merged objects before editing can resume.
         try {
           var v2 = await saveToServer(label, key, false);
-                currentEditor = String(v2.by || "").toLowerCase();
+          currentEditor = String(v2.by || "").toLowerCase();
           saveError = null;
           $("keyRow").hidden = true; $("pubLabel").value = "";
           renderStatus(); renderNotices(); renderHistory();
@@ -2308,22 +2399,11 @@ async function poll(){
   } finally { polling = false; }
 }
 
-setInterval(poll, 6000);   /* backstop — catches anything missed if the push below is skipped, drops, or was never configured */
+setInterval(poll, 6000);   /* saves are now a deliberate button-press, not constant — a plain 6s poll is enough to see a partner's save without a push service */
 document.addEventListener("visibilitychange", function(){ if (!document.hidden) poll(); });
 window.addEventListener("beforeunload", function(e){
   if (dirty){ e.preventDefault(); e.returnValue = ""; }
 });
-
-/* the server publishes to this channel right after a save goes through (see
-   api/plan.js) — an event here just means "go check", the same as a poll
-   tick finding a newer rev, so it reuses poll() rather than carrying data */
-function initPusher(){
-  if (!PUSHER_KEY || typeof Pusher === "undefined") return;
-  try {
-    var client = new Pusher(PUSHER_KEY, {cluster: PUSHER_CLUSTER});
-    client.subscribe("plan").bind("updated", function(){ poll(); });
-  } catch(e){ /* the 6s poll above still covers it */ }
-}
 
 async function init(){
   var v = await loadServer();
@@ -2351,7 +2431,6 @@ async function init(){
   document.getElementById("buildline").textContent = "Build " + BUILD;
   syncDateInputs();
   render();
-  initPusher();
 
   setSaveLine(!canPublish
     ? "No server on this address, so this is a read-only copy. Changes stay on this screen until you reload."

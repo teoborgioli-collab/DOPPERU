@@ -1,5 +1,4 @@
 import { put, head } from '@vercel/blob';
-import Pusher from 'pusher';
 
 const KEY = 'plan.json';
 const HISTORY = 10;
@@ -99,24 +98,6 @@ async function writePlan(plan) {
   });
 }
 
-/* Optional: an instant nudge to any open tab, instead of it waiting for the
-   next poll. Entirely skipped if the four PUSHER_* variables are not set —
-   the periodic poll on the page still covers everything on its own. */
-async function announce(rev) {
-  const { PUSHER_APP_ID, PUSHER_KEY, PUSHER_SECRET, PUSHER_CLUSTER } = process.env;
-  if (!PUSHER_APP_ID || !PUSHER_KEY || !PUSHER_SECRET || !PUSHER_CLUSTER) return;
-  try {
-    const pusher = new Pusher({
-      appId: PUSHER_APP_ID, key: PUSHER_KEY, secret: PUSHER_SECRET,
-      cluster: PUSHER_CLUSTER, useTLS: true,
-    });
-    await pusher.trigger('plan', 'updated', { rev });
-    console.log('Pusher: announced rev', rev);
-  } catch (error) {
-    console.error('Pusher announce failed (save still succeeded):', error && error.message);
-  }
-}
-
 function snapshot(plan) {
   return {
     rev: plan.rev || 0, updated: plan.updated || '', by: plan.by || '', label: plan.label || '',
@@ -194,11 +175,10 @@ export default async function handler(req, res) {
 
     const configured = editors();
     if (req.method === 'GET' && req.query && req.query.diag) return send(res, 200, {
-      build: '2026-09-09-slower-autosave', openMode: false,
+      build: '2026-09-10-catalogue-and-guide', openMode: false,
       PLAN_EDIT_KEYS_set: !!(process.env.PLAN_EDIT_KEYS || '').trim(),
       BLOB_TOKEN_set: !!blobToken(),
-      PUSHER_configured: !!(process.env.PUSHER_APP_ID && process.env.PUSHER_KEY
-        && process.env.PUSHER_SECRET && process.env.PUSHER_CLUSTER),
+      GUIDE_BLOB_TOKEN_set: !!(process.env.GUIDE_BLOB_TOKEN || '').trim(),
       usableEditors: configured.length, names: configured.map((e) => e.name),
     });
     if (configured.length !== 2 || !configured.some((e) => e.name === 'matteo') || !configured.some((e) => e.name === 'levin')) {
@@ -235,9 +215,6 @@ export default async function handler(req, res) {
       activeScenario: fields.activeScenario, history: history.slice(0, HISTORY),
     };
     await writePlan(plan);
-    /* awaited, not fire-and-forget: a serverless function can be frozen the
-       instant the response is sent, which would cut this off mid-request */
-    await announce(plan.rev);
     return send(res, 200, plan);
   } catch (error) {
     console.error('Plan API failure:', error && error.name ? error.name : 'Error');

@@ -3,7 +3,6 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@vercel/blob": "^2.0.0",
-    "pusher": "^5.2.0"
+    "@vercel/blob": "^2.0.0"
   }
 }
