@@ -180,3 +180,21 @@ Ensure environment variables apply to the deployed environment, then redeploy.
 The new API reports storage configuration failures on screen rather than `http_500`.
 If saving still fails, inspect `/api/plan?diag=1` and the Vercel function logs.
 Before reloading after a failed save, use **More → Download a copy** to keep edits.
+
+
+## Manual saving (2026-09-10)
+
+Edits stay on your screen until you press Save. There are no automatic saves.
+Live updates pause while you have unsaved changes or a focused input.
+If you edit during a save, those newer edits remain unsaved until the next Save.
+A real conflict detected by Save still requires reconciliation; it never silently
+overwrites a newer shared plan. Refresh other open tabs after deploying this update
+so they stop running the previous autosave code.
+
+## Activity catalogue and guide
+
+The catalogue is at the bottom of the planner. Filter 20 activities by category,
+region, current scenario, or search. Explore an idea for details and add it to a
+chosen stop. These changes still require Save.
+
+The catalogue does not include a book reader or guide links.

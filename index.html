@@ -8,6 +8,17 @@
 html,body{margin:0}
 img{max-width:100%}
 [hidden]{display:none!important}
+
+.discovery{margin-top:52px;padding-top:28px;border-top:2px solid var(--ink)}
+.discovery-head{display:flex;justify-content:space-between;align-items:start;gap:28px}.discovery-head h2{font-size:clamp(28px,4vw,42px);margin:8px 0 12px;max-width:600px}.discovery-head .sub{max-width:620px}.discovery-head>.btn{flex:none;margin-top:10px}
+.discovery-tools{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px;margin:24px 0 18px}.discovery-tools label{display:flex;flex-direction:column;gap:8px}.discovery-tools input,.discovery-tools select{width:100%;min-width:0;padding:12px!important;background:var(--surface);color:var(--ink);border:1px solid var(--rule);border-radius:6px;font:inherit;font-size:14px}
+.discovery-categories{display:flex;gap:8px;flex-wrap:wrap}.discovery-categories button{padding:8px 13px;border:1px solid var(--rule);background:transparent;color:var(--ink);border-radius:24px;cursor:pointer;font:inherit;font-size:13px}.discovery-categories button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.discovery-count{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted);margin:24px 0 14px}.discovery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.discovery-card{display:flex;flex-direction:column;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--surface)}.discovery-cover{padding:18px;min-height:96px;display:flex;align-items:end;justify-content:space-between;color:#394b42;background:#dce6dc}.discovery-cover[data-kind="Culture"]{background:#ebe0cf;color:#6b5033}.discovery-cover[data-kind="Food"]{background:#eed9cd;color:#7a4933}.discovery-cover[data-kind="Water & coast"]{background:#dce7e9;color:#385d68}.discovery-cover[data-kind="Adventure"]{background:#e8ddc3;color:#73582e}.discovery-cover .ordinal{font-family:Georgia,serif;font-size:38px;opacity:.5}.discovery-cover .lab{color:inherit}
+.discovery-body{padding:18px;display:flex;flex:1;flex-direction:column}.discovery-body h3{margin:8px 0 10px;font-size:21px;line-height:1.2}.discovery-body p{font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 14px}.discovery-body .detail-link{align-self:start;padding:0;border:0;background:none;text-decoration:underline;text-underline-offset:4px;color:var(--link);font:inherit;font-size:13px;cursor:pointer;margin:auto 0 18px}.discovery-add{display:flex;gap:8px;align-items:stretch}.discovery-add select{min-width:0;width:100%;font:inherit;font-size:13px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px}.discovery-add .btn{flex:none;padding:8px 12px}.discovery-body .place{font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:600;color:var(--ink-soft)}
+.activity-dialog,.guide-dialog{border:1px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);padding:28px;max-width:600px;width:calc(100% - 32px);max-height:90vh;overflow:auto}.activity-dialog::backdrop,.guide-dialog::backdrop{background:rgba(24,32,27,.55)}.dialog-close{display:block;margin:0 0 24px auto}.activity-dialog h2{margin:12px 0}.activity-dialog p{line-height:1.65}.guide-dialog{max-width:1100px}.guide-toolbar{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:20px}.guide-toolbar h3{margin:6px 0}.guide-dialog iframe{width:100%;height:65vh;border:1px solid var(--rule);background:white}.guide-dialog iframe[hidden]{display:none}#guideWelcome p{max-width:65ch;line-height:1.6}
+@media(max-width:900px){.discovery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.discovery-head{display:block}}@media(max-width:600px){.discovery-grid{grid-template-columns:1fr}.discovery-tools{grid-template-columns:1fr 1fr}.discovery-search{grid-column:1/-1}.discovery-count{display:block}.discovery-count span{display:block;margin-bottom:6px}}
+
 </style>
 </head>
 <body>
@@ -463,6 +474,17 @@ textarea{margin-top:18px;padding:12px 13px;min-height:54px;line-height:1.65}
   .sub2{margin-left:0}
   h2{margin-top:48px}
 }
+
+.discovery{margin-top:52px;padding-top:28px;border-top:2px solid var(--ink)}
+.discovery-head{display:flex;justify-content:space-between;align-items:start;gap:28px}.discovery-head h2{font-size:clamp(28px,4vw,42px);margin:8px 0 12px;max-width:600px}.discovery-head .sub{max-width:620px}.discovery-head>.btn{flex:none;margin-top:10px}
+.discovery-tools{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px;margin:24px 0 18px}.discovery-tools label{display:flex;flex-direction:column;gap:8px}.discovery-tools input,.discovery-tools select{width:100%;min-width:0;padding:12px!important;background:var(--surface);color:var(--ink);border:1px solid var(--rule);border-radius:6px;font:inherit;font-size:14px}
+.discovery-categories{display:flex;gap:8px;flex-wrap:wrap}.discovery-categories button{padding:8px 13px;border:1px solid var(--rule);background:transparent;color:var(--ink);border-radius:24px;cursor:pointer;font:inherit;font-size:13px}.discovery-categories button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.discovery-count{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted);margin:24px 0 14px}.discovery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.discovery-card{display:flex;flex-direction:column;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--surface)}.discovery-cover{padding:18px;min-height:96px;display:flex;align-items:end;justify-content:space-between;color:#394b42;background:#dce6dc}.discovery-cover[data-kind="Culture"]{background:#ebe0cf;color:#6b5033}.discovery-cover[data-kind="Food"]{background:#eed9cd;color:#7a4933}.discovery-cover[data-kind="Water & coast"]{background:#dce7e9;color:#385d68}.discovery-cover[data-kind="Adventure"]{background:#e8ddc3;color:#73582e}.discovery-cover .ordinal{font-family:Georgia,serif;font-size:38px;opacity:.5}.discovery-cover .lab{color:inherit}
+.discovery-body{padding:18px;display:flex;flex:1;flex-direction:column}.discovery-body h3{margin:8px 0 10px;font-size:21px;line-height:1.2}.discovery-body p{font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 14px}.discovery-body .detail-link{align-self:start;padding:0;border:0;background:none;text-decoration:underline;text-underline-offset:4px;color:var(--link);font:inherit;font-size:13px;cursor:pointer;margin:auto 0 18px}.discovery-add{display:flex;gap:8px;align-items:stretch}.discovery-add select{min-width:0;width:100%;font:inherit;font-size:13px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px}.discovery-add .btn{flex:none;padding:8px 12px}.discovery-body .place{font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:600;color:var(--ink-soft)}
+.activity-dialog,.guide-dialog{border:1px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);padding:28px;max-width:600px;width:calc(100% - 32px);max-height:90vh;overflow:auto}.activity-dialog::backdrop,.guide-dialog::backdrop{background:rgba(24,32,27,.55)}.dialog-close{display:block;margin:0 0 24px auto}.activity-dialog h2{margin:12px 0}.activity-dialog p{line-height:1.65}.guide-dialog{max-width:1100px}.guide-toolbar{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:20px}.guide-toolbar h3{margin:6px 0}.guide-dialog iframe{width:100%;height:65vh;border:1px solid var(--rule);background:white}.guide-dialog iframe[hidden]{display:none}#guideWelcome p{max-width:65ch;line-height:1.6}
+@media(max-width:900px){.discovery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.discovery-head{display:block}}@media(max-width:600px){.discovery-grid{grid-template-columns:1fr}.discovery-tools{grid-template-columns:1fr 1fr}.discovery-search{grid-column:1/-1}.discovery-count{display:block}.discovery-count span{display:block;margin-bottom:6px}}
+
 </style>
 
 <div class="wrap">
@@ -527,11 +549,6 @@ textarea{margin-top:18px;padding:12px 13px;min-height:54px;line-height:1.65}
   <p class="sub">Recomputed live from the plan above.</p>
   <div id="checks"></div>
 
-  <details class="fold" id="activitiesFold"><summary id="activitiesTitle">Browse activities</summary><div class="fold-body">
-    <p class="sub">Find an idea and add it to a stop in this option.</p>
-    <div class="mkform"><input id="activitySearch" type="search" placeholder="Search activities or places" aria-label="Search activities"><select id="activityRegion" aria-label="Filter activities by region"><option value="">All regions</option></select></div>
-    <div id="activityCatalog" class="cat"></div><p id="activityFeedback" role="status" aria-live="polite"></p>
-  </div></details>
   <h2>Add a stop</h2>
   <p class="sub">Choose a place or create your own.</p>
   <div id="catalog"></div>
@@ -541,6 +558,17 @@ textarea{margin-top:18px;padding:12px 13px;min-height:54px;line-height:1.65}
     it only becomes the shared plan when you save.</p>
     <div id="history"></div>
   </div></details>
+
+  <section id="activitiesFold" class="discovery" aria-labelledby="activitiesTitle">
+    <div class="discovery-head"><div><p class="lab">A little inspiration for the journey</p><h2 id="activitiesTitle">Make room for something good.</h2><p class="sub">A collection of places, small adventures, and slower moments. Pick an idea, then make it part of your trip.</p></div></div>
+    <div class="discovery-tools"><label class="discovery-search"><span class="lab">Find your next idea</span><input id="activitySearch" type="search" placeholder="Try food, Cusco, birds…" aria-label="Search activities"></label><label><span class="lab">Where</span><select id="activityRegion" aria-label="Filter activities by region"><option value="">Everywhere</option></select></label><label><span class="lab">Your route</span><select id="activityRoute" aria-label="Filter activities by route"><option value="">All ideas</option><option value="route">Places in this scenario</option></select></label></div>
+    <div id="activityCategories" class="discovery-categories" aria-label="Activity categories"></div>
+    <div class="discovery-count"><span id="activityCount" role="status"></span><span>Ideas to explore · details to confirm before booking</span></div>
+    <div id="activityCatalog" class="discovery-grid"></div>
+    <p id="activityFeedback" role="status" aria-live="polite"></p>
+  </section>
+  <dialog id="activityDialog" class="activity-dialog"><button class="mini dialog-close" type="button" id="closeActivity">Close ×</button><div id="activityDetails"></div></dialog>
+
 
   <footer class="foot">
     <p>Distances and flight legs assume the usual routings: Lima is the hub for the north coast,
@@ -674,7 +702,7 @@ var FALLBACK_SEED = {
 
 /* The API is tried first; a plain static host without it falls back to the
    file next to this page. */
-var BUILD = "2026-09-09-slower-autosave";   /* shown in the footer — check it after deploying */
+var BUILD = "2026-09-10-catalogue-no-reader";   /* shown in the footer — check it after deploying */
 var PLAN_API = "/api/plan";
 var PLAN_FILE = "plan.json";
 
@@ -775,8 +803,7 @@ var editAct = null;           // the one activity whose link is open for editing
 var saveError = null;         // last save failure, shown until it is fixed
 var openMode = false;         // this build is always key-only
 var currentEditor = "";       // key owner; each person can set only their own decision
-var autosaveTimer = null;     // pending debounced autosave, once a key is known
-var saving = false;           // a save is in flight — skip overlapping autosaves
+var saving = false;           // prevent overlapping manual saves
 
 function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
 function lsSet(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
@@ -854,24 +881,12 @@ function normaliseState(){
   });
 }
 
-/* every edit marks the screen dirty, then — once a key is already known,
-   so this is not the first save of the session — queues a quiet autosave a
-   couple of seconds after you stop typing, so your partner sees it without
-   either of you pressing Save. */
-var editSeq = 0;   /* bumped on every real edit — lets a save tell whether you changed something else while it was in flight */
+/* Edits stay local until Save is pressed. */
+var editSeq = 0;
 function save(){
   dirty = true;
   editSeq++;
-  scheduleAutosave();
-}
-function scheduleAutosave(){
-  if (!canPublish || !lsGet(LS_KEY) || conflict) return;
-  clearTimeout(autosaveTimer);
-  /* long enough that Vercel Blob's storage (fronted by a CDN, not instantly
-     consistent) has caught up with the last write by the time this one
-     reads "what's current" — too short here is what was causing a
-     same-person conflict on nearly every edit */
-  autosaveTimer = setTimeout(function(){ if (!saving) doSave("", false); }, 4000);
+  renderStatus();
 }
 
 function usablePlan(v){
@@ -1783,30 +1798,71 @@ var ACTIVITIES = [
   ["Manu Road", "Amazon", "Cloud forest birdwatching", "An outing to plan with a local guide along the Manu Road."],
   ["Máncora", "Coast", "Beach afternoon", "Keep an afternoon free by the water."],
   ["Huanchaco", "Coast", "Surf session", "Add a lesson or a session to your coastal stay."],
-  ["Trujillo", "Coast", "Explore Chan Chan", "An archaeological outing to consider from Trujillo or Huanchaco."]
+  ["Trujillo", "Coast", "Explore Chan Chan", "An archaeological outing to consider from Trujillo or Huanchaco."],
+  ["Arequipa", "Andes", "Visit Santa Catalina monastery", "Explore the monastery complex within Arequipa.", 13],
+  ["Arequipa", "Andes", "See Arequipa cathedral", "Add the cathedral and Plaza de Armas to a city walk.", 35],
+  ["Sacred Valley", "Andes", "Explore Ollantaytambo", "Visit the archaeological site and its terraces.", 21],
+  ["Lima", "Coast", "Browse a Lima food market", "Choose a market in Miraflores or Magdalena for a food-focused outing.", 28],
+  ["Lima", "Coast", "Take a Peruvian cooking class", "Look for a class featuring ceviche or lomo saltado.", 28],
+  ["Colca Canyon", "Andes", "Visit Colca villages", "Consider Chivay or Yanque when planning time in the Colca Valley.", 25],
+  ["Lima", "Coast", "Walk Lima’s historic centre", "Explore the architecture of the old city.", 35],
+  ["Huacachina", "Coast", "Try sandboarding", "Add a sandboarding outing if your route includes Huacachina.", 30]
 ];
+var catalogueCategory = "All";
+var activityKinds = ["Culture","Nature","Adventure","Food","Water & coast"];
+var activityKindByTitle = {
+  "Explore Barranco":"Culture", "Walk the Miraflores waterfront":"Water & coast", "Salinas day trip":"Nature", "Birdwatching at Mejía":"Nature", "Explore Cusco":"Culture", "Visit the Sacred Valley":"Culture", "Visit Machu Picchu":"Culture", "Macaw clay lick outing":"Nature", "Cloud forest birdwatching":"Nature", "Beach afternoon":"Water & coast", "Surf session":"Water & coast", "Explore Chan Chan":"Culture", "Visit Santa Catalina monastery":"Culture", "See Arequipa cathedral":"Culture", "Explore Ollantaytambo":"Culture", "Browse a Lima food market":"Food", "Take a Peruvian cooking class":"Food", "Visit Colca villages":"Culture", "Walk Lima’s historic centre":"Culture", "Try sandboarding":"Adventure"
+};
+function searchKey(t){return String(t).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();}
+function matchingStop(a,it){
+  var place=searchKey(a[0]),name=searchKey(resolve(it.id).name);
+  return name===place || (place==="sacred valley" && it.id==="valley") || (place==="machu picchu" && it.id==="cusco") || (place==="tambopata" && it.id==="tambopata");
+}
+function activityPicker(a){
+  var row=document.createElement("div");row.className="discovery-add";
+  var target=document.createElement("select");target.setAttribute("aria-label","Stop for "+a[2]);
+  var blank=document.createElement("option");blank.value="";blank.textContent=state.items.length?"Choose a stop…":"Add a stop first";target.appendChild(blank);
+  state.items.forEach(function(it,i){var o=document.createElement("option");o.value=String(i);o.textContent=resolve(it.id).name;target.appendChild(o);});
+  var preferred=state.items.findIndex(function(it){return matchingStop(a,it);});if(preferred>=0)target.value=String(preferred);
+  var add=document.createElement("button");add.className="btn";add.type="button";
+  function refresh(){var it=target.value===""?null:state.items[Number(target.value)];var exists=it&&(it.acts||[]).some(function(x){return x.t===a[2];});add.disabled=!it||!!exists;add.textContent=exists?"Added":"+ Add";add.setAttribute("aria-label",(exists?"Added ":"Add ")+a[2]);}
+  target.onchange=refresh;refresh();
+  add.onclick=function(){var it=state.items[Number(target.value)];if(!it||target.value==="")return;if(!it.acts)it.acts=[];if(it.acts.some(function(x){return x.t===a[2];}))return;it.acts.push({id:newActId(),t:a[2],d:0,u:"",s:"",n:"",votes:{matteo:"",levin:""}});var msg=a[2]+" added to "+resolve(it.id).name+". Press Save to share your changes.";if($("activityDialog").open)$("activityDialog").close();commit();$("activityFeedback").textContent=msg;};
+  row.appendChild(target);row.appendChild(add);return row;
+}
+function activityDetail(a){
+  var box=$("activityDetails");box.textContent="";
+  var place=document.createElement("p");place.className="lab";place.textContent=a[0]+" · "+activityKindByTitle[a[2]];box.appendChild(place);
+  var h=document.createElement("h2");h.textContent=a[2];box.appendChild(h);
+  var p=document.createElement("p");p.textContent=a[3];box.appendChild(p);
+  var note=document.createElement("p");note.className="sub";note.textContent="Add this idea to a stop, then choose its day and add booking details in your itinerary.";box.appendChild(note);
+  box.appendChild(activityPicker(a));
+
+  $("activityDialog").showModal();
+}
 function renderActivities(){
   var cat=$("activityCatalog");cat.textContent="";
-  var q=$("activitySearch").value.trim().toLowerCase(), region=$("activityRegion").value;
-  var ideas=ACTIVITIES.filter(function(a){return (!region || a[1]===region) && a.join(" ").toLowerCase().includes(q);});
-  if(!ideas.length){cat.textContent="No matching activities. Try another search, or add your own inside a stop.";return;}
+  var q=searchKey($("activitySearch").value.trim()),region=$("activityRegion").value,route=$("activityRoute").value;
+  var ideas=ACTIVITIES.filter(function(a){return (!region||a[1]===region)&&(catalogueCategory==="All"||activityKindByTitle[a[2]]===catalogueCategory)&&searchKey(a.join(" ")+" "+activityKindByTitle[a[2]]).includes(q)&&(!route||state.items.some(function(it){return matchingStop(a,it);}));});
+  $("activityCount").textContent=ideas.length+" "+(ideas.length===1?"idea":"ideas")+" to explore";
+  if(!ideas.length){var empty=document.createElement("p");empty.className="empty";empty.textContent="No ideas here yet. Try another category or place, or clear your search.";cat.appendChild(empty);return;}
   ideas.forEach(function(a){
-    var card=document.createElement("div");card.className="activity-card";
-    var label=document.createElement("span");label.className="lab";label.textContent=a[0]+" · "+a[1];card.appendChild(label);
-    var title=document.createElement("h3");title.textContent=a[2];card.appendChild(title);
-    var desc=document.createElement("p");desc.textContent=a[3];card.appendChild(desc);
-    var target=document.createElement("select");target.setAttribute("aria-label","Stop for "+a[2]);
-    state.items.forEach(function(it,i){var o=document.createElement("option");o.value=i;o.textContent=resolve(it.id).name;target.appendChild(o);});
-    var preferred=state.items.findIndex(function(it){return resolve(it.id).name.toLowerCase()===a[0].toLowerCase();});if(preferred>=0)target.value=preferred;
-    var b=document.createElement("button");b.type="button";b.className="btn";
-    function refresh(){var it=state.items[Number(target.value)];var exists=it && (it.acts||[]).some(function(x){return x.t===a[2];});b.disabled=!it || exists;b.textContent=!it?"Add a stop first":exists?"Added":"Add activity";}
-    target.onchange=refresh;refresh();
-    b.onclick=function(){var it=state.items[Number(target.value)];if(!it)return;if(!it.acts)it.acts=[];it.acts.push({id:newActId(),t:a[2],d:0,u:"",s:"",n:"",votes:{matteo:"",levin:""}});var msg=a[2]+" added to "+resolve(it.id).name+".";commit();$("activityFeedback").textContent=msg;};
-    card.appendChild(target);card.appendChild(b);cat.appendChild(card);
+    var card=document.createElement("article");card.className="discovery-card";
+    var cover=document.createElement("div");cover.className="discovery-cover";cover.dataset.kind=activityKindByTitle[a[2]];
+    var kind=document.createElement("span");kind.className="lab";kind.textContent=activityKindByTitle[a[2]];cover.appendChild(kind);
+    var num=document.createElement("span");num.className="ordinal";num.setAttribute("aria-hidden","true");num.textContent=String(ACTIVITIES.indexOf(a)+1).padStart(2,"0");cover.appendChild(num);card.appendChild(cover);
+    var body=document.createElement("div");body.className="discovery-body";
+    var place=document.createElement("span");place.className="place";place.textContent=a[0];body.appendChild(place);
+    var h=document.createElement("h3");h.textContent=a[2];body.appendChild(h);
+    var desc=document.createElement("p");desc.textContent=a[3];body.appendChild(desc);
+    var detail=document.createElement("button");detail.className="detail-link";detail.type="button";detail.textContent="Explore this idea ↗";detail.setAttribute("aria-label","Explore "+a[2]);detail.onclick=function(){activityDetail(a);};body.appendChild(detail);
+    body.appendChild(activityPicker(a));card.appendChild(body);cat.appendChild(card);
   });
 }
+["All"].concat(activityKinds).forEach(function(kind){var b=document.createElement("button");b.type="button";b.textContent=kind;b.setAttribute("aria-pressed",String(kind==="All"));b.onclick=function(){catalogueCategory=kind;Array.from($("activityCategories").children).forEach(function(x){x.setAttribute("aria-pressed",String(x===b));});renderActivities();};$("activityCategories").appendChild(b);});
 ["Coast","Andes","Amazon"].forEach(function(r){var o=document.createElement("option");o.value=r;o.textContent=r;$("activityRegion").appendChild(o);});
-$("activitySearch").oninput=renderActivities;$("activityRegion").onchange=renderActivities;
+$("activitySearch").oninput=renderActivities;$("activityRegion").onchange=renderActivities;$("activityRoute").onchange=renderActivities;
+$("closeActivity").onclick=function(){$("activityDialog").close();};
 
 function customIds(){
   return Object.keys(state.defs || {}).filter(isCustom);
@@ -1966,7 +2022,7 @@ function say(msg){
 
 /* ---------- merging a save conflict ----------
    Two people co-editing live now means a save conflict (someone else saved
-   first) can happen constantly, not just occasionally — autosave alone
+   first) can happen constantly, not just occasionally — treating every save as conflicting
    would turn every one of those into an interrupting "pick a side" prompt.
    Most of the time the two edits do not actually overlap (you touched
    Lima's note, they voted on an Arequipa activity), so try a 3-way merge
@@ -2087,12 +2143,9 @@ async function doSave(label, force){
   var key = lsGet(LS_KEY) || $("pubKey").value;
   if (saving) return;
   saving = true;
-  var savedOK = false;
-  clearTimeout(autosaveTimer);
   say("Saving…");
   try {
     var v = await saveToServer(label, key, force);
-    savedOK = true;
     currentEditor=String(v.by||"").toLowerCase();
     saveError = null;
     if (key) lsSet(LS_KEY, key);
@@ -2101,9 +2154,9 @@ async function doSave(label, force){
     /* a save doesn't change anything on screen — state already held what we
        just sent — so only refresh the bits that report on the save itself.
        A full render() here would rebuild the whole itinerary and could steal
-       focus out from under you mid-type when an autosave lands. */
+       focus out from under you if you edit while a save completes. */
     renderStatus(); renderNotices(); renderHistory();
-    say(dirty ? "Saved as v" + v.rev + " — one more change is queuing up right behind it"
+    say(dirty ? "Saved as v" + v.rev + " — newer edits still need Save"
               : "Saved as v" + v.rev + (v.by ? " by " + v.by : ""));
   } catch(e){
     saveError = (e.message === "bad_key" || e.message === "not_configured") ? e.message : null;
@@ -2123,8 +2176,7 @@ async function doSave(label, force){
         render(); // Rebind every input to the merged objects before editing can resume.
         try {
           var v2 = await saveToServer(label, key, false);
-          savedOK = true;
-          currentEditor = String(v2.by || "").toLowerCase();
+                currentEditor = String(v2.by || "").toLowerCase();
           saveError = null;
           $("keyRow").hidden = true; $("pubLabel").value = "";
           renderStatus(); renderNotices(); renderHistory();
@@ -2145,7 +2197,6 @@ async function doSave(label, force){
     }
   } finally {
     saving = false;
-    if (savedOK && dirty && !conflict) scheduleAutosave();
   }
 }
 
@@ -2241,19 +2292,14 @@ function editingField(){
 }
 var polling = false;
 async function poll(){
-  if (!canPublish || document.hidden || saving || polling) return;
+  if (!canPublish || document.hidden || saving || polling || dirty || editingField()) return;
   polling = true;
   var seq = editSeq, rev = serverRev;
   try {
     var v = await loadServer();
     // A read begun before a save/edit must never replace newer local state.
     if (!v || saving || serverRev !== rev || editSeq !== seq || (v.rev || 0) <= serverRev) return;
-    if (dirty){
-      // Do not replace objects underneath live input event handlers.
-      // The next save can merge, or show the genuine conflict for a person.
-      conflict = v; renderNotices();
-      return;
-    }
+    if (dirty) return; // An edit may have started while this read was in flight.
     if (editingField()) return; // Includes text not submitted yet in an add form.
     var scrollY = window.scrollY;
     adoptServer(v); syncDateInputs(); render();
