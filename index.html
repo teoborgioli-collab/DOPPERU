@@ -13,17 +13,29 @@ img{max-width:100%}
 .discovery-head{display:flex;justify-content:space-between;align-items:start;gap:28px}.discovery-head h2{font-size:clamp(28px,4vw,42px);margin:8px 0 12px;max-width:600px}.discovery-head .sub{max-width:620px}.discovery-head>.btn{flex:none;margin-top:10px}
 .discovery-tools{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px;margin:24px 0 18px}.discovery-tools label{display:flex;flex-direction:column;gap:8px}.discovery-tools input,.discovery-tools select{width:100%;min-width:0;padding:12px!important;background:var(--surface);color:var(--ink);border:1px solid var(--rule);border-radius:6px;font:inherit;font-size:14px}
 .discovery-categories{display:flex;gap:8px;flex-wrap:wrap}.discovery-categories button{padding:8px 13px;border:1px solid var(--rule);background:transparent;color:var(--ink);border-radius:24px;cursor:pointer;font:inherit;font-size:13px}.discovery-categories button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
-.discovery-count{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted);margin:24px 0 14px}.discovery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.discovery-card{display:flex;flex-direction:column;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--surface)}.discovery-cover{padding:18px;min-height:96px;display:flex;align-items:end;justify-content:space-between;color:#394b42;background:#dce6dc}.discovery-cover[data-kind="Culture"]{background:#ebe0cf;color:#6b5033}.discovery-cover[data-kind="Food"]{background:#eed9cd;color:#7a4933}.discovery-cover[data-kind="Water & coast"]{background:#dce7e9;color:#385d68}.discovery-cover[data-kind="Adventure"]{background:#e8ddc3;color:#73582e}.discovery-cover .ordinal{font-family:Georgia,serif;font-size:38px;opacity:.5}.discovery-cover .lab{color:inherit}
-.discovery-body{padding:18px;display:flex;flex:1;flex-direction:column}.discovery-body h3{margin:8px 0 10px;font-size:21px;line-height:1.2}.discovery-body p{font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 14px}.discovery-body .detail-link{align-self:start;padding:0;border:0;background:none;text-decoration:underline;text-underline-offset:4px;color:var(--link);font:inherit;font-size:13px;cursor:pointer;margin:auto 0 18px}.discovery-add{display:flex;gap:8px;align-items:stretch}.discovery-add select{min-width:0;width:100%;font:inherit;font-size:13px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px}.discovery-add .btn{flex:none;padding:8px 12px}.discovery-body .place{font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:600;color:var(--ink-soft)}
+.discovery-count{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted);margin:24px 0 14px}
+.discovery-list{display:flex;flex-direction:column}
+.discovery-row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:9px 4px;border:0;border-bottom:1px solid var(--rule-soft);background:none;font:inherit;color:var(--ink);cursor:pointer}
+.discovery-row:hover,.discovery-row:focus-visible{background:var(--sunk)}
+.discovery-row .dot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--muted)}
+.discovery-row[data-kind="Culture"] .dot{background:var(--puna)}
+.discovery-row[data-kind="Food"] .dot{background:var(--focus)}
+.discovery-row[data-kind="Water & coast"] .dot{background:var(--coast)}
+.discovery-row[data-kind="Adventure"] .dot{background:var(--warn)}
+.discovery-row[data-kind="Nature"] .dot{background:var(--lowland)}
+.discovery-row .row-title{flex:1;min-width:0;font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.discovery-row .row-meta{flex:none;font-size:12px;color:var(--muted)}
+.discovery-row .row-arrow{flex:none;color:var(--muted)}
+.discovery-add{display:flex;gap:8px;align-items:stretch;margin-top:14px}.discovery-add select{min-width:0;width:100%;font:inherit;font-size:13px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px}.discovery-add .btn{flex:none;padding:8px 12px}
 .activity-dialog{border:1px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);padding:28px;max-width:600px;width:calc(100% - 32px);max-height:90vh;overflow:auto}.activity-dialog::backdrop{background:rgba(24,32,27,.55)}.dialog-close{display:block;margin:0 0 24px auto}.activity-dialog h2{margin:12px 0}.activity-dialog p{line-height:1.65}
 .guide-controls{display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap}.guide-controls .mini{cursor:pointer}.discovery-group{border-bottom:1px solid var(--rule)}
 .discovery-group summary{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;padding:13px 2px;font-size:15px;font-weight:500;list-style:none}
 .discovery-group summary::-webkit-details-marker{display:none}
 .discovery-group summary::after{content:"+";color:var(--muted)}
 .discovery-group[open] summary::after{content:"−"}
-.discovery-group .discovery-grid{padding-bottom:18px}
-@media(max-width:900px){.discovery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.discovery-head{display:block}}@media(max-width:600px){.discovery-grid{grid-template-columns:1fr}.discovery-tools{grid-template-columns:1fr 1fr}.discovery-search{grid-column:1/-1}.discovery-count{display:block}.discovery-count span{display:block;margin-bottom:6px}}
+.discovery-group .discovery-list{padding-bottom:12px}
+@media(max-width:900px){.discovery-head{display:block}}
+@media(max-width:600px){.discovery-tools{grid-template-columns:1fr 1fr}.discovery-search{grid-column:1/-1}.discovery-count{display:block}.discovery-count span{display:block;margin-bottom:6px}.discovery-row .row-meta{display:none}}
 
 </style>
 </head>
@@ -262,6 +274,7 @@ h2{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:1.6rem;
 .st-unsure{color:var(--muted)}
 .st-optional{color:var(--coast);border-color:var(--coast)}
 .st-tobook{color:var(--warn);border-color:var(--warn)}
+.st-spontaneous{color:var(--cloudforest);border-color:var(--cloudforest)}
 .st-booked{color:var(--ok);border-color:var(--ok)}
 
 .act a{color:var(--link);text-decoration:none;font-size:11px;flex:none;
@@ -485,17 +498,29 @@ textarea{margin-top:18px;padding:12px 13px;min-height:54px;line-height:1.65}
 .discovery-head{display:flex;justify-content:space-between;align-items:start;gap:28px}.discovery-head h2{font-size:clamp(28px,4vw,42px);margin:8px 0 12px;max-width:600px}.discovery-head .sub{max-width:620px}.discovery-head>.btn{flex:none;margin-top:10px}
 .discovery-tools{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px;margin:24px 0 18px}.discovery-tools label{display:flex;flex-direction:column;gap:8px}.discovery-tools input,.discovery-tools select{width:100%;min-width:0;padding:12px!important;background:var(--surface);color:var(--ink);border:1px solid var(--rule);border-radius:6px;font:inherit;font-size:14px}
 .discovery-categories{display:flex;gap:8px;flex-wrap:wrap}.discovery-categories button{padding:8px 13px;border:1px solid var(--rule);background:transparent;color:var(--ink);border-radius:24px;cursor:pointer;font:inherit;font-size:13px}.discovery-categories button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
-.discovery-count{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted);margin:24px 0 14px}.discovery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.discovery-card{display:flex;flex-direction:column;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--surface)}.discovery-cover{padding:18px;min-height:96px;display:flex;align-items:end;justify-content:space-between;color:#394b42;background:#dce6dc}.discovery-cover[data-kind="Culture"]{background:#ebe0cf;color:#6b5033}.discovery-cover[data-kind="Food"]{background:#eed9cd;color:#7a4933}.discovery-cover[data-kind="Water & coast"]{background:#dce7e9;color:#385d68}.discovery-cover[data-kind="Adventure"]{background:#e8ddc3;color:#73582e}.discovery-cover .ordinal{font-family:Georgia,serif;font-size:38px;opacity:.5}.discovery-cover .lab{color:inherit}
-.discovery-body{padding:18px;display:flex;flex:1;flex-direction:column}.discovery-body h3{margin:8px 0 10px;font-size:21px;line-height:1.2}.discovery-body p{font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 14px}.discovery-body .detail-link{align-self:start;padding:0;border:0;background:none;text-decoration:underline;text-underline-offset:4px;color:var(--link);font:inherit;font-size:13px;cursor:pointer;margin:auto 0 18px}.discovery-add{display:flex;gap:8px;align-items:stretch}.discovery-add select{min-width:0;width:100%;font:inherit;font-size:13px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px}.discovery-add .btn{flex:none;padding:8px 12px}.discovery-body .place{font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:600;color:var(--ink-soft)}
+.discovery-count{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted);margin:24px 0 14px}
+.discovery-list{display:flex;flex-direction:column}
+.discovery-row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:9px 4px;border:0;border-bottom:1px solid var(--rule-soft);background:none;font:inherit;color:var(--ink);cursor:pointer}
+.discovery-row:hover,.discovery-row:focus-visible{background:var(--sunk)}
+.discovery-row .dot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--muted)}
+.discovery-row[data-kind="Culture"] .dot{background:var(--puna)}
+.discovery-row[data-kind="Food"] .dot{background:var(--focus)}
+.discovery-row[data-kind="Water & coast"] .dot{background:var(--coast)}
+.discovery-row[data-kind="Adventure"] .dot{background:var(--warn)}
+.discovery-row[data-kind="Nature"] .dot{background:var(--lowland)}
+.discovery-row .row-title{flex:1;min-width:0;font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.discovery-row .row-meta{flex:none;font-size:12px;color:var(--muted)}
+.discovery-row .row-arrow{flex:none;color:var(--muted)}
+.discovery-add{display:flex;gap:8px;align-items:stretch;margin-top:14px}.discovery-add select{min-width:0;width:100%;font:inherit;font-size:13px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px}.discovery-add .btn{flex:none;padding:8px 12px}
 .activity-dialog{border:1px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);padding:28px;max-width:600px;width:calc(100% - 32px);max-height:90vh;overflow:auto}.activity-dialog::backdrop{background:rgba(24,32,27,.55)}.dialog-close{display:block;margin:0 0 24px auto}.activity-dialog h2{margin:12px 0}.activity-dialog p{line-height:1.65}
 .guide-controls{display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap}.guide-controls .mini{cursor:pointer}.discovery-group{border-bottom:1px solid var(--rule)}
 .discovery-group summary{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;padding:13px 2px;font-size:15px;font-weight:500;list-style:none}
 .discovery-group summary::-webkit-details-marker{display:none}
 .discovery-group summary::after{content:"+";color:var(--muted)}
 .discovery-group[open] summary::after{content:"−"}
-.discovery-group .discovery-grid{padding-bottom:18px}
-@media(max-width:900px){.discovery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.discovery-head{display:block}}@media(max-width:600px){.discovery-grid{grid-template-columns:1fr}.discovery-tools{grid-template-columns:1fr 1fr}.discovery-search{grid-column:1/-1}.discovery-count{display:block}.discovery-count span{display:block;margin-bottom:6px}}
+.discovery-group .discovery-list{padding-bottom:12px}
+@media(max-width:900px){.discovery-head{display:block}}
+@media(max-width:600px){.discovery-tools{grid-template-columns:1fr 1fr}.discovery-search{grid-column:1/-1}.discovery-count{display:block}.discovery-count span{display:block;margin-bottom:6px}.discovery-row .row-meta{display:none}}
 
 </style>
 
@@ -576,7 +601,7 @@ textarea{margin-top:18px;padding:12px 13px;min-height:54px;line-height:1.65}
     <div class="discovery-tools"><label class="discovery-search"><span class="lab">Find your next idea</span><input id="activitySearch" type="search" placeholder="Try food, Cusco, birds…" aria-label="Search activities"></label><label><span class="lab">Where</span><select id="activityRegion" aria-label="Filter activities by region"><option value="">Everywhere</option></select></label><label><span class="lab">Your route</span><select id="activityRoute" aria-label="Filter activities by route"><option value="">All ideas</option><option value="route">Places in this scenario</option></select></label></div>
     <div id="activityCategories" class="discovery-categories" aria-label="Activity categories"></div>
     <div class="discovery-count"><span id="activityCount" role="status"></span><span>Ideas to explore · details to confirm before booking</span></div>
-    <div id="activityCatalog" class="discovery-grid"></div>
+    <div id="activityCatalog" class="discovery-list"></div>
     <p id="activityFeedback" role="status" aria-live="polite"></p>
   </section>
   <dialog id="activityDialog" class="activity-dialog"><button class="mini dialog-close" type="button" id="closeActivity">Close ×</button><div id="activityDetails"></div></dialog>
@@ -672,11 +697,12 @@ var KINDS = [
   {band:"puna", label:"High Andes"}
 ];
 var STATUSES = [
-  {v:"",         label:"no status"},
-  {v:"unsure",   label:"Unsure"},
-  {v:"optional", label:"Optional"},
-  {v:"tobook",   label:"To book"},
-  {v:"booked",   label:"Booked"}
+  {v:"",            label:"no status"},
+  {v:"unsure",      label:"Unsure"},
+  {v:"optional",    label:"Optional"},
+  {v:"tobook",      label:"To book"},
+  {v:"spontaneous", label:"Book spontaneously"},
+  {v:"booked",      label:"Booked"}
 ];
 /* tap cycle for the little approval checkboxes: blank -> approved -> disapproved -> blank */
 var VOTE_CYCLE = ["", "approved", "disapproved"];
@@ -710,7 +736,7 @@ var FALLBACK_SEED = {
 
 /* The API is tried first; a plain static host without it falls back to the
    file next to this page. */
-var BUILD = "2026-09-10-catalogue-live";   /* shown in the footer — check it after deploying */
+var BUILD = "2026-09-10-checks-list-view";   /* shown in the footer — check it after deploying */
 var PLAN_API = "/api/plan";
 var PLAN_FILE = "plan.json";
 var canPublish = false;
@@ -1690,16 +1716,11 @@ function renderMeter(){
       : Math.abs(diff) + (Math.abs(diff) === 1 ? " night" : " nights") + " spare";
 }
 
-function has(tag){
-  return state.items.some(function(it){
-    var S = resolve(it.id); return S && S.tags.indexOf(tag) > -1;
-  });
-}
+
 function idx(id){
   for (var i = 0; i < state.items.length; i++) if (state.items[i].id === id) return i;
   return -1;
 }
-
 function renderChecks(endCursor){
   var out = [], planned = plannedNights(), budget = tripNights();
 
@@ -1709,69 +1730,31 @@ function renderChecks(endCursor){
       + (endCursor ? " Last stop currently ends " + fmt(endCursor) + "." : "")]);
   }
 
-  if (!has("macaws")){
-    out.push(["bad","Macaws",
-      "No clay lick in this plan. Macaws and parrots were the priority, and there is no substitute "
-      + "for the Amazon — <b>Tambopata</b> is a 45-minute flight from Cusco and needs three nights."]);
-  }
-
-  var iC = idx("cusco"), iA = idx("arequipa"), iV = idx("valley"), iP = idx("puno");
-  var acclim = [iA, iV, iP].some(function(i){ return i > -1 && i < iC; });
-  if (iC > -1 && !acclim){
-    out.push(["warn","Altitude",
-      "Cusco sits at <b>3,400 m</b> with nothing lower before it. Coming straight from sea level and "
-      + "then birding at 4,200 m on Abra Málaga is rough — put Arequipa or the Sacred Valley first."]);
-  }
-
-  state.items.forEach(function(it){
-    var S = resolve(it.id);
-    if (S && it.nights < S.min){
-      out.push(["warn", S.name.split(" ")[0],
-        "<b>" + S.name + "</b> at " + it.nights + (it.nights === 1 ? " night" : " nights")
-        + " is short. " + S.min + " is the minimum that makes the travel worth it."]);
-    }
-  });
-
-  var travelDays = state.items.filter(function(it){
-    var S = resolve(it.id); return S && S.tags.indexOf("travel-day") > -1;
-  });
-  if (travelDays.length){
-    out.push(["warn","Transit",
-      travelDays.map(function(it){ return "<b>" + resolve(it.id).name + "</b>"; }).join(" and ")
-      + " needs two flights via Lima. Budget a whole day each way and do not count it as beach time."]);
-  }
-
-  if (has("rain-risk")){
-    out.push(["warn","Weather",
-      "November is the turn of the wet season. Keep a buffer day after anything on the east slope, "
-      + "and never schedule a flight for the morning straight after coming off a mountain road."]);
-  }
-
-  var coldOnly = has("cold-water") && idx("mancora") === -1;
-  if (coldOnly){
-    out.push(["warn","Water",
-      "The only coast in this plan is on the Humboldt Current — water around <b>17°C</b> and "
-      + "often overcast. Fine for seabirds, not for swimming. The north coast is the warm one."]);
-  }
-
-  var toBook = [];
+  /* the plan used to be one fixed macaw-priority Peru itinerary, so checks
+     like "no clay lick", altitude sequencing, and the north-coast transit
+     warning were reasonable defaults — now that the catalogue covers
+     hundreds of places all over the country for whatever trip you're
+     actually building, those stopped being safe assumptions to bake in.
+     Left with just the two checks that are true for any trip: nights
+     balance, and activities you haven't actually decided on yet. */
+  var pending = [];
   state.items.forEach(function(it){
     (it.acts || []).forEach(function(a){
-      if (a.s === "tobook") toBook.push({stop: resolve(it.id), a: a});
+      if (a.s === "tobook" || a.s === "unsure") pending.push({stop: resolve(it.id), a: a, s: a.s});
     });
   });
-  if (toBook.length){
-    out.push(["warn","To book",
-      "<b>" + toBook.length + (toBook.length === 1 ? " thing" : " things")
-      + " still to book</b> — "
-      + toBook.slice(0, 6).map(function(x){
-          return esc(x.a.t) + " (" + esc(x.stop ? x.stop.name : "?") + ")";
+  if (pending.length){
+    out.push(["warn","Decisions",
+      "<b>" + pending.length + (pending.length === 1 ? " activity" : " activities")
+      + " still unsure or to book</b> — "
+      + pending.slice(0, 6).map(function(x){
+          return esc(x.a.t) + " (" + esc(x.stop ? x.stop.name : "?") + ", " + (x.s === "unsure" ? "unsure" : "to book") + ")";
         }).join(", ")
-      + (toBook.length > 6 ? " and " + (toBook.length - 6) + " more" : "") + "."]);
+      + (pending.length > 6 ? " and " + (pending.length - 6) + " more" : "") + "."]);
   }
 
   if (!out.length){
-    out.push(["ok","Clear","Nights balance, altitude sequence is sane, and the plan has a clay lick in it."]);
+    out.push(["ok","Clear","Nights balance, and nothing left unsure or to book."]);
   }
 
   var box = document.getElementById("checks");
@@ -1939,18 +1922,20 @@ function activityDetail(a){
 
   $("activityDialog").showModal();
 }
-function activityCard(a){
-  var card=document.createElement("article");card.className="discovery-card";
-  var cover=document.createElement("div");cover.className="discovery-cover";cover.dataset.kind=activityKindByTitle[a[2]];
-  var kind=document.createElement("span");kind.className="lab";kind.textContent=activityKindByTitle[a[2]];cover.appendChild(kind);
-  var num=document.createElement("span");num.className="ordinal";num.setAttribute("aria-hidden","true");num.textContent=String(ACTIVITIES.indexOf(a)+1).padStart(2,"0");cover.appendChild(num);card.appendChild(cover);
-  var body=document.createElement("div");body.className="discovery-body";
-  var place=document.createElement("span");place.className="place";place.textContent=a[0]+(a[4]?" · p. "+a[4]:"");body.appendChild(place);
-  var h=document.createElement("h3");h.textContent=a[2];body.appendChild(h);
-  var desc=document.createElement("p");desc.textContent=a[3];body.appendChild(desc);
-  var detail=document.createElement("button");detail.className="detail-link";detail.type="button";detail.textContent="Explore this idea ↗";detail.setAttribute("aria-label","Explore "+a[2]);detail.onclick=function(){activityDetail(a);};body.appendChild(detail);
-  body.appendChild(activityPicker(a));card.appendChild(body);
-  return card;
+/* one line per idea — with 500+ of them, a card per idea (even grouped)
+   was too much to scan; a row shows just enough to decide whether to open
+   it, and "Explore this idea" (title, description, page ref, add-to-stop)
+   still lives in the same detail dialog the cards used to open */
+function activityRow(a){
+  var row=document.createElement("button");row.type="button";row.className="discovery-row";
+  row.dataset.kind=activityKindByTitle[a[2]];
+  row.setAttribute("aria-label","Explore "+a[2]+", "+a[0]+(a[4]?", page "+a[4]:""));
+  var dot=document.createElement("span");dot.className="dot";dot.setAttribute("aria-hidden","true");row.appendChild(dot);
+  var title=document.createElement("span");title.className="row-title";title.textContent=a[2];row.appendChild(title);
+  var meta=document.createElement("span");meta.className="row-meta";meta.textContent=a[0]+(a[4]?" · p. "+a[4]:"");row.appendChild(meta);
+  var arrow=document.createElement("span");arrow.className="row-arrow";arrow.setAttribute("aria-hidden","true");arrow.textContent="→";row.appendChild(arrow);
+  row.onclick=function(){activityDetail(a);};
+  return row;
 }
 /* grouped into a collapsible section per place — a flat grid of 500+ cards
    is not something anyone scrolls through; a search or category pick still
@@ -1979,9 +1964,9 @@ function renderActivities(){
     var summary=document.createElement("summary");
     summary.textContent=place+" ("+list.length+(list.length===1?" idea":" ideas")+")";
     details.appendChild(summary);
-    var grid=document.createElement("div");grid.className="discovery-grid";
-    list.forEach(function(a){ grid.appendChild(activityCard(a)); });
-    details.appendChild(grid);
+    var listEl=document.createElement("div");listEl.className="discovery-list";
+    list.forEach(function(a){ listEl.appendChild(activityRow(a)); });
+    details.appendChild(listEl);
     cat.appendChild(details);
   });
 }
