@@ -1,10 +1,14 @@
 import { head } from '@vercel/blob';
 import { handleUpload } from '@vercel/blob/client';
 
-/* The guide PDF lives in its own Blob store — deliberately separate from
-   plan.js's store, its own token, its own lifecycle. Nothing here is linked
-   from any public page; the only way to ever learn the file's URL is to
-   already hold one of the two edit keys. */
+/* The guide PDF lives in the same Blob store as the plan (just under a
+   different filename) rather than a separate store — connecting a second
+   store did not generate its own read-write token, only a STORE_ID and a
+   webhook key, and chasing exactly how Vercel's multi-store token model
+   works wasn't worth it when reusing the store we already know works avoids
+   the question entirely. Nothing here is linked from any public page; the
+   only way to ever learn the file's URL is to already hold one of the two
+   edit keys. */
 const GUIDE_PATH = 'guide.pdf';
 
 function editors() {
