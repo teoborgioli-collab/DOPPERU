@@ -27,7 +27,7 @@ img{max-width:100%}
 .discovery-row .row-meta{flex:none;font-size:12px;color:var(--muted)}
 .discovery-row .row-arrow{flex:none;color:var(--muted)}
 .discovery-add{display:flex;gap:8px;align-items:stretch;margin-top:14px}.discovery-add select{min-width:0;width:100%;font:inherit;font-size:13px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px}.discovery-add .btn{flex:none;padding:8px 12px}
-.activity-dialog{border:1px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);padding:28px;max-width:600px;width:calc(100% - 32px);max-height:90vh;overflow:auto}.activity-dialog::backdrop{background:rgba(24,32,27,.55)}.dialog-close{display:block;margin:0 0 24px auto}.activity-dialog h2{margin:12px 0}.activity-dialog p{line-height:1.65}
+.activity-dialog{border:1px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);padding:28px;max-width:600px;width:calc(100% - 32px);max-height:90vh;overflow:auto}.activity-dialog::backdrop{background:rgba(24,32,27,.55)}.dialog-close{display:block;margin:0 0 24px auto}.activity-dialog h2{margin:12px 0}.activity-dialog p{line-height:1.65}.activity-links{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.activity-links a{color:var(--link);text-decoration:none;border:1px solid var(--rule);border-radius:4px;padding:7px 10px;font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.09em}.activity-links a:hover{border-color:var(--link)}
 .guide-controls{display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap}.guide-controls .mini{cursor:pointer}.discovery-group{border-bottom:1px solid var(--rule)}
 .discovery-group summary{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;padding:13px 2px;font-size:15px;font-weight:500;list-style:none}
 .discovery-group summary::-webkit-details-marker{display:none}
@@ -512,7 +512,7 @@ textarea{margin-top:18px;padding:12px 13px;min-height:54px;line-height:1.65}
 .discovery-row .row-meta{flex:none;font-size:12px;color:var(--muted)}
 .discovery-row .row-arrow{flex:none;color:var(--muted)}
 .discovery-add{display:flex;gap:8px;align-items:stretch;margin-top:14px}.discovery-add select{min-width:0;width:100%;font:inherit;font-size:13px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px}.discovery-add .btn{flex:none;padding:8px 12px}
-.activity-dialog{border:1px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);padding:28px;max-width:600px;width:calc(100% - 32px);max-height:90vh;overflow:auto}.activity-dialog::backdrop{background:rgba(24,32,27,.55)}.dialog-close{display:block;margin:0 0 24px auto}.activity-dialog h2{margin:12px 0}.activity-dialog p{line-height:1.65}
+.activity-dialog{border:1px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);padding:28px;max-width:600px;width:calc(100% - 32px);max-height:90vh;overflow:auto}.activity-dialog::backdrop{background:rgba(24,32,27,.55)}.dialog-close{display:block;margin:0 0 24px auto}.activity-dialog h2{margin:12px 0}.activity-dialog p{line-height:1.65}.activity-links{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.activity-links a{color:var(--link);text-decoration:none;border:1px solid var(--rule);border-radius:4px;padding:7px 10px;font-family:"Archivo Narrow",Arial,sans-serif;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.09em}.activity-links a:hover{border-color:var(--link)}
 .guide-controls{display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap}.guide-controls .mini{cursor:pointer}.discovery-group{border-bottom:1px solid var(--rule)}
 .discovery-group summary{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;padding:13px 2px;font-size:15px;font-weight:500;list-style:none}
 .discovery-group summary::-webkit-details-marker{display:none}
@@ -521,6 +521,83 @@ textarea{margin-top:18px;padding:12px 13px;min-height:54px;line-height:1.65}
 .discovery-group .discovery-list{padding-bottom:12px}
 @media(max-width:900px){.discovery-head{display:block}}
 @media(max-width:600px){.discovery-tools{grid-template-columns:1fr 1fr}.discovery-search{grid-column:1/-1}.discovery-count{display:block}.discovery-count span{display:block;margin-bottom:6px}.discovery-row .row-meta{display:none}}
+
+
+/* 2026-09-11 notebook polish — visual only; no planner logic changed */
+.wrap{max-width:980px}
+.mast{padding-bottom:28px}
+.masthead-row{align-items:flex-start}
+.dek{max-width:62ch}
+
+/* Let sections breathe like notebook entries rather than app panels. */
+h2{margin-top:58px}
+.leg{
+  padding:27px 27px 29px 23px;
+  border-top:0;border-right:0;border-bottom:1px solid var(--rule);
+  box-shadow:none;
+  background:color-mix(in srgb,var(--surface) 76%,transparent);
+}
+.legtop h3{line-height:1.25}
+.legwhy{line-height:1.65}
+.controls{margin-top:16px}
+.mini{opacity:.82}.mini:hover{opacity:1}
+
+/* Quieter controls: primary actions read clearly; maintenance actions recede. */
+.toolbar,.moremenu,.keyrow{border-color:var(--rule-soft)}
+.btn{padding:9px 14px}
+.guide-controls{gap:8px 12px;align-items:center}
+.guide-controls .btn{padding:8px 13px}
+.guide-controls .mini{font-size:10px;color:var(--muted)}
+#guideStatus{flex-basis:100%;margin:2px 0 0;font-size:11px}
+
+/* Activity browser = reference index, not another dashboard. */
+.discovery{margin-top:62px;padding-top:34px;border-top:1px solid var(--ink)}
+.discovery-head h2{font-size:clamp(26px,3.5vw,36px);line-height:1.15}
+.discovery-tools{
+  grid-template-columns:minmax(0,2fr) minmax(130px,1fr) minmax(150px,1fr);
+  gap:10px;margin:24px 0 14px;padding:14px;
+  background:color-mix(in srgb,var(--sunk) 58%,transparent);
+  border:1px solid var(--rule-soft);
+}
+.discovery-tools input,.discovery-tools select{padding:10px!important;border-radius:2px}
+.discovery-categories{gap:6px}
+.discovery-categories button{padding:6px 10px;border-radius:2px;font-size:12px}
+.discovery-count{margin:18px 0 8px}
+.discovery-group summary{padding:14px 3px;font-weight:400}
+.discovery-row{padding:10px 4px;gap:10px}
+.discovery-row:hover,.discovery-row:focus-visible{background:color-mix(in srgb,var(--sunk) 60%,transparent)}
+.discovery-row .dot{width:6px;height:6px}
+.discovery-row .row-title{font-weight:400}
+.activity-dialog{border-radius:3px;padding:24px;box-shadow:0 18px 50px rgba(0,0,0,.12)}
+.activity-links a{border-radius:2px}
+
+/* Saved/history areas stay available without competing with the trip itself. */
+.fold{margin-top:46px;border-color:var(--rule-soft)}
+.fold summary{padding:16px 2px;font-size:1.25rem}
+.foot{margin-top:64px;color:var(--muted)}
+
+@media(max-width:700px){
+  body{font-size:15px;line-height:1.6}
+  .wrap{padding:26px 15px 72px}
+  .mast{padding-bottom:24px}
+  .meter{padding:24px 0 20px;gap:20px 26px}
+  .dates{padding:16px 0}
+  .toolbar{padding:15px 0}
+  h2{margin-top:44px}
+  .leg{padding:20px 14px 22px 15px;border-left-width:4px}
+  .legtop h3{font-size:1.4rem}
+  .acts{margin-top:18px}.act{padding:13px 0}
+  .controls{gap:9px 13px}
+  .guide-controls{margin-top:18px;width:100%}
+  .discovery{margin-top:48px;padding-top:26px}
+  .discovery-head h2{font-size:28px}
+  .discovery-tools{grid-template-columns:1fr 1fr;padding:10px;gap:9px}
+  .discovery-search{grid-column:1/-1}
+  .discovery-categories{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+  .discovery-categories button{white-space:nowrap}
+  .discovery-row{padding:11px 2px}
+  .activity-dialog{width:calc(100% - 20px);padding:20px}
+}
 
 </style>
 
@@ -597,8 +674,8 @@ textarea{margin-top:18px;padding:12px 13px;min-height:54px;line-height:1.65}
   </div></details>
 
   <section id="activitiesFold" class="discovery" aria-labelledby="activitiesTitle">
-    <div class="discovery-head"><div><p class="lab">A little inspiration for the journey</p><h2 id="activitiesTitle">Make room for something good.</h2><p class="sub">A collection of places, small adventures, and slower moments. Pick an idea, then make it part of your trip.</p></div><div class="guide-controls"><button class="btn" type="button" id="openGuide">Open the guide</button><label class="mini">Upload / replace PDF<input type="file" id="guideFile" accept="application/pdf" hidden></label><button class="btn" type="button" id="openEpub">Read the guide (EPUB)</button><button class="btn" type="button" id="openBooks">Open in Books</button><label class="mini">Upload / replace EPUB<input type="file" id="epubFile" accept=".epub,application/epub+zip" hidden></label><span id="guideStatus" role="status" aria-live="polite" class="sub"></span></div></div>
-    <div class="discovery-tools"><label class="discovery-search"><span class="lab">Find your next idea</span><input id="activitySearch" type="search" placeholder="Try food, Cusco, birds…" aria-label="Search activities"></label><label><span class="lab">Where</span><select id="activityRegion" aria-label="Filter activities by region"><option value="">Everywhere</option></select></label><label><span class="lab">Your route</span><select id="activityRoute" aria-label="Filter activities by route"><option value="">All ideas</option><option value="route">Places in this scenario</option></select></label></div>
+    <div class="discovery-head"><div><p class="lab">Things worth knowing about</p><h2 id="activitiesTitle">Ideas beyond the itinerary.</h2><p class="sub">A smaller shortlist of history, archaeology, nature and coast ideas for the places on this trip. These are suggestions — they stay out of your day-by-day plan unless you add one.</p></div><div class="guide-controls"><button class="btn" type="button" id="openEpub">Open guide</button><button class="mini" type="button" id="openGuide" title="Open the saved PDF version">PDF</button><label class="mini">Replace EPUB<input type="file" id="epubFile" accept=".epub,application/epub+zip" hidden></label><label class="mini">Replace PDF<input type="file" id="guideFile" accept="application/pdf" hidden></label><span id="guideStatus" role="status" aria-live="polite" class="sub"></span></div></div>
+    <div class="discovery-tools"><label class="discovery-search"><span class="lab">Find your next idea</span><input id="activitySearch" type="search" placeholder="Try Cusco, ruins, birds…" aria-label="Search activities"></label><label><span class="lab">Where</span><select id="activityRegion" aria-label="Filter activities by region"><option value="">Everywhere</option></select></label><label><span class="lab">Your route</span><select id="activityRoute" aria-label="Filter activities by route"><option value="">All ideas</option><option value="route">Places in this scenario</option></select></label></div>
     <div id="activityCategories" class="discovery-categories" aria-label="Activity categories"></div>
     <div class="discovery-count"><span id="activityCount" role="status"></span><span>Ideas to explore · details to confirm before booking</span></div>
     <div id="activityCatalog" class="discovery-list"></div>
@@ -736,7 +813,7 @@ var FALLBACK_SEED = {
 
 /* The API is tried first; a plain static host without it falls back to the
    file next to this page. */
-var BUILD = "2026-09-11-open-in-books";   /* shown in the footer — check it after deploying */
+var BUILD = "2026-09-11-repo-notebook";   /* shown in the footer — check it after deploying */
 var PLAN_API = "/api/plan";
 var PLAN_FILE = "plan.json";
 var canPublish = false;
@@ -1786,14 +1863,11 @@ var ACTIVITIES = [
   ["Arequipa", "Andes", "Visit Santa Catalina monastery", "Explore the monastery complex within Arequipa.", 13],
   ["Arequipa", "Andes", "See Arequipa cathedral", "Add the cathedral and Plaza de Armas to a city walk.", 35],
   ["Sacred Valley", "Andes", "Explore Ollantaytambo", "Visit the archaeological site and its terraces.", 21],
-  ["Lima", "Coast", "Browse a Lima food market", "Choose a market in Miraflores or Magdalena for a food-focused outing.", 28],
-  ["Lima", "Coast", "Take a Peruvian cooking class", "Look for a class featuring ceviche or lomo saltado.", 28],
   ["Colca Canyon", "Andes", "Visit Colca villages", "Consider Chivay or Yanque when planning time in the Colca Valley.", 25],
   ["Lima", "Coast", "Walk Lima’s historic centre", "Explore the architecture of the old city.", 35],
   ["Huacachina", "Coast", "Try sandboarding", "Add a sandboarding outing if your route includes Huacachina.", 30],
   ["Cusco", "Andes", "Tour Sacsayhuamán fortress", "Walk the massive Inca stone terraces on the hill above Cusco.", 209],
   ["Cusco", "Andes", "Visit Qorikancha sun temple", "See the Inca temple that once anchored the empire's ceremonial road network.", 206],
-  ["Cusco", "Andes", "Take a Cusco chocolate workshop", "Join a hands-on chocolate or Peruvian cooking class in the city centre.", 217],
   ["Sacred Valley", "Andes", "Browse Pisac's artisan market", "Shop for textiles and crafts at Pisac's covered market hall.", 224],
   ["Sacred Valley", "Andes", "Hike Pisac's Inca ruins", "Walk the terraced hillside ruins above Pisac town.", 225],
   ["Sacred Valley", "Andes", "Visit Moray's terraces", "See the Inca's circular terraced amphitheatre, once used to test crops at different altitudes.", 228],
@@ -1811,13 +1885,33 @@ var ACTIVITIES = [
   ["Trujillo", "Coast", "Tour Chan Chan", "Explore the largest adobe city in the Americas, built by the Chimú.", 308],
   ["Paracas", "Coast", "Boat to the Islas Ballestas", "See sea lions and seabirds, and the Candelabra geoglyph, from the water.", 120],
   ["Nazca", "Coast", "Fly over the Nazca Lines", "Take a small-plane flight to see the animal and figure geoglyphs from above.", 131],
-  ["Máncora", "Coast", "Go whale watching near Máncora", "Book a boat trip from nearby Los Órganos to see humpback whales (July–October).", 319]
+  ["Máncora", "Coast", "Go whale watching near Máncora", "Book a boat trip from nearby Los Órganos to see humpback whales (July–October).", 319],
+  ["Lima", "Coast", "Barranco evening & dining area", "Use Barranco as a flexible evening zone rather than pinning one restaurant: around Parque Municipal, Puente de los Suspiros and Bajada de Baños you can browse cafés, bars and dinner options."],
+  ["Lima", "Coast", "Surquillo Market No. 1", "A practical local market stop near Miraflores for fruit, produce and a quick look at everyday Lima food culture — without turning it into a restaurant recommendation."],
+  ["Lima", "Coast", "Plaza Mayor & historic centre", "Walk Lima’s historic core around Plaza Mayor, the Cathedral, Archbishop’s Palace and surrounding colonial streets."],
+  ["Lima", "Coast", "San Francisco monastery & catacombs", "Historic monastery complex close to Plaza Mayor; an easy add-on to a central Lima walk."],
+  ["Lima", "Coast", "Huaca Pucllana", "Pre-Inca adobe ceremonial complex in Miraflores — useful if you want archaeology without leaving Lima."],
+  ["Lima", "Coast", "Museo Larco", "Major pre-Columbian collection in Pueblo Libre; a strong museum option if you have a longer Lima stop."],
+  ["Arequipa", "Andes", "Mercado San Camilo", "Historic covered market in the UNESCO-listed centre; useful for a short local-life stop and casual food browsing rather than a specific restaurant."],
+  ["Arequipa", "Andes", "Yanahuara viewpoint & neighbourhood", "Walk the traditional Yanahuara streets and volcanic-stone arches for a broad view back toward Arequipa and the volcanoes."],
+  ["Arequipa", "Andes", "Compañía de Jesús & cloisters", "Compact historic stop near Plaza de Armas with ornate mestizo-baroque stonework and cloisters."],
+  ["Cusco", "Andes", "San Pedro Market", "Central market for produce, juices, snacks and everyday Cusco life — a flexible place to browse rather than a fixed food booking."],
+  ["Cusco", "Andes", "San Blas neighbourhood", "Walk uphill through the artisan quarter for small workshops, viewpoints, cafés and a quieter alternative to Plaza de Armas."],
+  ["Cusco", "Andes", "Plaza de Armas & Cathedral", "A simple historic-centre walk around Cusco’s main square and cathedral, easy to combine with Qorikancha."],
+  ["Cusco", "Andes", "Q’enqo & Tambomachay", "Two smaller archaeological sites outside central Cusco; worthwhile if you want to extend beyond Sacsayhuamán."],
+  ["Máncora", "Coast", "Máncora main strip & evening area", "Keep dinner flexible around the central town/Av. Piura area, where most restaurants, surf shops and evening activity cluster."],
+  ["Máncora", "Coast", "Máncora municipal market", "A low-key local market for fruit, groceries and inexpensive meals; useful as a practical town stop rather than a destination restaurant."],
+  ["Máncora", "Coast", "Los Órganos harbour & town", "Quieter coastal stop south of Máncora with an artisanal fishing harbour and easy access to nearby beaches and marine-life outings."]
 ];
 var catalogueCategory = "All";
-var activityKinds = ["Culture","Nature","Adventure","Food","Water & coast"];
+var activityKinds = ["Culture","Nature","Adventure","Water & coast","Local life"];
 var activityKindByTitle = {
-  "Explore Barranco":"Culture", "Walk the Miraflores waterfront":"Water & coast", "Salinas day trip":"Nature", "Birdwatching at Mejía":"Nature", "Explore Cusco":"Culture", "Visit the Sacred Valley":"Culture", "Visit Machu Picchu":"Culture", "Macaw clay lick outing":"Nature", "Cloud forest birdwatching":"Nature", "Beach afternoon":"Water & coast", "Surf session":"Water & coast", "Explore Chan Chan":"Culture", "Visit Santa Catalina monastery":"Culture", "See Arequipa cathedral":"Culture", "Explore Ollantaytambo":"Culture", "Browse a Lima food market":"Food", "Take a Peruvian cooking class":"Food", "Visit Colca villages":"Culture", "Walk Lima’s historic centre":"Culture", "Try sandboarding":"Adventure",
-  "Tour Sacsayhuamán fortress":"Culture", "Visit Qorikancha sun temple":"Culture", "Take a Cusco chocolate workshop":"Food",
+  "Barranco evening & dining area":"Local life", "Surquillo Market No. 1":"Local life", "Plaza Mayor & historic centre":"Culture", "San Francisco monastery & catacombs":"Culture", "Huaca Pucllana":"Culture", "Museo Larco":"Culture",
+  "Mercado San Camilo":"Local life", "Yanahuara viewpoint & neighbourhood":"Culture", "Compañía de Jesús & cloisters":"Culture",
+  "San Pedro Market":"Local life", "San Blas neighbourhood":"Local life", "Plaza de Armas & Cathedral":"Culture", "Q’enqo & Tambomachay":"Culture",
+  "Máncora main strip & evening area":"Local life", "Máncora municipal market":"Local life", "Los Órganos harbour & town":"Water & coast",
+  "Explore Barranco":"Culture", "Walk the Miraflores waterfront":"Water & coast", "Salinas day trip":"Nature", "Birdwatching at Mejía":"Nature", "Explore Cusco":"Culture", "Visit the Sacred Valley":"Culture", "Visit Machu Picchu":"Culture", "Macaw clay lick outing":"Nature", "Cloud forest birdwatching":"Nature", "Beach afternoon":"Water & coast", "Surf session":"Water & coast", "Explore Chan Chan":"Culture", "Visit Santa Catalina monastery":"Culture", "See Arequipa cathedral":"Culture", "Explore Ollantaytambo":"Culture", "Visit Colca villages":"Culture", "Walk Lima’s historic centre":"Culture", "Try sandboarding":"Adventure",
+  "Tour Sacsayhuamán fortress":"Culture", "Visit Qorikancha sun temple":"Culture",
   "Browse Pisac's artisan market":"Culture", "Hike Pisac's Inca ruins":"Culture", "Visit Moray's terraces":"Culture",
   "Tour the Salineras de Maras":"Culture", "Watch weaving in Chinchero":"Culture", "Climb Huayna Picchu":"Adventure",
   "Hike to Intipunku":"Adventure", "Boat to the Uros islands":"Culture", "See the Sillustani towers":"Culture",
@@ -1881,9 +1975,13 @@ async function loadExpandedActivities(){
         title = m[1]; city = m[2]; sub = city; page = parseInt(m[3], 10);
       }
       if (activityKindByTitle.hasOwnProperty(title)) return;   // a hand-written version already covers this one
+      var kind = guideCategoryFor(title);
+      if (kind === "Food") return;
+      var keepPlaces = ["Lima","Arequipa","Colca Canyon","Cusco","Sacred Valley","Machu Picchu","Máncora","Talara","Piura","Trujillo","Huanchaco","Chiclayo","Tambopata","Puerto Maldonado"];
+      if (keepPlaces.indexOf(city) < 0 && keepPlaces.indexOf(sub) < 0) return;
       var region = GUIDE_REGION_BY_CITY[sub] || GUIDE_REGION_BY_CITY[city] || "Andes";
       ACTIVITIES.push([city, region, title, guideDescFor(city), page]);
-      activityKindByTitle[title] = guideCategoryFor(title);
+      activityKindByTitle[title] = kind;
       added++;
     });
     if (added) renderActivities();
@@ -1912,6 +2010,11 @@ function activityDetail(a){
   var place=document.createElement("p");place.className="lab";place.textContent=a[0]+" · "+activityKindByTitle[a[2]];box.appendChild(place);
   var h=document.createElement("h2");h.textContent=a[2];box.appendChild(h);
   var p=document.createElement("p");p.textContent=a[3];box.appendChild(p);
+  var links=document.createElement("div");links.className="activity-links";
+  var maps=document.createElement("a");maps.target="_blank";maps.rel="noopener";maps.href="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(a[2]+" "+a[0]+" Peru");maps.textContent="Open in Maps";links.appendChild(maps);
+  var search=document.createElement("a");search.target="_blank";search.rel="noopener";search.href="https://www.google.com/search?q="+encodeURIComponent(a[2]+" "+a[0]+" Peru official");search.textContent="Current info";links.appendChild(search);
+  var tours=document.createElement("a");tours.target="_blank";tours.rel="noopener";var gyBase={"Lima":"https://www.getyourguide.com/lima-l39/","Arequipa":"https://www.getyourguide.com/arequipa-l2859/","Cusco":"https://www.getyourguide.com/cusco-l359/"};tours.href=gyBase[a[0]]||("https://www.google.com/search?q="+encodeURIComponent("site:getyourguide.com "+a[2]+" "+a[0]+" Peru"));tours.textContent="Tours";links.appendChild(tours);
+  box.appendChild(links);
   if (a[4]){
     var ref=document.createElement("p");ref.className="sub";
     ref.textContent="Guidebook reference: Lonely Planet Peru, p. "+a[4]+" — open your own copy to that page for the full write-up.";
@@ -1946,7 +2049,7 @@ function renderActivities(){
   var cat=$("activityCatalog");cat.textContent="";
   var q=searchKey($("activitySearch").value.trim()),region=$("activityRegion").value,route=$("activityRoute").value;
   var filtering = !!(q || region || route || catalogueCategory!=="All");
-  var ideas=ACTIVITIES.filter(function(a){return (!region||a[1]===region)&&(catalogueCategory==="All"||activityKindByTitle[a[2]]===catalogueCategory)&&searchKey(a.join(" ")+" "+activityKindByTitle[a[2]]).includes(q)&&(!route||state.items.some(function(it){return matchingStop(a,it);}));});
+  var ideas=ACTIVITIES.filter(function(a){return activityKindByTitle[a[2]]!=="Food" && (!region||a[1]===region)&&(catalogueCategory==="All"||activityKindByTitle[a[2]]===catalogueCategory)&&searchKey(a.join(" ")+" "+activityKindByTitle[a[2]]).includes(q)&&(!route||state.items.some(function(it){return matchingStop(a,it);}));});
   $("activityCount").textContent=ideas.length+" "+(ideas.length===1?"idea":"ideas")+" to explore";
   if(!ideas.length){var empty=document.createElement("p");empty.className="empty";empty.textContent="No ideas here yet. Try another category or place, or clear your search.";cat.appendChild(empty);return;}
 
@@ -2002,7 +2105,7 @@ async function openGuide(){
   try {
     var r = await fetch("/api/guide", {headers:{"X-Edit-Key":encodeURIComponent(key)}, cache:"no-store"});
     if (r.status === 404){
-      $("guideStatus").textContent = "No guide uploaded yet — use Upload / replace PDF.";
+      $("guideStatus").textContent = "No PDF saved yet — use Replace PDF.";
       if (tab) tab.close();
       return;
     }
@@ -2035,7 +2138,7 @@ $("guideFile").addEventListener("change", async function(){
       handleUploadUrl: "/api/guide",
       clientPayload: key,
     });
-    $("guideStatus").textContent = "Uploaded — click Open the guide to view it.";
+    $("guideStatus").textContent = "PDF saved.";
   } catch(e){
     $("guideStatus").textContent = "Upload failed — " + (e && e.message ? e.message : "unknown error");
   }
@@ -2066,7 +2169,7 @@ async function openEpub(chapter){
       /* nothing uploaded through this app yet — still open the reader on
          its own rather than erroring, since it can be used directly too
          (drag-and-drop, its own picker) */
-      $("guideStatus").textContent = "Opening the reader — no EPUB uploaded here yet, so it'll open empty. Use Upload / replace EPUB to attach one for next time.";
+      $("guideStatus").textContent = "Opening the reader — no EPUB is saved here yet. Use Replace EPUB to attach one for next time.";
       if (tab) tab.location = READER_URL; else window.open(READER_URL, "_blank");
       return;
     }
@@ -2089,37 +2192,6 @@ async function openEpub(chapter){
 }
 $("openEpub").onclick = function(){ openEpub(); };
 
-/* ---------- open in the device's own book app ----------
-   No reader of ours involved: we just navigate to the .epub itself. iOS
-   Safari downloads it and offers "Open in Books"; a Mac opens Books
-   directly; elsewhere it lands in the downloads folder. Nothing to
-   maintain, and Books is simply better at a 900-page guide than anything
-   we would build — offline, searchable, synced across devices. */
-async function openInBooks(){
-  var tab = window.open("", "_blank");   /* opened on the click itself, or the popup blocker eats it */
-  $("guideStatus").textContent = "Fetching the EPUB…";
-  var key = await guideKey();
-  if (!key){ $("guideStatus").textContent = "An edit key is needed to download the guide."; if (tab) tab.close(); return; }
-  try {
-    var r = await fetch("/api/guide?file=epub", {headers:{"X-Edit-Key":encodeURIComponent(key)}, cache:"no-store"});
-    if (r.status === 404){
-      $("guideStatus").textContent = "No EPUB uploaded yet — use Upload / replace EPUB first.";
-      if (tab) tab.close(); return;
-    }
-    if (!r.ok){
-      var detail = null; try { detail = await r.json(); } catch(e){}
-      $("guideStatus").textContent = (detail && detail.message) || ("Could not fetch the EPUB (" + r.status + ").");
-      if (tab) tab.close(); return;
-    }
-    var body = await r.json();
-    $("guideStatus").textContent = "On iPhone: tap the download, then Open in Books.";
-    if (tab) tab.location = body.url; else window.open(body.url, "_blank");
-  } catch(e){
-    $("guideStatus").textContent = "Could not fetch the EPUB right now.";
-    if (tab) tab.close();
-  }
-}
-$("openBooks").onclick = openInBooks;
 $("epubFile").addEventListener("change", async function(){
   var file = this.files && this.files[0];
   this.value = "";
@@ -2135,7 +2207,7 @@ $("epubFile").addEventListener("change", async function(){
       clientPayload: key,
       multipart: true,   /* a plain single-request upload risks failing outright on a flaky connection with a file this size — multipart only has to retry the one chunk that dropped */
     });
-    $("guideStatus").textContent = "Uploaded — click Read the guide (EPUB) to open it.";
+    $("guideStatus").textContent = "EPUB saved — click Open guide.";
   } catch(e){
     $("guideStatus").textContent = "Upload failed — " + (e && e.message ? e.message : "unknown error");
   }
