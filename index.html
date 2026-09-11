@@ -736,7 +736,7 @@ var FALLBACK_SEED = {
 
 /* The API is tried first; a plain static host without it falls back to the
    file next to this page. */
-var BUILD = "2026-09-10-epub-reader-link";   /* shown in the footer — check it after deploying */
+var BUILD = "2026-09-11-chapter-links";   /* shown in the footer — check it after deploying */
 var PLAN_API = "/api/plan";
 var PLAN_FILE = "plan.json";
 var canPublish = false;
@@ -1655,7 +1655,12 @@ function render(){
       if (editing === it.id) editing = null;
       state.items.splice(i, 1); commit();
     };
-    ctl.appendChild(up); ctl.appendChild(dn); ctl.appendChild(ed); ctl.appendChild(rm);
+    var gd = document.createElement("button");
+    gd.type = "button"; gd.className = "mini";
+    gd.textContent = "Guide ↗";
+    gd.title = "Open the guide at the " + S.name + " chapter";
+    gd.onclick = function(){ openEpub(S.name); };
+    ctl.appendChild(up); ctl.appendChild(dn); ctl.appendChild(ed); ctl.appendChild(gd); ctl.appendChild(rm);
     body.appendChild(ctl);
 
     if (editing === it.id){
@@ -2049,13 +2054,15 @@ $("guideFile").addEventListener("change", async function(){
    reader). Leave it blank and the button just explains that, rather than
    failing confusingly. */
 var READER_URL = "https://reader-inky-five.vercel.app/";
-async function openEpub(){
+async function openEpub(chapter){
   if (!READER_URL){
     $("guideStatus").textContent = "No reader app configured yet — see SETUP.md → Guide EPUB reader.";
     return;
   }
   var tab = window.open("", "_blank");   /* open synchronously so it isn't treated as an unsolicited popup once the fetch below finishes */
-  $("guideStatus").textContent = "Loading the EPUB…";
+  $("guideStatus").textContent = chapter
+    ? "Opening the guide at “" + chapter + "”…"
+    : "Loading the EPUB…";
   var key = await guideKey();
   if (!key){ $("guideStatus").textContent = "An edit key is needed to read the guide."; if (tab) tab.close(); return; }
   try {
@@ -2076,7 +2083,9 @@ async function openEpub(){
     }
     var body = await r.json();
     $("guideStatus").textContent = "";
-    var readerUrl = READER_URL + (READER_URL.indexOf("?") > -1 ? "&" : "?") + "url=" + encodeURIComponent(body.url);
+    var readerUrl = READER_URL + (READER_URL.indexOf("?") > -1 ? "&" : "?")
+      + "url=" + encodeURIComponent(body.url)
+      + (chapter ? "&ch=" + encodeURIComponent(chapter) : "");
     if (tab) tab.location = readerUrl; else window.open(readerUrl, "_blank");
   } catch(e){
     $("guideStatus").textContent = "Could not open the EPUB right now.";
