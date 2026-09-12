@@ -120,7 +120,7 @@ function cleanItem(item) {
   return {
     id: String(it.id || '').slice(0, 60),
     nights: Math.min(60, Math.max(1, parseInt(it.nights, 10) || 1)),
-    note: typeof it.note === 'string' ? it.note.slice(0, 2000) : '',
+    note: typeof it.note === 'string' ? it.note.slice(0, 10000) : '',
     vibe: typeof it.vibe === 'string' ? it.vibe.slice(0, 120) : '',
     acts: Array.isArray(it.acts) ? it.acts.slice(0, 60).map((activity) => ({
       id: String((activity && activity.id) || '').slice(0, 40) || randomId(),
@@ -128,7 +128,7 @@ function cleanItem(item) {
       t: String((activity && activity.t) || '').slice(0, 120),
       u: typeof (activity && activity.u) === 'string' ? activity.u.slice(0, 500) : '',
       s: STATUSES.includes(activity && activity.s) ? activity.s : '',
-      n: typeof (activity && activity.n) === 'string' ? activity.n.slice(0, 300) : '',
+      n: typeof (activity && activity.n) === 'string' ? activity.n.slice(0, 10000) : '',
       votes: cleanVotes(activity && activity.votes),
     })).filter((activity) => activity.t) : [],
   };
