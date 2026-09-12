@@ -65,6 +65,7 @@ img{max-width:100%}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap">
 
 <style>
 :root{
@@ -618,6 +619,115 @@ h2{margin-top:58px}
   .discovery-categories button{white-space:nowrap}
   .discovery-row{padding:11px 2px}
   .activity-dialog{width:calc(100% - 20px);padding:20px}
+}
+
+/* ============================================================
+   DIGITAL DIARY — 80s/90s notebook identity (visual only)
+   Warm aged paper, typewriter-mono body, marker headings.
+   This block is authoritative over the earlier refresh layers.
+   ============================================================ */
+:root{
+  --paper:#f2ecdc; --surface:#f8f2e3; --sunk:#e7dec9;
+  --ink:#211d15; --ink-soft:#4d4636; --muted:#847a63;
+  --rule:#cfc3a5; --rule-soft:#e2d9c2;
+  --coast:#3f668f; --lowland:#5a7f4f; --cloudforest:#3f8a80;
+  --puna:#a97e39; --city:#8f5f76;
+  --link:#3a5a86; --focus:#c14a2e;
+  --marker:#c14a2e; --marker-2:#e8c14a;
+  --warn:#9a6a1e; --warn-bg:#efe4c8; --bad:#9e3a34; --bad-bg:#f0e0d6; --ok:#3d7a4e;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#191510; --surface:#221d15; --sunk:#2a241a;
+    --ink:#efe6d2; --ink-soft:#cabfa4; --muted:#948a72;
+    --rule:#3d3524; --rule-soft:#2c261b;
+    --coast:#8fb0e0; --lowland:#9bc79b; --cloudforest:#7fd0cc;
+    --puna:#e0b06f; --city:#c592ac;
+    --link:#8fb4de; --focus:#f0885f;
+    --marker:#f0885f; --marker-2:#e8c14a;
+    --warn:#e0b06a; --warn-bg:#2b2313; --bad:#e08f8f; --bad-bg:#2c1c1a; --ok:#7fcf9c;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#191510; --surface:#221d15; --sunk:#2a241a;
+  --ink:#efe6d2; --ink-soft:#cabfa4; --muted:#948a72;
+  --rule:#3d3524; --rule-soft:#2c261b;
+  --coast:#8fb0e0; --lowland:#9bc79b; --cloudforest:#7fd0cc;
+  --puna:#e0b06f; --city:#c592ac;
+  --link:#8fb4de; --focus:#f0885f;
+  --marker:#f0885f; --marker-2:#e8c14a;
+  --warn:#e0b06a; --warn-bg:#2b2313; --bad:#e08f8f; --bad-bg:#2c1c1a; --ok:#7fcf9c;
+}
+
+/* typewritten diary body */
+body{
+  font-family:"IBM Plex Mono","Courier New",monospace;
+  font-weight:400;font-size:15.5px;line-height:1.7;letter-spacing:0;
+}
+.wrap{max-width:900px;padding:52px 30px 120px}
+
+/* label chips read like filed tabs */
+.lab{letter-spacing:.14em;color:var(--muted)}
+
+/* masthead */
+.mast{border-bottom:2px solid var(--ink);padding-bottom:30px}
+h1{
+  font-family:"Permanent Marker",cursive;font-weight:400;
+  font-size:clamp(2.1rem,6vw,3.7rem);line-height:1.06;letter-spacing:0;
+  margin:.22em 0 .3em;max-width:16ch;color:var(--ink);
+  text-shadow:0 1px 0 color-mix(in srgb,var(--ink) 12%,transparent);
+}
+.dek{font-family:inherit;font-weight:400;font-size:.98rem;line-height:1.75;
+  max-width:64ch;color:var(--ink-soft)}
+
+/* THE signature: section titles look swiped with a highlighter marker */
+h2{
+  font-family:"Permanent Marker",cursive;font-weight:400;letter-spacing:0;
+  font-size:clamp(1.5rem,3.2vw,1.95rem);line-height:1.2;
+  display:inline-block;margin:62px 0 10px;padding:0 .18em;color:var(--ink);
+  background-image:linear-gradient(
+    to bottom,
+    transparent 0, transparent 52%,
+    color-mix(in srgb,var(--marker-2) 46%,transparent) 52%,
+    color-mix(in srgb,var(--marker-2) 46%,transparent) 92%,
+    transparent 92%);
+  background-repeat:no-repeat;
+  transform:rotate(-.6deg);
+}
+.sub{font-family:inherit;color:var(--muted);margin-bottom:22px}
+
+/* itinerary stops = dated diary entries, gentle coloured edge */
+.leg{
+  border:0;border-left:4px solid var(--band);
+  border-bottom:1px solid var(--rule);border-radius:0;
+  background:color-mix(in srgb,var(--surface) 60%,transparent);
+  padding:26px 24px 28px 22px;box-shadow:none;
+}
+.legtop h3{font-family:inherit;font-weight:500;font-size:1.28rem;letter-spacing:-.01em;line-height:1.3}
+.when .day{font-family:inherit;font-weight:500}
+.sub2{font-family:inherit;font-style:italic}
+.vibe{font-family:inherit;font-style:italic}
+
+/* controls stay quiet, typewritten, squared like old software chrome */
+.btn,.mini,.hrev,.bal,.step .n,.consensus,.st,.dsel,.mark,.saveline,
+.act a,.actadd .go,.edited,.lab,.discovery-categories button{
+  font-family:"IBM Plex Mono","Courier New",monospace;font-weight:500;letter-spacing:.09em;
+}
+.btn{border-radius:2px;background:transparent;text-transform:uppercase}
+.btn.primary:not(:disabled){background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.track{border-radius:0}
+.track i{border-radius:0}
+
+/* the activity index reads like a reference appendix */
+.discovery{border-top:2px solid var(--ink)}
+.discovery-head h2{font-size:clamp(1.5rem,3.2vw,1.95rem)}
+.fold summary{font-family:"Permanent Marker",cursive;font-weight:400;font-size:1.3rem}
+.foot{border-top:2px solid var(--ink)}
+
+@media (max-width:620px){
+  .wrap{padding:30px 16px 80px}
+  h2{margin-top:46px}
+  .leg{padding:20px 15px 22px 16px}
 }
 
 </style>
