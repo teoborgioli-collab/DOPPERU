@@ -65,7 +65,7 @@ img{max-width:100%}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap">
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&display=swap">
 
 <style>
 :root{
@@ -664,7 +664,7 @@ body{
   font-family:"IBM Plex Mono","Courier New",monospace;
   font-weight:400;font-size:15.5px;line-height:1.7;letter-spacing:0;
 }
-.wrap{max-width:900px;padding:52px 30px 120px}
+.wrap{max-width:900px;padding:30px 30px 120px}
 
 /* label chips read like filed tabs */
 .lab{letter-spacing:.14em;color:var(--muted)}
@@ -672,28 +672,31 @@ body{
 /* masthead */
 .mast{border-bottom:2px solid var(--ink);padding-bottom:30px}
 h1{
-  font-family:"Permanent Marker",cursive;font-weight:400;
-  font-size:clamp(2.1rem,6vw,3.7rem);line-height:1.06;letter-spacing:0;
-  margin:.22em 0 .3em;max-width:16ch;color:var(--ink);
-  text-shadow:0 1px 0 color-mix(in srgb,var(--ink) 12%,transparent);
+  font-family:"Caveat",cursive;font-weight:700;
+  font-size:clamp(3rem,8vw,5rem);line-height:.98;letter-spacing:0;
+  margin:.06em 0 .24em;max-width:18ch;color:var(--ink);
 }
 .dek{font-family:inherit;font-weight:400;font-size:.98rem;line-height:1.75;
   max-width:64ch;color:var(--ink-soft)}
 
 /* THE signature: section titles look swiped with a highlighter marker */
 h2{
-  font-family:"Permanent Marker",cursive;font-weight:400;letter-spacing:0;
-  font-size:clamp(1.5rem,3.2vw,1.95rem);line-height:1.2;
-  display:inline-block;margin:62px 0 10px;padding:0 .18em;color:var(--ink);
+  font-family:"Caveat",cursive;font-weight:700;letter-spacing:.005em;
+  font-size:clamp(2.1rem,4.4vw,2.9rem);line-height:1.05;
+  display:inline-block;margin:58px 0 10px;padding:0 .12em .04em;color:var(--ink);
   background-image:linear-gradient(
     to bottom,
-    transparent 0, transparent 52%,
-    color-mix(in srgb,var(--marker-2) 46%,transparent) 52%,
-    color-mix(in srgb,var(--marker-2) 46%,transparent) 92%,
-    transparent 92%);
+    transparent 0, transparent 34%,
+    color-mix(in srgb,var(--marker-2) 78%,transparent) 34%,
+    color-mix(in srgb,var(--marker-2) 78%,transparent) 96%,
+    transparent 96%);
   background-repeat:no-repeat;
-  transform:rotate(-.6deg);
+  background-size:100% 100%;
 }
+:root[data-theme="dark"] h2,
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) h2{
+  color:var(--ink);
+}}
 .sub{font-family:inherit;color:var(--muted);margin-bottom:22px}
 
 /* itinerary stops = dated diary entries, gentle coloured edge */
@@ -721,7 +724,7 @@ h2{
 /* the activity index reads like a reference appendix */
 .discovery{border-top:2px solid var(--ink)}
 .discovery-head h2{font-size:clamp(1.5rem,3.2vw,1.95rem)}
-.fold summary{font-family:"Permanent Marker",cursive;font-weight:400;font-size:1.3rem}
+.fold summary{font-family:"Caveat",cursive;font-weight:700;font-size:1.7rem;letter-spacing:.005em}
 .foot{border-top:2px solid var(--ink)}
 
 @media (max-width:620px){
