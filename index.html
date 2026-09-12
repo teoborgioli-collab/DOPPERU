@@ -207,10 +207,11 @@ h2{font-family:var(--cond);font-weight:700;text-transform:uppercase;
 .when .nn{margin-top:10px;font-family:var(--cond);font-weight:700;font-size:10px;
   text-transform:uppercase;letter-spacing:.075em;color:var(--band,var(--ink));line-height:1.35}
 .body{min-width:0}
-.legtop h3{font-family:var(--cond);font-weight:700;font-size:1.42rem;line-height:1.2;
-  margin:0;letter-spacing:-.04em}
-.sub2{display:block;margin:4px 0 0;font-family:var(--serif);font-style:italic;
-  font-size:.95rem;font-weight:400;color:var(--muted);letter-spacing:0}
+.legtop h3{font-family:var(--cond);font-weight:700;font-size:1.22rem;line-height:1.28;
+  margin:0;text-transform:uppercase;letter-spacing:.02em}
+.sub2{display:block;margin:5px 0 0;font-family:var(--serif);font-style:italic;
+  font-size:.95rem;font-weight:400;color:var(--muted);
+  text-transform:none;letter-spacing:0}
 .sub2:empty{display:none}
 .vibe{display:block;width:100%;max-width:46ch;margin:5px 0 0;padding:2px 0;
   font-family:var(--serif);font-style:italic;font-size:1rem;color:var(--ink-soft);
@@ -247,14 +248,16 @@ h2{font-family:var(--cond);font-weight:700;text-transform:uppercase;
   box-shadow:-5px 0 0 var(--bad);padding-left:10px}
 .ahead{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
 .asub{display:flex;flex-wrap:wrap;gap:7px 12px;align-items:center;margin-top:6px;padding-left:2px}
-.aname{flex:1 1 240px;min-width:150px;font-family:var(--cond);font-size:14.5px;
-  font-weight:700;color:var(--ink);letter-spacing:-.02em}
+.aname{flex:1 1 240px;min-width:150px;font-family:var(--cond);font-size:13px;
+  font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.03em;
+  line-height:1.35}
 .act{padding:14px 0 15px}
 /* everything below an activity's title line is indented, so a stop's own
    note is never mistaken for one of its activities' notes */
 .act>.aedit,.act>.notes-editor,.act>.activity-links,.act>.decision-row,.act>.move-row{
   padding-left:15px}
-.at{flex:1 1 240px;min-width:150px;font-family:var(--cond);font-size:14.5px;font-weight:700;
+.at{flex:1 1 240px;min-width:150px;font-family:var(--cond);font-size:13px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.03em;
   color:var(--ink);background:var(--paper);border:1px solid var(--focus);border-radius:0;padding:5px 8px}
 .at:focus{outline:none}
 .aedit{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:8px}
@@ -413,7 +416,8 @@ textarea::placeholder{color:var(--muted)}
 .catgroup .lab{display:block;margin-bottom:4px;color:var(--ink)}
 .opt{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:baseline;
   padding:9px 0;border-bottom:1px solid var(--rule-soft)}
-.opt .nm{font-family:var(--cond);font-size:15px;font-weight:700}
+.opt .nm{font-family:var(--cond);font-size:13px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.03em}
 .opt .mt{grid-column:1;color:var(--muted);font-size:13px;margin:0}
 .opt .add{grid-row:1;grid-column:2;background:var(--surface);border:1px solid var(--rule);
   border-radius:0;color:var(--ink);cursor:pointer;padding:4px 10px;
@@ -521,15 +525,17 @@ textarea::placeholder{color:var(--muted)}
   padding:26px;max-width:600px;width:calc(100% - 32px);max-height:90vh;overflow:auto;
   box-shadow:6px 6px 0 rgba(27,25,22,.18)}
 .activity-dialog::backdrop{background:rgba(27,25,22,.6)}
-.activity-dialog h2{margin:10px 0;border-top:0;padding-top:0;font-size:1.35rem;letter-spacing:-.005em}
+.activity-dialog h2{margin:10px 0;border-top:0;padding-top:0;font-size:1.15rem;
+  text-transform:uppercase;letter-spacing:.02em;line-height:1.3}
 .activity-dialog p{line-height:1.65}
 .dialog-close{display:block;margin:0 0 20px auto}
-.activity-links{display:flex;gap:9px;flex-wrap:wrap;margin:16px 0;overflow-wrap:anywhere}
+.activity-links{display:flex;gap:4px 18px;flex-wrap:wrap;margin:14px 0;overflow-wrap:anywhere}
 .activity-links a{color:var(--link);text-decoration:none;border:0;padding:0;
   font-family:var(--cond);font-weight:400;font-size:13px;text-transform:none;letter-spacing:.01em}
 .activity-links a:hover{text-decoration:underline;text-underline-offset:3px}
-.act .activity-links{gap:4px 18px;margin:10px 0 0}
-.act .activity-links a::before{content:"\2192\00a0";color:var(--muted)}
+.activity-links a::before{content:"\2192\00a0";color:var(--muted)}
+.act .activity-links{margin:10px 0 0}
+.activity-dialog .activity-links a::before{content:none}
 .activity-dialog .activity-links a{border:1px solid var(--ink);padding:7px 11px;
   font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink)}
 .activity-dialog .activity-links a:hover{background:var(--ink);color:var(--paper)}
