@@ -64,8 +64,7 @@ img{max-width:100%}
 <title>Dopperu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap">
- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap">
 
 <style>
 :root{
@@ -622,203 +621,128 @@ h2{margin-top:58px}
 }
 
 /* ============================================================
-   DIGITAL DIARY — 80s/90s notebook identity (visual only)
-   Warm aged paper, typewriter-mono body, marker headings.
-   This block is authoritative over the earlier refresh layers.
+   DIGITAL DIARY — quiet 80s/90s notebook (visual only)
+   Warm aged paper, typewriter mono, one restrained signature:
+   a keyline margin and uppercase mono labels. No chrome.
+   Authoritative over all earlier layers.
    ============================================================ */
-:root{
-  --paper:#f2ecdc; --surface:#f8f2e3; --sunk:#e7dec9;
-  --ink:#211d15; --ink-soft:#4d4636; --muted:#847a63;
-  --rule:#cfc3a5; --rule-soft:#e2d9c2;
-  --coast:#3f668f; --lowland:#5a7f4f; --cloudforest:#3f8a80;
-  --puna:#a97e39; --city:#8f5f76;
-  --link:#3a5a86; --focus:#c14a2e;
-  --marker:#c14a2e; --marker-2:#e8c14a;
-  --warn:#9a6a1e; --warn-bg:#efe4c8; --bad:#9e3a34; --bad-bg:#f0e0d6; --ok:#3d7a4e;
+:root,:root[data-theme="light"]{
+  --paper:#efe9da; --surface:#f6f1e4; --sunk:#e7e0cd;
+  --ink:#232019; --ink-soft:#514b3d; --muted:#837c69;
+  --rule:#c8bda0; --rule-soft:#ded4bc;
+  --accent:#9c4a2a;
+  --coast:#3f668f; --lowland:#5a7f4f; --cloudforest:#3f8a80; --puna:#a97e39; --city:#8f5f76;
+  --link:#3a5a86; --focus:#9c4a2a; --band:var(--rule);
+  --warn:#8a5a16; --warn-bg:#efe4c8; --bad:#9e3a34; --bad-bg:#f0e0d6; --ok:#3d7a4e;
+}
+:root[data-theme="dark"]{
+  --paper:#16130d; --surface:#1e1a12; --sunk:#262117;
+  --ink:#ece3cf; --ink-soft:#c4baa1; --muted:#8f8770;
+  --rule:#3a3323; --rule-soft:#2a2418;
+  --accent:#e07a4e;
+  --coast:#8fb0e0; --lowland:#9bc79b; --cloudforest:#7fd0cc; --puna:#e0b06f; --city:#c592ac;
+  --link:#8fb4de; --focus:#e07a4e;
+  --warn:#e0b06a; --warn-bg:#2b2313; --bad:#e08f8f; --bad-bg:#2c1c1a; --ok:#7fcf9c;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --paper:#191510; --surface:#221d15; --sunk:#2a241a;
-    --ink:#efe6d2; --ink-soft:#cabfa4; --muted:#948a72;
-    --rule:#3d3524; --rule-soft:#2c261b;
-    --coast:#8fb0e0; --lowland:#9bc79b; --cloudforest:#7fd0cc;
-    --puna:#e0b06f; --city:#c592ac;
-    --link:#8fb4de; --focus:#f0885f;
-    --marker:#f0885f; --marker-2:#e8c14a;
+    --paper:#16130d; --surface:#1e1a12; --sunk:#262117;
+    --ink:#ece3cf; --ink-soft:#c4baa1; --muted:#8f8770;
+    --rule:#3a3323; --rule-soft:#2a2418;
+    --accent:#e07a4e;
+    --coast:#8fb0e0; --lowland:#9bc79b; --cloudforest:#7fd0cc; --puna:#e0b06f; --city:#c592ac;
+    --link:#8fb4de; --focus:#e07a4e;
     --warn:#e0b06a; --warn-bg:#2b2313; --bad:#e08f8f; --bad-bg:#2c1c1a; --ok:#7fcf9c;
   }
 }
-:root[data-theme="dark"]{
-  --paper:#191510; --surface:#221d15; --sunk:#2a241a;
-  --ink:#efe6d2; --ink-soft:#cabfa4; --muted:#948a72;
-  --rule:#3d3524; --rule-soft:#2c261b;
-  --coast:#8fb0e0; --lowland:#9bc79b; --cloudforest:#7fd0cc;
-  --puna:#e0b06f; --city:#c592ac;
-  --link:#8fb4de; --focus:#f0885f;
-  --marker:#f0885f; --marker-2:#e8c14a;
-  --warn:#e0b06a; --warn-bg:#2b2313; --bad:#e08f8f; --bad-bg:#2c1c1a; --ok:#7fcf9c;
-}
 
-/* ============================================================
-   DOPPERU — retro personal-organizer software system
-   Light = putty desktop chrome · Dark = amber CRT phosphor
-   ============================================================ */
-
-/* --- palette + chrome tokens --- */
-:root,:root[data-theme="light"]{
-  --paper:#c9c3b2; --surface:#e7e2d4; --sunk:#d5cfbe;
-  --ink:#211f18; --ink-soft:#46433a; --muted:#726d5f;
-  --rule:#9a9382; --rule-soft:#c1baa8;
-  --titlebar:#1f5f5a; --titlebar-fg:#f2efe6;
-  --accent:#1f5f5a; --link:#1f5f5a; --focus:#1f5f5a;
-  --bevel-lt:#ffffff; --bevel-dk:#8f8877;
-  --scan:transparent;
-  --coast:#2f6f6b; --lowland:#5a7f4f; --cloudforest:#3f8a80; --puna:#a97e39; --city:#8f5f76;
-  --marker:#1f5f5a; --marker-2:#c9a227;
-}
-:root[data-theme="dark"]{
-  --paper:#0c0b08; --surface:#151209; --sunk:#0a0906;
-  --ink:#f2b23a; --ink-soft:#d69a34; --muted:#9a7627;
-  --rule:#5a4413; --rule-soft:#2f2409;
-  --titlebar:#3a2c0c; --titlebar-fg:#f7c451;
-  --accent:#f2b23a; --link:#f2b23a; --focus:#f7c451;
-  --bevel-lt:#3a2c0c; --bevel-dk:#000000;
-  --scan:rgba(0,0,0,.28);
-  --coast:#f2b23a; --lowland:#f2b23a; --cloudforest:#f2b23a; --puna:#f2b23a; --city:#f2b23a;
-  --marker:#f2b23a; --marker-2:#f7c451;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --paper:#0c0b08; --surface:#151209; --sunk:#0a0906;
-    --ink:#f2b23a; --ink-soft:#d69a34; --muted:#9a7627;
-    --rule:#5a4413; --rule-soft:#2f2409;
-    --titlebar:#3a2c0c; --titlebar-fg:#f7c451;
-    --accent:#f2b23a; --link:#f2b23a; --focus:#f7c451;
-    --bevel-lt:#3a2c0c; --bevel-dk:#000000;
-    --scan:rgba(0,0,0,.28);
-    --coast:#f2b23a; --lowland:#f2b23a; --cloudforest:#f2b23a; --puna:#f2b23a; --city:#f2b23a;
-    --marker:#f2b23a; --marker-2:#f7c451;
-  }
-}
-
-/* --- desktop backdrop + mono body --- */
+/* mono body on plain aged paper — no backdrop pattern, no window */
 body{
   font-family:"IBM Plex Mono","Courier New",monospace;
-  font-weight:400;font-size:15px;line-height:1.65;letter-spacing:0;
-  color:var(--ink);
-  background:
-    repeating-linear-gradient(var(--scan) 0 1px, transparent 1px 3px),
-    var(--paper);
+  font-weight:400;font-size:15px;line-height:1.7;letter-spacing:0;
+  color:var(--ink);background:var(--paper);
 }
+.wrap{max-width:760px;margin:0 auto;padding:64px 28px 110px;background:transparent;
+  border:0;box-shadow:none}
 
-/* --- THE window: everything lives in a beveled application window --- */
-.wrap{
-  max-width:940px;margin:30px auto 90px;
-  padding:56px 30px 40px;
-  position:relative;
-  background:var(--surface);
-  border:2px solid var(--ink);
-  box-shadow:
-    inset 2px 2px 0 var(--bevel-lt),
-    inset -2px -2px 0 var(--bevel-dk),
-    7px 7px 0 rgba(0,0,0,.30);
-}
-.wrap::before{
-  content:"DOPPERU.APP  \00B7  PERU TRIP ORGANIZER";
-  position:absolute;top:0;left:0;right:0;height:30px;
-  display:flex;align-items:center;padding:0 12px;
-  background:var(--titlebar);color:var(--titlebar-fg);
-  font:700 12px/1 "IBM Plex Mono",monospace;letter-spacing:.14em;
-  border-bottom:2px solid var(--ink);
-  z-index:2;
-}
-.wrap::after{
-  content:"_  \25A1  \00D7";
-  position:absolute;top:0;right:12px;height:30px;
-  display:flex;align-items:center;gap:8px;
-  color:var(--titlebar-fg);font:700 13px/1 "IBM Plex Mono",monospace;
-  letter-spacing:.3em;z-index:3;pointer-events:none;
-}
+/* uppercase mono labels — the connective tissue of the diary */
+.lab{font-family:inherit;font-size:11px;letter-spacing:.18em;color:var(--muted);
+  text-transform:uppercase;font-weight:500}
 
-/* labels = filed tabs */
-.lab{letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
-
-/* --- masthead: CRT terminal display type --- */
-.mast{border-bottom:2px solid var(--ink);padding-bottom:26px}
+/* masthead */
+.mast{border-bottom:1px solid var(--ink);padding-bottom:30px}
 h1{
-  font-family:"VT323",monospace;font-weight:400;
-  font-size:clamp(3.2rem,9vw,5.6rem);line-height:.9;letter-spacing:.01em;
-  text-transform:uppercase;
-  margin:.08em 0 .2em;max-width:16ch;color:var(--ink);
-  text-shadow:0 0 12px color-mix(in srgb,var(--accent) 30%,transparent);
+  font-family:inherit;font-weight:600;
+  font-size:clamp(2.1rem,5.5vw,3.1rem);line-height:1.08;letter-spacing:-.02em;
+  text-transform:none;margin:.35em 0 .3em;max-width:20ch;color:var(--ink);
 }
-.dek{font-family:inherit;font-weight:400;font-size:.95rem;line-height:1.7;
-  max-width:62ch;color:var(--ink-soft)}
+.dek{font-family:inherit;font-weight:400;font-size:.94rem;line-height:1.75;
+  max-width:64ch;color:var(--ink-soft)}
 
-/* --- section titles = inverse title-bar strips (the signature) --- */
+/* section titles: quiet uppercase mono with a short accent keyline above */
 h2{
-  font-family:"VT323",monospace;font-weight:400;letter-spacing:.06em;
-  font-size:clamp(1.8rem,4vw,2.5rem);line-height:1;text-transform:uppercase;
-  display:block;margin:52px 0 14px;padding:7px 14px 5px;color:var(--titlebar-fg);
-  background:var(--titlebar);
-  border:2px solid var(--ink);
-  box-shadow:inset 1px 1px 0 color-mix(in srgb,var(--bevel-lt) 40%,transparent),4px 4px 0 rgba(0,0,0,.22);
+  font-family:inherit;font-weight:600;letter-spacing:.02em;
+  font-size:1.15rem;line-height:1.3;text-transform:uppercase;
+  display:block;margin:64px 0 4px;padding-top:14px;color:var(--ink);
+  background:none;border:0;box-shadow:none;position:relative;
 }
-.sub{font-family:inherit;color:var(--muted);margin:0 0 20px}
+h2::before{content:"";position:absolute;top:0;left:0;width:38px;height:3px;
+  background:var(--accent)}
+.sub{font-family:inherit;color:var(--muted);font-size:13px;margin:0 0 22px}
 
-/* --- itinerary stops = beveled index cards with a colour tab --- */
+/* itinerary stops: notebook entries with a thin coloured margin keyline */
 .leg{
-  border:2px solid var(--ink);border-left:8px solid var(--band);border-radius:0;
-  background:var(--surface);
-  box-shadow:inset 1px 1px 0 var(--bevel-lt),inset -2px -2px 0 var(--bevel-dk),4px 4px 0 rgba(0,0,0,.20);
-  padding:22px 22px 24px 20px;margin-bottom:20px;
+  border:0;border-left:2px solid var(--band);border-radius:0;
+  background:transparent;box-shadow:none;
+  padding:6px 0 26px 22px;margin:0 0 6px;
 }
-.legtop h3{font-family:"VT323",monospace;font-weight:400;font-size:1.7rem;letter-spacing:.03em;line-height:1.05;text-transform:uppercase}
-.when .day{font-family:"VT323",monospace;font-weight:400;font-size:1.5rem;letter-spacing:.02em}
+.legtop h3{font-family:inherit;font-weight:600;font-size:1.15rem;letter-spacing:-.01em;
+  line-height:1.2;text-transform:none}
+.when .day{font-family:inherit;font-weight:600;font-size:.95rem;letter-spacing:0}
 .when .out,.when .nn{color:var(--muted)}
 .sub2,.vibe{font-family:inherit;font-style:italic;color:var(--ink-soft)}
 
-/* --- controls = raised 3D buttons / sunken fields (old software chrome) --- */
+/* controls: flat squared mono — no bevels */
 .btn,.mini,.hrev,.bal,.step .n,.consensus,.st,.dsel,.mark,.saveline,
 .act a,.actadd .go,.edited,.lab,.discovery-categories button{
-  font-family:"IBM Plex Mono","Courier New",monospace;font-weight:500;letter-spacing:.08em;
+  font-family:"IBM Plex Mono","Courier New",monospace;font-weight:500;letter-spacing:.04em;
 }
 .btn{
-  border-radius:0;text-transform:uppercase;font-weight:600;
-  background:var(--surface);color:var(--ink);border:2px solid var(--ink);
-  box-shadow:inset 1px 1px 0 var(--bevel-lt),inset -2px -2px 0 var(--bevel-dk);
-  padding:9px 16px;
+  border-radius:0;text-transform:uppercase;font-weight:600;font-size:12px;letter-spacing:.06em;
+  background:transparent;color:var(--ink);border:1px solid var(--ink);
+  box-shadow:none;padding:9px 15px;
 }
-.btn:active{box-shadow:inset -1px -1px 0 var(--bevel-lt),inset 2px 2px 0 var(--bevel-dk);transform:translate(1px,1px)}
-.btn.primary:not(:disabled){background:var(--titlebar);color:var(--titlebar-fg);border-color:var(--ink)}
+.btn:hover{background:var(--ink);color:var(--surface)}
+.btn:active{transform:translateY(1px)}
+.btn.primary:not(:disabled){background:var(--accent);color:var(--surface);border-color:var(--accent)}
+.btn.primary:not(:disabled)::before{display:none}
 input,textarea,select,.linkbox,input[type=date]{
-  border-radius:0 !important;background:var(--sunk);color:var(--ink);
-  border:2px solid var(--ink);
-  box-shadow:inset 2px 2px 0 var(--bevel-dk);
+  border-radius:0 !important;background:var(--surface);color:var(--ink);
+  border:1px solid var(--rule);box-shadow:none;
 }
-input:focus,textarea:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
 
-/* --- meter / segmented bar framed like a gauge --- */
-.meter{border:2px solid var(--ink);background:var(--sunk);padding:16px 16px 14px;
-  box-shadow:inset 2px 2px 0 var(--bevel-dk)}
-.big{font-family:"VT323",monospace;font-weight:400;font-size:2.4rem;line-height:1;color:var(--accent)}
+/* meter: quiet framed strip, not a gauge */
+.meter{border:1px solid var(--rule);background:var(--surface);padding:18px 18px 16px;
+  box-shadow:none}
+.big{font-family:inherit;font-weight:600;font-size:1.9rem;line-height:1;color:var(--ink)}
 .track,.track i,.bar-track{border-radius:0}
 
-/* --- scenario tabs = folder tabs --- */
-.scenario-tabs button{border-radius:0;border:2px solid var(--ink);
-  box-shadow:inset 1px 1px 0 var(--bevel-lt);text-transform:uppercase}
+/* scenario tabs: plain squared toggles */
+.scenario-tabs button{border-radius:0;border:1px solid var(--rule);box-shadow:none;
+  text-transform:uppercase;font-size:12px}
+.scenario-tabs button[aria-pressed=true]{border-color:var(--ink);background:var(--ink);color:var(--surface)}
 
-/* --- reference appendix --- */
-.discovery{border-top:2px solid var(--ink)}
-.discovery-head h2{font-size:clamp(1.4rem,3vw,1.8rem)}
-.fold summary{font-family:"VT323",monospace;font-weight:400;font-size:1.5rem;letter-spacing:.03em;text-transform:uppercase}
-.foot{border-top:2px solid var(--ink)}
+/* appendix + folds */
+.discovery{border-top:1px solid var(--ink)}
+.discovery-head h2{font-size:1.15rem}
+.fold summary{font-family:inherit;font-weight:600;font-size:1.05rem;letter-spacing:.01em;text-transform:uppercase}
+.foot{border-top:1px solid var(--ink)}
 
 @media (max-width:620px){
-  .wrap{padding:52px 15px 40px;margin:14px auto 60px}
-  .wrap::before{font-size:10px;letter-spacing:.08em}
-  h2{margin-top:42px}
-  .leg{padding:18px 14px 20px 14px}
+  .wrap{padding:40px 16px 70px}
+  h2{margin-top:48px}
+  .leg{padding-left:16px}
 }
 
 </style>
