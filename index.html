@@ -113,23 +113,22 @@ h1{
 .scenario-tabs .mini{margin-left:20px}
 .scenario-tabs .active{background:var(--ink);color:var(--paper);border-color:var(--ink);position:relative;z-index:1}
 
-/* ---- 6. Meter (the tally strip) ------------------------------------ */
-.meter{display:flex;flex-wrap:wrap;gap:20px 42px;align-items:flex-end;
-  padding:20px 0 18px;border-bottom:1px solid var(--rule)}
-.stat{display:flex;flex-direction:column;gap:4px}
-.stat .big{font-family:var(--cond);font-weight:700;font-size:2.3rem;line-height:.9;
-  font-variant-numeric:tabular-nums;letter-spacing:-.01em}
-.bar-track{flex:1 1 240px;min-width:190px}
-.track{height:11px;display:flex;gap:1px;background:var(--sunk);
-  border:1px solid var(--ink);border-radius:0;overflow:hidden}
-.track i{display:block;height:100%;background:var(--band,var(--link));min-width:2px}
-.bal{margin-top:8px;font-family:var(--cond);font-weight:700;font-size:10.5px;
-  text-transform:uppercase;letter-spacing:.14em}
+/* ---- 6. Deck: dates and the running tally, one line ---------------- */
+.deck{display:flex;flex-wrap:wrap;gap:12px 32px;align-items:baseline;
+  justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--rule)}
+.tally{margin:0;font-size:14.5px;color:var(--ink-soft)}
+.tally .big{font-family:var(--cond);font-weight:700;font-size:1.15rem;color:var(--ink);
+  font-variant-numeric:tabular-nums}
+.bal{margin-left:6px;font-family:var(--cond);font-weight:700;font-size:10.5px;
+  text-transform:uppercase;letter-spacing:.13em;white-space:nowrap}
 .bal.ok{color:var(--ok)}
+.bal.over{color:var(--bad)}
+.bal.under{color:var(--warn)}
+.bal.ok::before{content:"\2014\00a0"}
+.bal.over::before,.bal.under::before{content:"\2014\00a0"}
 
 /* ---- 7. Dates, toolbar, menus -------------------------------------- */
-.dates{display:flex;flex-wrap:wrap;gap:12px 30px;align-items:center;
-  padding:16px 0;border-bottom:1px solid var(--rule)}
+.dates{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center}
 .dates label{display:flex;align-items:center;gap:10px}
 .dates input{font-family:var(--cond);font-weight:500;font-size:14px;padding:6px 9px;
   background:var(--surface);color:var(--ink);border:1px solid var(--rule);border-radius:0;
@@ -144,7 +143,7 @@ h1{
 .btn.primary{background:var(--ink);color:var(--paper)}
 .btn.primary:hover{background:var(--focus);border-color:var(--focus);color:#fff}
 .btn.primary:disabled{background:transparent;border-color:var(--rule);color:var(--muted);cursor:default}
-.btn.primary:not(:disabled)::before{content:"\2022\00a0";}
+
 .status{color:var(--muted);font-size:13px;margin-left:auto;font-family:var(--cond);
   font-variant-numeric:tabular-nums;text-align:right;letter-spacing:.01em}
 .status b{color:var(--ink);font-weight:700}
@@ -153,8 +152,8 @@ h1{
   background:var(--surface);border:1px solid var(--rule);border-radius:0;padding:7px 9px}
 
 .mini{background:none;border:none;padding:2px 0;cursor:pointer;color:var(--muted);
-  font-family:var(--cond);font-weight:700;font-size:10.5px;
-  text-transform:uppercase;letter-spacing:.14em;text-underline-offset:3px}
+  font-family:var(--cond);font-weight:400;font-size:13px;letter-spacing:.01em;
+  text-underline-offset:3px}
 .mini:hover{color:var(--ink);text-decoration:underline}
 .mini.drop:hover{color:var(--bad)}
 .mini:disabled{color:var(--rule);cursor:default;text-decoration:none}
@@ -185,22 +184,42 @@ h1{
 /* a heavy rule, then the head in condensed caps — the guidebook device */
 h2{font-family:var(--cond);font-weight:700;text-transform:uppercase;
   font-size:1.02rem;letter-spacing:.15em;line-height:1.3;
-  margin:56px 0 6px;padding-top:11px;border-top:3px solid var(--ink)}
+  margin:52px 0 6px;padding-top:11px;border-top:3px solid var(--ink)}
+
+/* ---- 9b. The route profile ------------------------------------------ */
+.route{margin-bottom:6px}
+.profile{margin:18px 0 0;padding:0}
+.prof{display:block;max-width:100%}
+.prof-fill{fill:var(--ink);fill-opacity:.10}
+.prof-cap{stroke:var(--ink);stroke-width:2.5;vector-effect:non-scaling-stroke}
+.prof-cap.unknown{stroke-width:1.5;stroke-dasharray:5 4;opacity:.55}
+.prof-name.unknown{fill:var(--muted);font-weight:400}
+.prof-riser{stroke:var(--ink);stroke-width:1;stroke-dasharray:2 3;opacity:.5;
+  vector-effect:non-scaling-stroke}
+.prof-base{stroke:var(--ink);stroke-width:1;vector-effect:non-scaling-stroke}
+.prof-grid{stroke:var(--rule);stroke-width:1;vector-effect:non-scaling-stroke}
+.prof-hit{fill:transparent;cursor:default}
+.prof-hit:hover{fill:var(--ink);fill-opacity:.05}
+.prof text{font-family:var(--cond);fill:var(--ink)}
+.prof-name{font-size:15px;font-weight:700}
+.prof-xtick,.prof-ytick{font-size:13px;fill:var(--muted);font-weight:400}
+.prof-cap-txt{margin-top:8px;font-family:var(--cond);font-size:11px;
+  text-transform:uppercase;letter-spacing:.13em;color:var(--muted)}
 .sub{color:var(--muted);font-size:14px;line-height:1.55;margin:0 0 18px;max-width:62ch}
 
 /* ---- 10. Itinerary entries ------------------------------------------ */
 .leg{display:grid;grid-template-columns:112px 1fr;gap:0 26px;align-items:start;
-  background:var(--surface);
-  border:1px solid var(--rule);border-left:6px solid var(--band,var(--ink));
-  border-radius:0;padding:22px 22px 24px 20px;margin-bottom:16px;box-shadow:var(--shadow)}
-.when{padding-top:2px}
-.when .day{font-family:var(--cond);font-weight:700;font-size:.98rem;line-height:1.25;
-  text-transform:uppercase;letter-spacing:.055em;font-variant-numeric:tabular-nums;color:var(--ink)}
-.when .out{font-family:var(--cond);font-size:12.5px;color:var(--muted);
-  font-variant-numeric:tabular-nums;margin-top:4px}
-.when .nn{margin-top:12px;font-family:var(--cond);font-weight:700;font-size:10px;
-  text-transform:uppercase;letter-spacing:.14em;color:var(--paper);background:var(--band,var(--ink));
-  display:inline-block;padding:3px 7px}
+  background:none;border:0;border-bottom:1px solid var(--rule);border-radius:0;
+  padding:22px 0 24px 16px;margin:0;
+  box-shadow:inset 4px 0 0 var(--band,var(--ink))}
+.leg:first-child{border-top:1px solid var(--rule)}
+.when{padding-top:3px}
+.when .day{font-family:var(--cond);font-weight:700;font-size:.95rem;line-height:1.25;
+  letter-spacing:.01em;font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap}
+.when .out{font-family:var(--cond);font-size:13px;color:var(--muted);
+  font-variant-numeric:tabular-nums;margin-top:3px}
+.when .nn{margin-top:9px;font-family:var(--cond);font-weight:700;font-size:9.5px;
+  text-transform:uppercase;letter-spacing:.13em;color:var(--band,var(--ink))}
 .body{min-width:0}
 .legtop h3{font-family:var(--cond);font-weight:700;font-size:1.5rem;line-height:1.15;
   margin:0;letter-spacing:-.005em}
@@ -223,12 +242,17 @@ h2{font-family:var(--cond);font-weight:700;text-transform:uppercase;
   font-size:15px;line-height:1;cursor:pointer}
 .step button:hover{background:var(--ink);color:var(--paper)}
 .step button:disabled{color:var(--rule);cursor:default;background:none}
-.step .n{min-width:66px;text-align:center;font-family:var(--cond);font-weight:700;
-  font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;font-variant-numeric:tabular-nums;
-  border-left:1px solid var(--rule);border-right:1px solid var(--rule);padding:0 4px}
+.step .n{min-width:72px;text-align:center;font-family:var(--cond);font-weight:700;
+  font-size:13px;letter-spacing:.01em;font-variant-numeric:tabular-nums;
+  border-left:1px solid var(--rule);border-right:1px solid var(--rule);padding:0 6px}
 
 /* ---- 11. Activities inside a stop ------------------------------------ */
-.acts{margin-top:20px;border-top:1px solid var(--rule)}
+.entry-add{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:12px}
+.summon{color:var(--link);font-family:var(--cond);font-size:13px}
+.summon::before{content:"+\00a0"}
+.summon:hover{color:var(--ink);text-decoration:underline}
+.acts{margin-top:18px}
+.acts:not(:empty){border-top:1px solid var(--rule-soft)}
 .act{padding:12px 0 11px;border-bottom:1px solid var(--rule-soft)}
 .act:last-of-type{border-bottom:none}
 .act.consensus-approved{background:color-mix(in srgb,var(--ok) 11%,transparent);
@@ -238,7 +262,13 @@ h2{font-family:var(--cond);font-weight:700;text-transform:uppercase;
 .ahead{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
 .asub{display:flex;flex-wrap:wrap;gap:7px 12px;align-items:center;margin-top:6px;padding-left:2px}
 .aname{flex:1 1 240px;min-width:150px;font-family:var(--cond);font-size:15.5px;
-  font-weight:700;color:var(--ink)}
+  font-weight:700;color:var(--ink);text-align:left;background:none;border:0;padding:0;
+  cursor:pointer}
+.aname[aria-expanded]::after{content:"\00a0\00a0+";color:var(--muted);font-weight:400}
+.aname[aria-expanded="true"]::after{content:"\00a0\00a0\2212"}
+.aname:hover{text-decoration:underline;text-underline-offset:3px}
+.act.open{padding-bottom:16px}
+.act.open>.ahead{margin-bottom:2px}
 .at{flex:1 1 240px;min-width:150px;font-family:var(--cond);font-size:15.5px;font-weight:700;
   color:var(--ink);background:var(--paper);border:1px solid var(--focus);border-radius:0;padding:5px 8px}
 .at:focus{outline:none}
@@ -275,7 +305,8 @@ h2{font-family:var(--cond);font-weight:700;text-transform:uppercase;
 .st-spontaneous{color:var(--cloudforest);border-color:var(--cloudforest)}
 .st-booked{color:var(--ok);border-color:var(--ok)}
 
-.decision-row,.move-row{display:flex;flex-wrap:wrap;gap:9px 12px;align-items:center;margin-top:9px}
+.decision-row,.move-row{display:flex;flex-wrap:wrap;gap:9px 16px;align-items:center;margin-top:12px}
+.decision-row .mini.drop{margin-left:auto}
 .move-select{font-family:var(--cond);font-size:12px;color:var(--ink);background:var(--paper);
   border:1px solid var(--rule);border-radius:0;padding:5px 7px}
 .vote-box{width:24px;height:24px;flex:none;line-height:1;font-size:13px;font-weight:700;
@@ -291,8 +322,7 @@ h2{font-family:var(--cond);font-weight:700;text-transform:uppercase;
 .vote-box.conflict{color:var(--ink);border-color:var(--warn);
   background:linear-gradient(135deg,var(--ok) 50%,var(--bad) 50%)}
 .vote-box:disabled{cursor:default;opacity:.55}
-.consensus{font-family:var(--cond);font-weight:700;font-size:10px;text-transform:uppercase;
-  letter-spacing:.13em}
+.consensus{font-family:var(--cond);font-weight:400;font-size:13px;letter-spacing:.01em}
 .consensus.approved{color:var(--ok)}
 .consensus.disapproved{color:var(--bad)}
 .consensus.pending{color:var(--muted)}
@@ -344,6 +374,16 @@ textarea::placeholder{color:var(--muted)}
   border-top:1px solid var(--rule);padding-top:13px}
 .edited{font-family:var(--cond);font-weight:700;font-size:9.5px;text-transform:uppercase;
   letter-spacing:.14em;color:var(--focus)}
+.addstop{margin-top:22px}
+.addstop .mkform{align-items:center}
+.addstop .lab{flex:none;margin-right:2px}
+.catgroup.make{border-top:0;margin-top:16px;padding-top:0}
+.catgroup.make>summary{list-style:none;cursor:pointer;display:inline-block;
+  font-family:var(--cond);font-size:13px;color:var(--link)}
+.catgroup.make>summary::-webkit-details-marker{display:none}
+.catgroup.make>summary::before{content:"+\00a0"}
+.catgroup.make[open]>summary::before{content:"\2212\00a0"}
+.catgroup.make>summary:hover{color:var(--ink);text-decoration:underline}
 .mkform{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
 .mkform input,.mkform select{font-family:var(--serif);font-size:14px;color:var(--ink);
   background:var(--surface);border:1px solid var(--rule);border-radius:0;padding:7px 10px}
@@ -355,8 +395,9 @@ textarea::placeholder{color:var(--muted)}
 .mkform .add:hover{background:var(--focus);border-color:var(--focus);color:#fff}
 
 /* ---- 14. Checks -------------------------------------------------------- */
-.check{display:flex;gap:12px;align-items:flex-start;padding:11px 13px;border-radius:0;
-  margin-bottom:6px;font-size:14.5px;line-height:1.55;border:1px solid transparent}
+#checks{margin-top:26px}
+.check{display:flex;gap:12px;align-items:flex-start;padding:10px 13px;border-radius:0;
+  margin-bottom:5px;font-size:14px;line-height:1.55;border:1px solid transparent}
 .check.bad{background:var(--bad-bg);color:var(--ink);border-left:4px solid var(--bad)}
 .check.warn{background:var(--warn-bg);color:var(--ink);border-left:4px solid var(--warn)}
 .check.ok{background:var(--surface);color:var(--ink-soft);border-left:4px solid var(--rule)}
@@ -485,10 +526,14 @@ textarea::placeholder{color:var(--muted)}
 .activity-dialog p{line-height:1.65}
 .dialog-close{display:block;margin:0 0 20px auto}
 .activity-links{display:flex;gap:9px;flex-wrap:wrap;margin:16px 0;overflow-wrap:anywhere}
-.activity-links a{color:var(--ink);text-decoration:none;border:1px solid var(--ink);border-radius:0;
-  padding:7px 11px;font-family:var(--cond);font-weight:700;font-size:10px;
-  text-transform:uppercase;letter-spacing:.13em}
-.activity-links a:hover{background:var(--ink);color:var(--paper)}
+.activity-links a{color:var(--link);text-decoration:none;border:0;padding:0;
+  font-family:var(--cond);font-weight:400;font-size:13px;text-transform:none;letter-spacing:.01em}
+.activity-links a:hover{text-decoration:underline;text-underline-offset:3px}
+.act .activity-links{gap:4px 18px;margin:10px 0 0}
+.act .activity-links a::before{content:"\2192\00a0";color:var(--muted)}
+.activity-dialog .activity-links a{border:1px solid var(--ink);padding:7px 11px;
+  font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--ink)}
+.activity-dialog .activity-links a:hover{background:var(--ink);color:var(--paper)}
 
 /* ---- 18. Colophon -------------------------------------------------------- */
 .foot{position:relative;margin-top:70px;padding-top:26px;border-top:3px solid var(--ink);
@@ -551,20 +596,15 @@ textarea::placeholder{color:var(--muted)}
     <div class="titleedit" id="titleEdit" hidden><label class="fld"><span class="lab">Heading</span><input id="titleInput" maxlength="100"></label><label class="fld"><span class="lab">Subtitle</span><textarea id="subtitleInput" maxlength="400"></textarea></label><button class="mini" id="doneHeading" type="button">Done</button></div>
   </header>
 
-  <section class="scenarios" aria-label="Trip scenarios"><div id="scenarioTabs" class="scenario-tabs"></div><p class="sub">Explore another route. New options copy the current scenario; edits stay separate.</p></section>
+  <section class="scenarios" aria-label="Trip scenarios"><div id="scenarioTabs" class="scenario-tabs"></div><p class="sub">A second route to compare. Edits stay separate.</p></section>
 
-  <div class="meter">
-    <div class="stat"><span class="lab">Nights planned</span><span class="big" id="mNights">0</span></div>
-    <div class="stat"><span class="lab">Stops</span><span class="big" id="mStops">0</span></div>
-    <div class="bar-track">
-      <div class="track" id="track"></div>
-      <div class="bal" id="mBal">&nbsp;</div>
+  <div class="deck">
+    <div class="dates">
+      <label><span class="lab">Arrive</span><input type="date" id="dStart" value="2026-11-09"></label>
+      <label><span class="lab">Depart</span><input type="date" id="dEnd" value="2026-11-23"></label>
     </div>
-  </div>
-
-  <div class="dates">
-    <label><span class="lab">Arrive</span><input type="date" id="dStart" value="2026-11-09"></label>
-    <label><span class="lab">Depart</span><input type="date" id="dEnd" value="2026-11-23"></label>
+    <p class="tally"><span class="big" id="mNights">0</span> nights planned across
+      <span class="big" id="mStops">0</span> stops <span class="bal" id="mBal">&nbsp;</span></p>
   </div>
 
   <div class="toolbar" id="toolbar" hidden>
@@ -595,17 +635,19 @@ textarea::placeholder{color:var(--muted)}
 
   <div id="notices"></div>
 
-  <h2>Itinerary</h2>
+  <section class="route" aria-labelledby="routeTitle">
+    <h2 id="routeTitle">The route</h2>
+    <p class="sub">Height is altitude, width is nights. Peru's problem is the vertical axis.</p>
+    <figure class="profile" id="profile"></figure>
+  </section>
+
+  <div id="checks"></div>
+
+  <h2 id="itinTitle">Itinerary</h2>
   <p class="sub">Nights, not days — a stop's last date is the morning you move on.</p>
   <div id="legs"></div>
 
-  <h2>Checks</h2>
-  <p class="sub">Recomputed live from the plan above.</p>
-  <div id="checks"></div>
-
-  <h2>Add a stop</h2>
-  <p class="sub">Choose a place or create your own.</p>
-  <div id="catalog"></div>
+  <div id="catalog" class="addstop"></div>
 
   <details class="fold" id="historySection" hidden><summary>Earlier saves</summary><div class="fold-body">
     <p class="sub">The last ten versions, newest first. Restoring one loads it onto this screen —
@@ -706,6 +748,10 @@ var STOPS = {
 
 var GROUPS = ["Arrival & hubs","South","Cusco & the Andes","Amazon","Coast & beach"];
 
+function bandLabel(b){
+  for (var i = 0; i < KINDS.length; i++) if (KINDS[i].band === b) return KINDS[i].label;
+  return "";
+}
 var KINDS = [
   {band:"city", label:"City or hub"},
   {band:"coast", label:"Coast"},
@@ -1330,6 +1376,14 @@ function editPanel(id, refs, it0){
   done.onclick = function(){ editing = null; commit(); };
   row.appendChild(done);
 
+  var drop = document.createElement("button");
+  drop.type = "button"; drop.className = "mini drop"; drop.textContent = "Remove this stop";
+  drop.onclick = function(){
+    editing = null;
+    state.items = state.items.filter(function(x){ return x.id !== id; });
+    commit();
+  };
+  row.appendChild(drop);
   if (isEdited(id)){
     var rst = document.createElement("button");
     rst.type = "button"; rst.className = "mini"; rst.textContent = "Reset to catalogue";
@@ -1354,11 +1408,15 @@ function editPanel(id, refs, it0){
    on screen so a multi-night stop reads as a small day plan. */
 function dayLabel(d){ return d ? "Day " + d : "Any day"; }
 
+/* Editing chrome is summoned, not permanent: an empty note or an unused
+   add-activity form collapses to a single link until you ask for it. */
+var openNotes = {}, openAdd = {}, openAct = {};
+
 
 /* Notes remain plain text so existing saves, exports and merges stay compatible. */
 function resizeNote(ta){ta.style.height="auto";ta.style.height=(ta.scrollHeight+2)+"px";}
-function notesEditor(value,label,placeholder,onChange){
-  var wrap=document.createElement("div");wrap.className="notes-editor";
+function notesEditor(value,label,placeholder,onChange,key){
+  var wrap=document.createElement("div");wrap.className="notes-editor";wrap.setAttribute("data-note",key||"1");
   var toolbar=document.createElement("div");toolbar.className="notes-toolbar";
   var heading=document.createElement("span");heading.className="lab";heading.textContent="Notes";toolbar.appendChild(heading);
   var ta=document.createElement("textarea");ta.value=value||"";ta.maxLength=10000;ta.placeholder=placeholder;ta.setAttribute("aria-label",label);
@@ -1398,6 +1456,10 @@ function notesEditor(value,label,placeholder,onChange){
   requestAnimationFrame(function(){resizeNote(ta);});return wrap;
 }
 window.addEventListener("resize",function(){document.querySelectorAll(".notes-editor textarea").forEach(resizeNote);});
+var profT = null;
+window.addEventListener("resize", function(){
+  clearTimeout(profT); profT = setTimeout(function(){ try { renderProfile(); } catch(e){} }, 160);
+});
 
 function activityLinks(title,place){
   var links=document.createElement("div");links.className="activity-links";
@@ -1468,8 +1530,12 @@ function activityBlock(it, S){
 
   order.forEach(function(entry){
     var a = entry.a;
+    var akey = a.id || (it.id + "#" + entry.i);
+    /* one line per activity until you open it — an activity with a note or
+       one you're editing opens itself, because there is something to see */
+    var open = !!(openAct[akey] || editAct === a || (a.n && a.n.trim()));
     var row = document.createElement("div");
-    row.className = "act";
+    row.className = "act" + (open ? " open" : "");
     if (!a.votes) a.votes = {matteo:"",levin:""};
     var consensus = a.votes.matteo && a.votes.matteo === a.votes.levin ? a.votes.matteo : "pending";
     if (consensus === "approved" || consensus === "disapproved") row.classList.add("consensus-" + consensus);
@@ -1487,8 +1553,15 @@ function activityBlock(it, S){
       t.addEventListener("input", function(){ a.t = t.value; save(); renderStatus(); });
       head.appendChild(t);
     } else {
-      var name = document.createElement("strong");
-      name.className = "aname"; name.textContent = a.t;
+      var name = document.createElement("button");
+      name.type = "button"; name.className = "aname";
+      name.textContent = a.t;
+      name.setAttribute("aria-expanded", String(open));
+      name.title = open ? "Collapse" : "Open details";
+      name.onclick = function(){
+        if (openAct[akey]) delete openAct[akey]; else openAct[akey] = true;
+        render();
+      };
       head.appendChild(name);
     }
 
@@ -1505,8 +1578,7 @@ function activityBlock(it, S){
     ed.type = "button"; ed.className = "mini";
     ed.textContent = editAct === a ? "Done" : "Edit";
     ed.setAttribute("aria-label", (editAct === a ? "Finish editing " : "Edit ") + a.t);
-    ed.onclick = function(){ editAct = (editAct === a) ? null : a; commit(); };
-    head.appendChild(ed);
+    ed.onclick = function(){ editAct = (editAct === a) ? null : a; openAct[akey] = true; commit(); };
 
     var x = document.createElement("button");
     x.type = "button"; x.className = "mini drop x"; x.textContent = "Remove";
@@ -1515,8 +1587,8 @@ function activityBlock(it, S){
       if (editAct === a) editAct = null;
       it.acts.splice(entry.i, 1); commit();
     };
-    head.appendChild(x);
     row.appendChild(head);
+    if (!open){ wrap.appendChild(row); return; }
 
     /* the link only appears while editing — otherwise the row stays quiet */
     if (editAct === a){
@@ -1534,7 +1606,10 @@ function activityBlock(it, S){
       row.appendChild(erow);
     }
 
-    row.appendChild(notesEditor(a.n, "Note for " + a.t, "Time, price, who to ask…", function(value){a.n=value;save();renderStatus();}));
+    if (a.n || openNotes[akey]){
+      row.appendChild(notesEditor(a.n, "Note for " + a.t, "Time, price, who to ask…",
+        function(value){a.n=value;save();renderStatus();}, akey));
+    }
     var idea=ACTIVITIES.find(function(idea){return idea[2]===a.t;});
     row.appendChild(activityLinks(a.t,idea?idea[0]:S.name));
 
@@ -1566,7 +1641,18 @@ function activityBlock(it, S){
     decisions.appendChild(box);
     var c = document.createElement("span"); c.className="consensus "+consensus;
     c.textContent = consensus === "approved" ? "Doppiproved 🎉" : consensus === "disapproved" ? "Both disapproved" : "Waiting for agreement";
-    decisions.appendChild(c); row.appendChild(decisions);
+    decisions.appendChild(c);
+    if (!(a.n || openNotes[akey])){
+      var an = document.createElement("button");
+      an.type = "button"; an.className = "mini summon";
+      an.textContent = "Note";
+      an.onclick = function(){ openNotes[akey] = true; render();
+        var t = document.querySelector('[data-note="' + akey + '"] textarea'); if (t) t.focus(); };
+      decisions.appendChild(an);
+    }
+    decisions.appendChild(ed);
+    decisions.appendChild(x);
+    row.appendChild(decisions);
 
     var move = document.createElement("div"); move.className="move-row";
     var prev=document.createElement("button");prev.type="button";prev.className="mini";prev.textContent="↑";prev.title="Move activity up";prev.disabled=entry.i===0;
@@ -1593,9 +1679,12 @@ function activityBlock(it, S){
     wrap.appendChild(row);
   });
 
-  /* add one */
+  /* the form is summoned from the entry's action row, not parked here */
+  if (!openAdd[it.id]) return wrap;
+
   var form = document.createElement("form");
   form.className = "actadd";
+  form.setAttribute("data-add", it.id);
 
   var newDay = 0, newStatus = "";
   form.appendChild(daySelect(0, function(v){ newDay = v; }, "Which day"));
@@ -1627,7 +1716,13 @@ function activityBlock(it, S){
     it.acts.push({id: newActId(), d: newDay, t: title, u: url, s: newStatus, n: "", votes:{matteo:"",levin:""}});
     ti.value = ""; ui.value = "";
     commit();
+    var f = document.querySelector('[data-add="' + it.id + '"] input.t'); if (f) f.focus();
   });
+
+  var shut = document.createElement("button");
+  shut.type = "button"; shut.className = "mini"; shut.textContent = "Done";
+  shut.onclick = function(){ delete openAdd[it.id]; render(); };
+  form.appendChild(shut);
 
   wrap.appendChild(form);
   return wrap;
@@ -1663,7 +1758,7 @@ function render(){
     when.className = "when";
     when.innerHTML = '<div class="day">' + fmt(inD) + '</div>'
       + '<div class="out">to ' + fmt(outD) + '</div>'
-      + '<div class="nn">' + it.nights + (it.nights === 1 ? ' night' : ' nights') + '</div>';
+      + '<div class="nn">' + esc(bandLabel(S.band)) + '</div>';
     leg.appendChild(when);
 
     var body = document.createElement("div");
@@ -1705,6 +1800,7 @@ function render(){
     var n = document.createElement("span");
     n.className = "n";
     n.textContent = it.nights + (it.nights === 1 ? " night" : " nights");
+    n.setAttribute("aria-live", "polite");
     var plus = document.createElement("button");
     plus.type = "button"; plus.textContent = "+";
     plus.setAttribute("aria-label", "One night more in " + S.name);
@@ -1727,13 +1823,7 @@ function render(){
     ed.onclick = function(){
       editing = editing === it.id ? null : it.id; commit();
     };
-    var rm = document.createElement("button");
-    rm.type = "button"; rm.className = "mini drop"; rm.textContent = "Remove";
-    rm.onclick = function(){
-      if (editing === it.id) editing = null;
-      state.items.splice(i, 1); commit();
-    };
-    ctl.appendChild(up); ctl.appendChild(dn); ctl.appendChild(ed); ctl.appendChild(rm);
+    ctl.appendChild(up); ctl.appendChild(dn); ctl.appendChild(ed);
     body.appendChild(ctl);
 
     if (editing === it.id){
@@ -1748,7 +1838,32 @@ function render(){
 
     body.appendChild(activityBlock(it, S));
 
-    body.appendChild(notesEditor(it.note, "Notes for " + S.name, "Lodge, guide, flight number, what to book…", function(value){it.note=value;save();renderStatus();}));
+    var acts = document.createElement("div");
+    acts.className = "entry-add";
+    if (!openAdd[it.id]){
+      var ao = document.createElement("button");
+      ao.type = "button"; ao.className = "mini summon";
+      ao.textContent = (it.acts && it.acts.length) ? "Add another" : "Add something to do";
+      ao.onclick = function(){ openAdd[it.id] = true; render();
+        var f = document.querySelector('[data-add="' + it.id + '"] input.t'); if (f) f.focus(); };
+      acts.appendChild(ao);
+    }
+
+    var noteOpen = !!(it.note || openNotes[it.id]);
+    if (!noteOpen){
+      var nb = document.createElement("button");
+      nb.type = "button"; nb.className = "mini summon";
+      nb.textContent = "Add a note";
+      nb.onclick = function(){ openNotes[it.id] = true; render();
+        var t = document.querySelector('[data-note="' + it.id + '"] textarea'); if (t) t.focus(); };
+      acts.appendChild(nb);
+    }
+    if (acts.children.length) body.appendChild(acts);
+    if (noteOpen){
+      body.appendChild(notesEditor(it.note, "Notes for " + S.name,
+        "Lodge, guide, flight number, what to book…",
+        function(value){it.note=value;save();renderStatus();}, it.id));
+    }
 
     leg.appendChild(body);
     legs.appendChild(leg);
@@ -1762,22 +1877,125 @@ function render(){
   renderHistory();
 }
 
+function altOf(S){
+  if (!S) return null;
+  var e = String(S.elev || "").toLowerCase();
+  if (!e) return null;
+  if (e.indexOf("sea level") >= 0) return 0;
+  var m = e.replace(/[.,\u202f\s]/g, "").match(/(\d+)m/);
+  return m ? parseInt(m[1], 10) : null;
+}
+
+/* The route profile: height is altitude, width is nights. One series, one
+   ink, stops labelled directly — no legend to decode. Replaces the old
+   five-colour bar, which encoded nothing you could read. */
+function renderProfile(){
+  var fig = document.getElementById("profile");
+  if (!fig) return;
+  fig.textContent = "";
+
+  var steps = [], total = 0, maxAlt = 0, cursor = parseD(state.start);
+  state.items.forEach(function(it){
+    var S = resolve(it.id); if (!S) return;
+    var a = altOf(S);
+    steps.push({name:S.name, band:S.band, nights:it.nights, alt:(a === null ? 0 : a),
+                known:(a !== null), inD:cursor, x0:total});
+    total += it.nights;
+    cursor = addDays(cursor, it.nights);
+    if (a !== null && a > maxAlt) maxAlt = a;
+  });
+  if (!steps.length || !total){
+    var e = document.createElement("p");
+    e.className = "sub"; e.style.margin = "0";
+    e.textContent = "Add a stop and the profile draws itself.";
+    fig.appendChild(e);
+    return;
+  }
+
+  var W = Math.max(300, Math.round(fig.clientWidth || 900));
+  var narrow = W < 560;
+  var H = narrow ? 168 : 210;
+  var padT = narrow ? 20 : 26, padB = narrow ? 30 : 34, padL = narrow ? 30 : 42, padR = 6;
+  var ceil = Math.max(1000, Math.ceil((maxAlt * 1.18) / 500) * 500);
+  var plotH = H - padT - padB, plotW = W - padL - padR;
+  var xs = function(n){ return padL + (n / total) * plotW; };
+  var ys = function(a){ return padT + plotH - (a / ceil) * plotH; };
+
+  var NS = "http://www.w3.org/2000/svg";
+  function el(t, at){ var n = document.createElementNS(NS, t);
+    for (var k in at) n.setAttribute(k, at[k]); return n; }
+
+  var svg = el("svg", {viewBox:"0 0 " + W + " " + H, width:W, height:H, class:"prof",
+    role:"img",
+    "aria-label":"Altitude profile of the route, " + steps.map(function(s){
+      return s.name + " " + (s.known ? s.alt + " metres" : "altitude unknown")
+        + " for " + s.nights + (s.nights === 1 ? " night" : " nights");
+    }).join("; ")});
+
+  /* recessive altitude grid */
+  var gstep = ceil > 3000 ? 1000 : 500;
+  for (var a = gstep; a <= ceil; a += gstep){
+    svg.appendChild(el("line", {x1:padL, x2:W - padR, y1:ys(a), y2:ys(a), class:"prof-grid"}));
+    var gl = el("text", {x:padL - 7, y:ys(a) + 3.5, class:"prof-ytick", "text-anchor":"end"});
+    gl.textContent = (a / 1000).toFixed(a % 1000 ? 1 : 0) + "k";
+    svg.appendChild(gl);
+  }
+
+  steps.forEach(function(st, i){
+    var x0 = xs(st.x0), x1 = xs(st.x0 + st.nights), y = ys(st.alt);
+    var w = Math.max(1, x1 - x0 - 2);          /* 2px surface gap between fills */
+
+    if (st.known){
+      svg.appendChild(el("rect", {x:x0 + 1, y:y, width:w, height:padT + plotH - y,
+        class:"prof-fill"}));
+    }
+    svg.appendChild(el("line", {x1:x0 + 1, x2:x0 + 1 + w, y1:y, y2:y,
+      class:"prof-cap" + (st.known ? "" : " unknown")}));
+
+    /* riser between this step and the last, so a climb reads as a climb */
+    if (i){
+      var prev = steps[i - 1];
+      svg.appendChild(el("line", {x1:x0, x2:x0, y1:ys(prev.alt), y2:y, class:"prof-riser"}));
+    }
+
+    var mid = x0 + (x1 - x0) / 2, room = x1 - x0;
+    if (room > (narrow ? 46 : 56)){
+      var cap = narrow ? 9 : 15;
+      var nm = el("text", {x:mid, y:y - 10,
+        class:"prof-name" + (st.known ? "" : " unknown"), "text-anchor":"middle"});
+      nm.textContent = st.name.length > cap ? st.name.slice(0, cap - 1) + "\u2026" : st.name;
+      svg.appendChild(nm);
+      var vl = el("text", {x:mid, y:H - padB + 15, class:"prof-xtick", "text-anchor":"middle"});
+      vl.textContent = st.nights + "n" + (st.known
+        ? " \u00b7 " + (st.alt >= 1000 ? (st.alt / 1000).toFixed(1) + "km" : st.alt + "m")
+        : " \u00b7 alt?");
+      svg.appendChild(vl);
+    }
+
+    var hit = el("rect", {x:x0, y:padT, width:Math.max(2, x1 - x0), height:plotH, class:"prof-hit"});
+    var tip = el("title");
+    tip.textContent = st.name + " — " + fmt(st.inD) + ", "
+      + st.nights + (st.nights === 1 ? " night" : " nights")
+      + (st.known ? ", " + st.alt.toLocaleString() + " m" : ", altitude not set");
+    hit.appendChild(tip);
+    svg.appendChild(hit);
+  });
+
+  svg.appendChild(el("line", {x1:padL, x2:W - padR, y1:ys(0), y2:ys(0), class:"prof-base"}));
+  fig.appendChild(svg);
+
+  var cap = document.createElement("figcaption");
+  cap.className = "prof-cap-txt";
+  cap.textContent = fmt(parseD(state.start)) + " \u2192 " + fmt(addDays(parseD(state.start), total))
+    + " \u00b7 highest point " + maxAlt.toLocaleString() + " m";
+  fig.appendChild(cap);
+}
+
 function renderMeter(){
   var planned = plannedNights(), budget = tripNights();
   document.getElementById("mNights").textContent = planned;
   document.getElementById("mStops").textContent = state.items.length;
-
-  var track = document.getElementById("track");
-  track.textContent = "";
-  var span = Math.max(planned, budget, 1);
-  state.items.forEach(function(it){
-    var S = resolve(it.id); if (!S) return;
-    var seg = document.createElement("i");
-    seg.style.width = (it.nights / span * 100) + "%";
-    seg.style.setProperty("--band", "var(--" + S.band + ")");
-    seg.title = S.name + " · " + it.nights + "n";
-    track.appendChild(seg);
-  });
+  renderProfile();
 
   var bal = document.getElementById("mBal"), diff = planned - budget;
   bal.className = "bal " + (diff === 0 ? "ok" : diff > 0 ? "over" : "under");
@@ -2255,16 +2473,18 @@ function renderCatalog(){
   var add=document.createElement("button");add.type="button";add.className="btn";add.textContent="Add stop";add.disabled=true;
   choose.onchange=function(){add.disabled=!choose.value;};
   add.onclick=function(){var id=choose.value;if(!id)return;state.items.push({id:id,nights:resolve(id).min,note:"",acts:[]});commit();};
-  var row=document.createElement("div");row.className="mkform";row.appendChild(choose);row.appendChild(add);cat.appendChild(row);
+  var cue = document.createElement("span"); cue.className = "lab"; cue.textContent = "Add a stop";
+  var row=document.createElement("div");row.className="mkform";
+  row.appendChild(cue);row.appendChild(choose);row.appendChild(add);cat.appendChild(row);
 
-  /* create-your-own */
-  var mk = document.createElement("div");
+  /* create-your-own — folded away; the dropdown covers almost every case */
+  var mk = document.createElement("details");
   mk.className = "catgroup make";
-  var ml = document.createElement("span"); ml.className = "lab";
+  var ml = document.createElement("summary");
   ml.textContent = "Somewhere else";
   mk.appendChild(ml);
   var p = document.createElement("p"); p.className = "sub";
-  p.style.margin = "4px 0 12px";
+  p.style.margin = "10px 0 12px";
   p.textContent = "Add anywhere you like — it goes straight into the itinerary, and you can fill "
     + "in the details with Edit stop.";
   mk.appendChild(p);
