@@ -48,6 +48,16 @@ img{max-width:100%}
 .notes-checklist input:checked+span{text-decoration:line-through;color:var(--muted)}
 .activity-links{overflow-wrap:anywhere}
 .asub{display:block}
+
+.discovery-item{border-bottom:1px solid var(--rule-soft)}
+.discovery-item .discovery-row{border-bottom:0}
+.discovery-row[aria-expanded="true"] .row-title{white-space:normal}
+.discovery-row[aria-expanded="true"]{color:var(--link)}
+.discovery-details{padding:0 16px 18px 20px;line-height:1.65;overflow-wrap:anywhere}
+.discovery-details[hidden]{display:none}
+.discovery-details p{margin:8px 0}
+.discovery-details .discovery-add{margin-top:14px}
+@media(max-width:600px){.discovery-details{padding:0 6px 16px 18px}}
 </style>
 </head>
 <body>
@@ -692,7 +702,7 @@ h2{margin-top:58px}
     <div id="activityCatalog" class="discovery-list"></div>
     <p id="activityFeedback" role="status" aria-live="polite"></p>
   </section>
-  <dialog id="activityDialog" class="activity-dialog"><button class="mini dialog-close" type="button" id="closeActivity">Close ×</button><div id="activityDetails"></div></dialog>
+
 
 
   <footer class="foot">
@@ -2070,13 +2080,12 @@ function activityPicker(a){
   var add=document.createElement("button");add.className="btn";add.type="button";
   function refresh(){var it=target.value===""?null:state.items[Number(target.value)];var exists=it&&(it.acts||[]).some(function(x){return x.t===a[2];});add.disabled=!it||!!exists;add.textContent=exists?"Added":"+ Add";add.setAttribute("aria-label",(exists?"Added ":"Add ")+a[2]);}
   target.onchange=refresh;refresh();
-  add.onclick=function(){var it=state.items[Number(target.value)];if(!it||target.value==="")return;if(!it.acts)it.acts=[];if(it.acts.some(function(x){return x.t===a[2];}))return;it.acts.push({id:newActId(),t:a[2],d:0,u:"",s:"",n:"",votes:{matteo:"",levin:""}});var msg=a[2]+" added to "+resolve(it.id).name+". Press Save to share your changes.";if($("activityDialog").open)$("activityDialog").close();commit();$("activityFeedback").textContent=msg;};
+  add.onclick=function(){var it=state.items[Number(target.value)];if(!it||target.value==="")return;if(!it.acts)it.acts=[];if(it.acts.some(function(x){return x.t===a[2];}))return;it.acts.push({id:newActId(),t:a[2],d:0,u:"",s:"",n:"",votes:{matteo:"",levin:""}});var msg=a[2]+" added to "+resolve(it.id).name+". Press Save to share your changes.";var anchor=row.closest(".discovery-item"),top=anchor?anchor.getBoundingClientRect().top:null;commit();$("activityFeedback").textContent=msg;var restored=document.getElementById(activityRowId(a));if(restored){restored.focus({preventScroll:true});if(top!==null)window.scrollBy(0,restored.getBoundingClientRect().top-top);}};
   row.appendChild(target);row.appendChild(add);return row;
 }
 function activityDetail(a){
-  var box=$("activityDetails");box.textContent="";
+  var box=document.createElement("div");box.className="discovery-details";
   var place=document.createElement("p");place.className="lab";place.textContent=a[0]+" · "+activityKindByTitle[a[2]];box.appendChild(place);
-  var h=document.createElement("h2");h.textContent=a[2];box.appendChild(h);
   var p=document.createElement("p");p.textContent=a[3];box.appendChild(p);
   box.appendChild(activityLinks(a[2],a[0]));
   if (a[4]){
@@ -2087,22 +2096,29 @@ function activityDetail(a){
   var note=document.createElement("p");note.className="sub";note.textContent="Add this idea to a stop, then choose its day and add booking details in your itinerary.";box.appendChild(note);
   box.appendChild(activityPicker(a));
 
-  $("activityDialog").showModal();
+  return box;
 }
-/* one line per idea — with 500+ of them, a card per idea (even grouped)
-   was too much to scan; a row shows just enough to decide whether to open
-   it, and "Explore this idea" (title, description, page ref, add-to-stop)
-   still lives in the same detail dialog the cards used to open */
+/* Inline details retain their open state while editing the itinerary. */
+var expandedActivities=new Set();
+function activityRowId(a){return "idea-"+encodeURIComponent(a[0]+"::"+a[2]);}
 function activityRow(a){
+  var item=document.createElement("div");item.className="discovery-item";
   var row=document.createElement("button");row.type="button";row.className="discovery-row";
   row.dataset.kind=activityKindByTitle[a[2]];
   row.setAttribute("aria-label","Explore "+a[2]+", "+a[0]+(a[4]?", page "+a[4]:""));
   var dot=document.createElement("span");dot.className="dot";dot.setAttribute("aria-hidden","true");row.appendChild(dot);
   var title=document.createElement("span");title.className="row-title";title.textContent=a[2];row.appendChild(title);
   var meta=document.createElement("span");meta.className="row-meta";meta.textContent=a[0]+(a[4]?" · p. "+a[4]:"");row.appendChild(meta);
-  var arrow=document.createElement("span");arrow.className="row-arrow";arrow.setAttribute("aria-hidden","true");arrow.textContent="→";row.appendChild(arrow);
-  row.onclick=function(){activityDetail(a);};
-  return row;
+  var arrow=document.createElement("span");arrow.className="row-arrow";arrow.setAttribute("aria-hidden","true");arrow.textContent="+";row.appendChild(arrow);
+  row.id=activityRowId(a);row.setAttribute("aria-controls",row.id+"-details");
+  var box=null;
+  function update(){
+    var open=expandedActivities.has(row.id);row.setAttribute("aria-expanded",String(open));arrow.textContent=open?"−":"+";
+    if(open&&!box){box=activityDetail(a);box.id=row.id+"-details";box.setAttribute("role","region");box.setAttribute("aria-labelledby",row.id);item.appendChild(box);}
+    if(box)box.hidden=!open;
+  }
+  row.onclick=function(){if(expandedActivities.has(row.id))expandedActivities.delete(row.id);else expandedActivities.add(row.id);update();};
+  item.appendChild(row);update();return item;
 }
 /* grouped into a collapsible section per place — a flat grid of 500+ cards
    is not something anyone scrolls through; a search or category pick still
@@ -2110,7 +2126,9 @@ function activityRow(a){
    groups still have a match left in them so nothing is hidden behind an
    extra click while you're actively narrowing things down */
 function renderActivities(){
-  var cat=$("activityCatalog");cat.textContent="";
+  var cat=$("activityCatalog"),openGroups={};
+  cat.querySelectorAll(".discovery-group").forEach(function(group){openGroups[group.dataset.place]=group.open;});
+  cat.textContent="";
   var q=searchKey($("activitySearch").value.trim()),region=$("activityRegion").value,route=$("activityRoute").value;
   var filtering = !!(q || region || route || catalogueCategory!=="All");
   var ideas=ACTIVITIES.filter(function(a){return activityKindByTitle[a[2]]!=="Food" && (!region||a[1]===region)&&(catalogueCategory==="All"||activityKindByTitle[a[2]]===catalogueCategory)&&searchKey(a.join(" ")+" "+activityKindByTitle[a[2]]).includes(q)&&(!route||state.items.some(function(it){return matchingStop(a,it);}));});
@@ -2127,7 +2145,8 @@ function renderActivities(){
   order.forEach(function(place){
     var list=groups[place];
     var details=document.createElement("details");details.className="discovery-group";
-    if(filtering || list.length<=6) details.open=true;
+    details.dataset.place=place;
+    details.open=filtering || (Object.prototype.hasOwnProperty.call(openGroups,place)?openGroups[place]:list.length<=6);
     var summary=document.createElement("summary");
     summary.textContent=place+" ("+list.length+(list.length===1?" idea":" ideas")+")";
     details.appendChild(summary);
@@ -2140,7 +2159,6 @@ function renderActivities(){
 ["All"].concat(activityKinds).forEach(function(kind){var b=document.createElement("button");b.type="button";b.textContent=kind;b.setAttribute("aria-pressed",String(kind==="All"));b.onclick=function(){catalogueCategory=kind;Array.from($("activityCategories").children).forEach(function(x){x.setAttribute("aria-pressed",String(x===b));});renderActivities();};$("activityCategories").appendChild(b);});
 ["Coast","Andes","Amazon"].forEach(function(r){var o=document.createElement("option");o.value=r;o.textContent=r;$("activityRegion").appendChild(o);});
 $("activitySearch").oninput=renderActivities;$("activityRegion").onchange=renderActivities;$("activityRoute").onchange=renderActivities;
-$("closeActivity").onclick=function(){$("activityDialog").close();};
 
 /* ---------- guide PDF ----------
    Same edit-key auth as everything else. The file never passes through our
