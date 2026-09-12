@@ -65,7 +65,7 @@ img{max-width:100%}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap">
- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&display=swap">
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
 
 <style>
 :root{
@@ -659,78 +659,166 @@ h2{margin-top:58px}
   --warn:#e0b06a; --warn-bg:#2b2313; --bad:#e08f8f; --bad-bg:#2c1c1a; --ok:#7fcf9c;
 }
 
-/* typewritten diary body */
+/* ============================================================
+   DOPPERU — retro personal-organizer software system
+   Light = putty desktop chrome · Dark = amber CRT phosphor
+   ============================================================ */
+
+/* --- palette + chrome tokens --- */
+:root,:root[data-theme="light"]{
+  --paper:#c9c3b2; --surface:#e7e2d4; --sunk:#d5cfbe;
+  --ink:#211f18; --ink-soft:#46433a; --muted:#726d5f;
+  --rule:#9a9382; --rule-soft:#c1baa8;
+  --titlebar:#1f5f5a; --titlebar-fg:#f2efe6;
+  --accent:#1f5f5a; --link:#1f5f5a; --focus:#1f5f5a;
+  --bevel-lt:#ffffff; --bevel-dk:#8f8877;
+  --scan:transparent;
+  --coast:#2f6f6b; --lowland:#5a7f4f; --cloudforest:#3f8a80; --puna:#a97e39; --city:#8f5f76;
+  --marker:#1f5f5a; --marker-2:#c9a227;
+}
+:root[data-theme="dark"]{
+  --paper:#0c0b08; --surface:#151209; --sunk:#0a0906;
+  --ink:#f2b23a; --ink-soft:#d69a34; --muted:#9a7627;
+  --rule:#5a4413; --rule-soft:#2f2409;
+  --titlebar:#3a2c0c; --titlebar-fg:#f7c451;
+  --accent:#f2b23a; --link:#f2b23a; --focus:#f7c451;
+  --bevel-lt:#3a2c0c; --bevel-dk:#000000;
+  --scan:rgba(0,0,0,.28);
+  --coast:#f2b23a; --lowland:#f2b23a; --cloudforest:#f2b23a; --puna:#f2b23a; --city:#f2b23a;
+  --marker:#f2b23a; --marker-2:#f7c451;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0c0b08; --surface:#151209; --sunk:#0a0906;
+    --ink:#f2b23a; --ink-soft:#d69a34; --muted:#9a7627;
+    --rule:#5a4413; --rule-soft:#2f2409;
+    --titlebar:#3a2c0c; --titlebar-fg:#f7c451;
+    --accent:#f2b23a; --link:#f2b23a; --focus:#f7c451;
+    --bevel-lt:#3a2c0c; --bevel-dk:#000000;
+    --scan:rgba(0,0,0,.28);
+    --coast:#f2b23a; --lowland:#f2b23a; --cloudforest:#f2b23a; --puna:#f2b23a; --city:#f2b23a;
+    --marker:#f2b23a; --marker-2:#f7c451;
+  }
+}
+
+/* --- desktop backdrop + mono body --- */
 body{
   font-family:"IBM Plex Mono","Courier New",monospace;
-  font-weight:400;font-size:15.5px;line-height:1.7;letter-spacing:0;
-}
-.wrap{max-width:900px;padding:30px 30px 120px}
-
-/* label chips read like filed tabs */
-.lab{letter-spacing:.14em;color:var(--muted)}
-
-/* masthead */
-.mast{border-bottom:2px solid var(--ink);padding-bottom:30px}
-h1{
-  font-family:"Caveat",cursive;font-weight:700;
-  font-size:clamp(3rem,8vw,5rem);line-height:.98;letter-spacing:0;
-  margin:.06em 0 .24em;max-width:18ch;color:var(--ink);
-}
-.dek{font-family:inherit;font-weight:400;font-size:.98rem;line-height:1.75;
-  max-width:64ch;color:var(--ink-soft)}
-
-/* THE signature: section titles look swiped with a highlighter marker */
-h2{
-  font-family:"Caveat",cursive;font-weight:700;letter-spacing:.005em;
-  font-size:clamp(2.1rem,4.4vw,2.9rem);line-height:1.05;
-  display:inline-block;margin:58px 0 10px;padding:0 .12em .04em;color:var(--ink);
-  background-image:linear-gradient(
-    to bottom,
-    transparent 0, transparent 34%,
-    color-mix(in srgb,var(--marker-2) 78%,transparent) 34%,
-    color-mix(in srgb,var(--marker-2) 78%,transparent) 96%,
-    transparent 96%);
-  background-repeat:no-repeat;
-  background-size:100% 100%;
-}
-:root[data-theme="dark"] h2,
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) h2{
+  font-weight:400;font-size:15px;line-height:1.65;letter-spacing:0;
   color:var(--ink);
-}}
-.sub{font-family:inherit;color:var(--muted);margin-bottom:22px}
-
-/* itinerary stops = dated diary entries, gentle coloured edge */
-.leg{
-  border:0;border-left:4px solid var(--band);
-  border-bottom:1px solid var(--rule);border-radius:0;
-  background:color-mix(in srgb,var(--surface) 60%,transparent);
-  padding:26px 24px 28px 22px;box-shadow:none;
+  background:
+    repeating-linear-gradient(var(--scan) 0 1px, transparent 1px 3px),
+    var(--paper);
 }
-.legtop h3{font-family:inherit;font-weight:500;font-size:1.28rem;letter-spacing:-.01em;line-height:1.3}
-.when .day{font-family:inherit;font-weight:500}
-.sub2{font-family:inherit;font-style:italic}
-.vibe{font-family:inherit;font-style:italic}
 
-/* controls stay quiet, typewritten, squared like old software chrome */
+/* --- THE window: everything lives in a beveled application window --- */
+.wrap{
+  max-width:940px;margin:30px auto 90px;
+  padding:56px 30px 40px;
+  position:relative;
+  background:var(--surface);
+  border:2px solid var(--ink);
+  box-shadow:
+    inset 2px 2px 0 var(--bevel-lt),
+    inset -2px -2px 0 var(--bevel-dk),
+    7px 7px 0 rgba(0,0,0,.30);
+}
+.wrap::before{
+  content:"DOPPERU.APP  \00B7  PERU TRIP ORGANIZER";
+  position:absolute;top:0;left:0;right:0;height:30px;
+  display:flex;align-items:center;padding:0 12px;
+  background:var(--titlebar);color:var(--titlebar-fg);
+  font:700 12px/1 "IBM Plex Mono",monospace;letter-spacing:.14em;
+  border-bottom:2px solid var(--ink);
+  z-index:2;
+}
+.wrap::after{
+  content:"_  \25A1  \00D7";
+  position:absolute;top:0;right:12px;height:30px;
+  display:flex;align-items:center;gap:8px;
+  color:var(--titlebar-fg);font:700 13px/1 "IBM Plex Mono",monospace;
+  letter-spacing:.3em;z-index:3;pointer-events:none;
+}
+
+/* labels = filed tabs */
+.lab{letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
+
+/* --- masthead: CRT terminal display type --- */
+.mast{border-bottom:2px solid var(--ink);padding-bottom:26px}
+h1{
+  font-family:"VT323",monospace;font-weight:400;
+  font-size:clamp(3.2rem,9vw,5.6rem);line-height:.9;letter-spacing:.01em;
+  text-transform:uppercase;
+  margin:.08em 0 .2em;max-width:16ch;color:var(--ink);
+  text-shadow:0 0 12px color-mix(in srgb,var(--accent) 30%,transparent);
+}
+.dek{font-family:inherit;font-weight:400;font-size:.95rem;line-height:1.7;
+  max-width:62ch;color:var(--ink-soft)}
+
+/* --- section titles = inverse title-bar strips (the signature) --- */
+h2{
+  font-family:"VT323",monospace;font-weight:400;letter-spacing:.06em;
+  font-size:clamp(1.8rem,4vw,2.5rem);line-height:1;text-transform:uppercase;
+  display:block;margin:52px 0 14px;padding:7px 14px 5px;color:var(--titlebar-fg);
+  background:var(--titlebar);
+  border:2px solid var(--ink);
+  box-shadow:inset 1px 1px 0 color-mix(in srgb,var(--bevel-lt) 40%,transparent),4px 4px 0 rgba(0,0,0,.22);
+}
+.sub{font-family:inherit;color:var(--muted);margin:0 0 20px}
+
+/* --- itinerary stops = beveled index cards with a colour tab --- */
+.leg{
+  border:2px solid var(--ink);border-left:8px solid var(--band);border-radius:0;
+  background:var(--surface);
+  box-shadow:inset 1px 1px 0 var(--bevel-lt),inset -2px -2px 0 var(--bevel-dk),4px 4px 0 rgba(0,0,0,.20);
+  padding:22px 22px 24px 20px;margin-bottom:20px;
+}
+.legtop h3{font-family:"VT323",monospace;font-weight:400;font-size:1.7rem;letter-spacing:.03em;line-height:1.05;text-transform:uppercase}
+.when .day{font-family:"VT323",monospace;font-weight:400;font-size:1.5rem;letter-spacing:.02em}
+.when .out,.when .nn{color:var(--muted)}
+.sub2,.vibe{font-family:inherit;font-style:italic;color:var(--ink-soft)}
+
+/* --- controls = raised 3D buttons / sunken fields (old software chrome) --- */
 .btn,.mini,.hrev,.bal,.step .n,.consensus,.st,.dsel,.mark,.saveline,
 .act a,.actadd .go,.edited,.lab,.discovery-categories button{
-  font-family:"IBM Plex Mono","Courier New",monospace;font-weight:500;letter-spacing:.09em;
+  font-family:"IBM Plex Mono","Courier New",monospace;font-weight:500;letter-spacing:.08em;
 }
-.btn{border-radius:2px;background:transparent;text-transform:uppercase}
-.btn.primary:not(:disabled){background:var(--ink);color:var(--paper);border-color:var(--ink)}
-.track{border-radius:0}
-.track i{border-radius:0}
+.btn{
+  border-radius:0;text-transform:uppercase;font-weight:600;
+  background:var(--surface);color:var(--ink);border:2px solid var(--ink);
+  box-shadow:inset 1px 1px 0 var(--bevel-lt),inset -2px -2px 0 var(--bevel-dk);
+  padding:9px 16px;
+}
+.btn:active{box-shadow:inset -1px -1px 0 var(--bevel-lt),inset 2px 2px 0 var(--bevel-dk);transform:translate(1px,1px)}
+.btn.primary:not(:disabled){background:var(--titlebar);color:var(--titlebar-fg);border-color:var(--ink)}
+input,textarea,select,.linkbox,input[type=date]{
+  border-radius:0 !important;background:var(--sunk);color:var(--ink);
+  border:2px solid var(--ink);
+  box-shadow:inset 2px 2px 0 var(--bevel-dk);
+}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
 
-/* the activity index reads like a reference appendix */
+/* --- meter / segmented bar framed like a gauge --- */
+.meter{border:2px solid var(--ink);background:var(--sunk);padding:16px 16px 14px;
+  box-shadow:inset 2px 2px 0 var(--bevel-dk)}
+.big{font-family:"VT323",monospace;font-weight:400;font-size:2.4rem;line-height:1;color:var(--accent)}
+.track,.track i,.bar-track{border-radius:0}
+
+/* --- scenario tabs = folder tabs --- */
+.scenario-tabs button{border-radius:0;border:2px solid var(--ink);
+  box-shadow:inset 1px 1px 0 var(--bevel-lt);text-transform:uppercase}
+
+/* --- reference appendix --- */
 .discovery{border-top:2px solid var(--ink)}
-.discovery-head h2{font-size:clamp(1.5rem,3.2vw,1.95rem)}
-.fold summary{font-family:"Caveat",cursive;font-weight:700;font-size:1.7rem;letter-spacing:.005em}
+.discovery-head h2{font-size:clamp(1.4rem,3vw,1.8rem)}
+.fold summary{font-family:"VT323",monospace;font-weight:400;font-size:1.5rem;letter-spacing:.03em;text-transform:uppercase}
 .foot{border-top:2px solid var(--ink)}
 
 @media (max-width:620px){
-  .wrap{padding:30px 16px 80px}
-  h2{margin-top:46px}
-  .leg{padding:20px 15px 22px 16px}
+  .wrap{padding:52px 15px 40px;margin:14px auto 60px}
+  .wrap::before{font-size:10px;letter-spacing:.08em}
+  h2{margin-top:42px}
+  .leg{padding:18px 14px 20px 14px}
 }
 
 </style>
