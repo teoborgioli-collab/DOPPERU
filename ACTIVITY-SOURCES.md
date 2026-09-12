@@ -583,3 +583,39 @@ Source: user-supplied guide.pdf. Entries cover map legends and named listings in
 - Explore the bridges of Checacupe — Cusco, Cusco southern valley: PDF page 461.
 - Walk to Laguna Turquesa — Cusco, Cusco southern valley: PDF page 461.
 - Reed boats at Laguna Urinsaya — Cusco, Cusco southern valley: PDF page 461.
+
+## Official visitor and ticket sources (2026-09-12)
+
+These links were checked independently of Lonely Planet. The app now shows Maps,
+current-information search and tour search for every activity within a stop,
+including custom activities. Recognised attraction names also show the relevant
+official source below; personal booking links remain available separately.
+Visitor pages may link onward to an authorised ticket provider. Prices, hours,
+closures and availability should be checked there before booking.
+
+| Attraction | Official source | Use |
+| --- | --- | --- |
+| Museo Larco | https://www.museolarco.org/en/plan-your-visit/ | Plan a visit and follow the museum's ticket links. |
+| MALI | https://newweb.mali.pe/visitanos/ | Visitor information and the museum's chosen booking provider. |
+| Santa Catalina monastery | https://santacatalina.org.pe/horarios-y-precios | Official admission information. |
+| Machu Picchu and associated mountain routes | https://www.machupicchu.gob.pe/online-tickets/?lang=en | Official gateway to Ministry of Culture ticket sales; check the circuit and route required. |
+| Pachacámac | https://pachacamac.cultura.pe/ | Official archaeological sanctuary and museum website. |
+| Museo Pedro de Osma | https://www.museopedrodeosma.org/en/planea-tu-visita | Museum visitor and booking information. |
+| Sacsayhuamán, Ollantaytambo, Moray and Pisac ruins | https://cosituc.gob.pe/preguntas-frecuentes/ | Official Cusco tourist-ticket information; verify inclusions. |
+| MAC Lima | https://maclima.pe/compra-tu-entrada-2/ | Museum's own ticket page. |
+
+## Website-sourced suggestions (2026-09-12)
+
+These suggestions are independently sourced, with no Lonely Planet page reference.
+The entry below is also included in the app catalogue.
+
+- Visit MAC Lima (Lima): Explore contemporary art in Barranco and check the museum's current exhibitions before visiting. [Official visit & tickets](https://maclima.pe/compra-tu-entrada-2/).
+
+For later consideration: [Museo Nacional del Perú — MUNA](https://museos.cultura.pe/node/909).
+The Ministry of Culture directory currently labels it temporarily closed, so it
+has not been added as an available outing. Recheck the official listing before
+adding it to a stop.
+
+Notes now support bullet lines and Markdown checklists (`- [ ]` / `- [x]`), with
+clickable checkboxes under the editor. Both stop and activity notes expand with
+their content and accept up to 10,000 characters, including when saved by the API.

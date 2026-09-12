@@ -37,6 +37,17 @@ img{max-width:100%}
 @media(max-width:900px){.discovery-head{display:block}}
 @media(max-width:600px){.discovery-tools{grid-template-columns:1fr 1fr}.discovery-search{grid-column:1/-1}.discovery-count{display:block}.discovery-count span{display:block;margin-bottom:6px}.discovery-row .row-meta{display:none}}
 
+
+.notes-editor{width:100%;min-width:0;margin-top:16px}
+.notes-toolbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.notes-toolbar .lab{margin-right:auto}
+.notes-editor textarea{display:block;box-sizing:border-box;margin:0;min-height:90px;overflow:hidden;resize:none;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-checklist{display:grid;gap:6px;margin-top:8px}
+.notes-checklist label{display:flex;align-items:flex-start;gap:8px;overflow-wrap:anywhere}
+.notes-checklist input{margin-top:5px;flex-shrink:0}
+.notes-checklist input:checked+span{text-decoration:line-through;color:var(--muted)}
+.activity-links{overflow-wrap:anywhere}
+.asub{display:block}
 </style>
 </head>
 <body>
@@ -979,7 +990,7 @@ function normaliseState(){
                 t: String(a.t).slice(0, 120),
                 u: typeof a.u === "string" ? a.u.slice(0, 500) : "",
                 s: st,
-                n: typeof a.n === "string" ? a.n.slice(0, 300) : "",
+                n: typeof a.n === "string" ? a.n.slice(0, 10000) : "",
                 votes:{matteo:["approved","unsure","disapproved"].includes(votes.matteo) ? votes.matteo : "", levin:["approved","unsure","disapproved"].includes(votes.levin) ? votes.levin : ""}};
       });
   });
@@ -1414,6 +1425,73 @@ function editPanel(id, refs, it0){
    on screen so a multi-night stop reads as a small day plan. */
 function dayLabel(d){ return d ? "Day " + d : "Any day"; }
 
+
+/* Notes remain plain text so existing saves, exports and merges stay compatible. */
+function resizeNote(ta){ta.style.height="auto";ta.style.height=(ta.scrollHeight+2)+"px";}
+function notesEditor(value,label,placeholder,onChange){
+  var wrap=document.createElement("div");wrap.className="notes-editor";
+  var toolbar=document.createElement("div");toolbar.className="notes-toolbar";
+  var heading=document.createElement("span");heading.className="lab";heading.textContent="Notes";toolbar.appendChild(heading);
+  var ta=document.createElement("textarea");ta.value=value||"";ta.maxLength=10000;ta.placeholder=placeholder;ta.setAttribute("aria-label",label);
+  var checks=document.createElement("div");checks.className="notes-checklist";
+  function preview(){
+    checks.textContent="";
+    ta.value.split("\n").forEach(function(line,index){
+      var m=/^\s*- \[([ xX])\] (.*)$/.exec(line);if(!m)return;
+      var row=document.createElement("label"),cb=document.createElement("input"),text=document.createElement("span");
+      cb.type="checkbox";cb.checked=m[1].toLowerCase()==="x";text.textContent=m[2]||"Untitled task";
+      cb.onchange=function(){var lines=ta.value.split("\n");lines[index]=lines[index].replace(/\[([ xX])\]/,cb.checked?"[x]":"[ ]");ta.value=lines.join("\n");onChange(ta.value);resizeNote(ta);};
+      row.appendChild(cb);row.appendChild(text);checks.appendChild(row);
+    });
+  }
+  function changed(){onChange(ta.value);resizeNote(ta);preview();}
+  [["• Bullets","• "],["☐ Checklist","- [ ] "]].forEach(function(option){
+    var b=document.createElement("button");b.type="button";b.className="mini";b.textContent=option[0];b.setAttribute("aria-label",option[0]+" for "+label);
+    b.onclick=function(){
+      var start=ta.value.lastIndexOf("\n",ta.selectionStart-1)+1,end=ta.selectionEnd;
+      if(end>start&&ta.value[end-1]==="\n")end--;
+      var next=ta.value.indexOf("\n",end);end=next<0?ta.value.length:next;
+      var lines=ta.value.slice(start,end).split("\n"),remove=lines.every(function(l){return l.indexOf(option[1])===0;});
+      var result=lines.map(function(l){return (remove?"":option[1])+l.replace(/^(?:[-*•] \[[ xX]\] |[-*•] )/,"");}).join("\n");
+      if(ta.value.length-(end-start)+result.length>ta.maxLength)return;
+      ta.setRangeText(result,start,end,"select");ta.focus();changed();
+    };toolbar.appendChild(b);
+  });
+  ta.addEventListener("input",changed);
+  ta.addEventListener("keydown",function(e){
+    if(e.key!=="Enter"||e.shiftKey||e.isComposing||ta.selectionStart!==ta.selectionEnd)return;
+    var pos=ta.selectionStart,start=ta.value.lastIndexOf("\n",pos-1)+1,line=ta.value.slice(start,pos),m=/^(• |[-*] \[[ xX]\] |[-*] )(.*)$/.exec(line);
+    if(!m)return;e.preventDefault();
+    if(!m[2].trim())ta.setRangeText("",start,pos,"end");
+    else {var insert="\n"+m[1].replace(/\[[xX]\]/,"[ ]");if(ta.value.length+insert.length>ta.maxLength)return;ta.setRangeText(insert,pos,pos,"end");}changed();
+  });
+  wrap.appendChild(toolbar);wrap.appendChild(ta);wrap.appendChild(checks);preview();
+  requestAnimationFrame(function(){resizeNote(ta);});return wrap;
+}
+window.addEventListener("resize",function(){document.querySelectorAll(".notes-editor textarea").forEach(resizeNote);});
+
+function activityLinks(title,place){
+  var links=document.createElement("div");links.className="activity-links";
+  function add(label,url){var a=document.createElement("a");a.textContent=label;a.href=url;a.target="_blank";a.rel="noopener noreferrer";links.appendChild(a);}
+  var q=encodeURIComponent(title+" "+place+" Peru");
+  add("Open in Maps","https://www.google.com/maps/search/?api=1&query="+q);
+  var key=searchKey(title);
+  var official=[
+    [/mac lima/,"https://maclima.pe/compra-tu-entrada-2/","Official visit & tickets"],
+    [/larco/,"https://www.museolarco.org/en/plan-your-visit/","Official visit & tickets"],
+    [/\bmali\b|museo de arte de lima/,"https://newweb.mali.pe/visitanos/","Official visit & tickets"],
+    [/santa catalina/,"https://santacatalina.org.pe/horarios-y-precios","Official visit & tickets"],
+    [/machu\s?picchu|huayna picchu|wayna\s?picchu|intipunku/,"https://www.machupicchu.gob.pe/online-tickets/?lang=en","Official tickets"],
+    [/pachacamac/,"https://pachacamac.cultura.pe/","Official website"],
+    [/pedro de osma/,"https://www.museopedrodeosma.org/en/planea-tu-visita","Official visit & tickets"],
+    [/sacsayhuaman|ollantaytambo|moray|pisac.*ruins|chinchero.*ruins/,"https://cosituc.gob.pe/preguntas-frecuentes/","Official tourist ticket info"]
+  ];
+  official.forEach(function(o){if(o[0].test(key))add(o[2],o[1]);});
+  add("Current info","https://www.google.com/search?q="+q+"%20official");
+  add("Tours","https://www.google.com/search?q="+encodeURIComponent("site:getyourguide.com "+title+" "+place+" Peru"));
+  return links;
+}
+
 function activityBlock(it, S){
   var wrap = document.createElement("div");
   wrap.className = "acts";
@@ -1527,15 +1605,9 @@ function activityBlock(it, S){
       row.appendChild(erow);
     }
 
-    var sub = document.createElement("div");
-    sub.className = "asub";
-    var n = document.createElement("input");
-    n.type = "text"; n.className = "an"; n.value = a.n || ""; n.maxLength = 300;
-    n.placeholder = "note — time, price, who to ask…";
-    n.setAttribute("aria-label", "Note for " + a.t);
-    n.addEventListener("input", function(){ a.n = n.value; save(); renderStatus(); });
-    sub.appendChild(n);
-    row.appendChild(sub);
+    row.appendChild(notesEditor(a.n, "Note for " + a.t, "Time, price, who to ask…", function(value){a.n=value;save();renderStatus();}));
+    var idea=ACTIVITIES.find(function(idea){return idea[2]===a.t;});
+    row.appendChild(activityLinks(a.t,idea?idea[0]:S.name));
 
     var decisions = document.createElement("div"); decisions.className = "decision-row";
     var mv = a.votes.matteo || "", lv = a.votes.levin || "";
@@ -1747,13 +1819,7 @@ function render(){
 
     body.appendChild(activityBlock(it, S));
 
-    var ta = document.createElement("textarea");
-    ta.value = it.note || "";
-    ta.placeholder = "Notes — lodge, guide, flight number, what to book…";
-    ta.setAttribute("aria-label", "Notes for " + S.name);
-    ta.addEventListener("input", function(){ it.note = ta.value; save(); });
-    ta.addEventListener("blur", function(){ commit(); });
-    body.appendChild(ta);
+    body.appendChild(notesEditor(it.note, "Notes for " + S.name, "Lodge, guide, flight number, what to book…", function(value){it.note=value;save();renderStatus();}));
 
     leg.appendChild(body);
     legs.appendChild(leg);
@@ -1848,6 +1914,7 @@ function renderChecks(endCursor){
 
 
 var ACTIVITIES = [
+  ["Lima", "Coast", "Visit MAC Lima", "Explore contemporary art in Barranco; check current exhibitions and tickets on the museum’s own website."],
   ["Lima", "Coast", "Explore Barranco", "A neighbourhood walk for art, cafés, and coastal views."],
   ["Lima", "Coast", "Walk the Miraflores waterfront", "Leave a little time for a relaxed coastal walk."],
   ["Arequipa", "Andes", "Salinas day trip", "An idea for a day outside Arequipa; check altitude and travel time."],
@@ -1906,6 +1973,7 @@ var ACTIVITIES = [
 var catalogueCategory = "All";
 var activityKinds = ["Culture","Nature","Adventure","Water & coast","Local life"];
 var activityKindByTitle = {
+  "Visit MAC Lima":"Culture",
   "Barranco evening & dining area":"Local life", "Surquillo Market No. 1":"Local life", "Plaza Mayor & historic centre":"Culture", "San Francisco monastery & catacombs":"Culture", "Huaca Pucllana":"Culture", "Museo Larco":"Culture",
   "Mercado San Camilo":"Local life", "Yanahuara viewpoint & neighbourhood":"Culture", "Compañía de Jesús & cloisters":"Culture",
   "San Pedro Market":"Local life", "San Blas neighbourhood":"Local life", "Plaza de Armas & Cathedral":"Culture", "Q’enqo & Tambomachay":"Culture",
@@ -2010,11 +2078,7 @@ function activityDetail(a){
   var place=document.createElement("p");place.className="lab";place.textContent=a[0]+" · "+activityKindByTitle[a[2]];box.appendChild(place);
   var h=document.createElement("h2");h.textContent=a[2];box.appendChild(h);
   var p=document.createElement("p");p.textContent=a[3];box.appendChild(p);
-  var links=document.createElement("div");links.className="activity-links";
-  var maps=document.createElement("a");maps.target="_blank";maps.rel="noopener";maps.href="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(a[2]+" "+a[0]+" Peru");maps.textContent="Open in Maps";links.appendChild(maps);
-  var search=document.createElement("a");search.target="_blank";search.rel="noopener";search.href="https://www.google.com/search?q="+encodeURIComponent(a[2]+" "+a[0]+" Peru official");search.textContent="Current info";links.appendChild(search);
-  var tours=document.createElement("a");tours.target="_blank";tours.rel="noopener";var gyBase={"Lima":"https://www.getyourguide.com/lima-l39/","Arequipa":"https://www.getyourguide.com/arequipa-l2859/","Cusco":"https://www.getyourguide.com/cusco-l359/"};tours.href=gyBase[a[0]]||("https://www.google.com/search?q="+encodeURIComponent("site:getyourguide.com "+a[2]+" "+a[0]+" Peru"));tours.textContent="Tours";links.appendChild(tours);
-  box.appendChild(links);
+  box.appendChild(activityLinks(a[2],a[0]));
   if (a[4]){
     var ref=document.createElement("p");ref.className="sub";
     ref.textContent="Guidebook reference: Lonely Planet Peru, p. "+a[4]+" — open your own copy to that page for the full write-up.";
