@@ -618,6 +618,16 @@ h2{font-size:1.5rem}.legtop h3{font-size:1.65rem}
 .leg,.leg.leg *{font-family:"Courier New",Courier,monospace}
 .leg .legtop h3,.leg .aname,.leg .at{font-family:"Helvetica Neue",Arial,sans-serif}
 .leg .legtop h3 .sub2{font-family:"Courier New",Courier,monospace}
+/* Dark ink and generous leading make typed entries easier to read. */
+.leg{--ink:#000;--ink-soft:#000;--muted:#000;color:#000;background:#f7f3e8}
+.leg .when,.leg .when *,.leg .sub2,.leg .legmeta,.leg .legwhy,.leg .notes-editor,.leg .notes-editor *,.leg .consensus,.leg .mini,.leg .resource-toggle{color:#000}
+.leg .note-view,.leg textarea{font-size:15px;line-height:1.8;letter-spacing:0}
+.leg .note-view a{font:inherit;color:#000;text-transform:none;letter-spacing:0;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
+.leg input,.leg textarea,.leg select{color:#000;background-color:#f7f3e8}
+.leg .activity-links{opacity:1}
+.leg .st,.leg .dsel,.leg .activity-links a,.leg .ahead>a{color:#000}
+.leg .act.consensus-approved{background:#edf1e8}
+.leg .act.consensus-disapproved{background:#f4e9e3}
 </style>
 </head>
 <body>
@@ -1000,6 +1010,7 @@ function normaliseState(){
                 d: Math.max(0, parseInt(a.d, 10) || 0),
                 t: String(a.t).slice(0, 120),
                 u: typeof a.u === "string" ? a.u.slice(0, 500) : "",
+                links: Array.isArray(a.links) ? a.links.filter(function(x){return typeof x === "string";}).slice(0,10).map(function(x){return x.slice(0,500);}) : [],
                 s: st,
                 n: typeof a.n === "string" ? a.n.slice(0, 10000) : "",
                 votes:{matteo:["approved","unsure","disapproved"].includes(votes.matteo) ? votes.matteo : "", levin:["approved","unsure","disapproved"].includes(votes.levin) ? votes.levin : ""}};
@@ -1463,6 +1474,19 @@ var editNotes = {};
 var RE_CHECK  = /^(\s*[-*•]\s*\[)([ xX])(\]\s?)(.*)$/;
 var RE_BULLET = /^\s*[-*•]\s+(.*)$/;
 
+function safeLink(value){
+  try { var url = new URL(/^https?:\/\//i.test(value) ? value : "https://" + value); return /^https?:$/.test(url.protocol) ? url.href : ""; } catch(e){ return ""; }
+}
+function appendNoteLinks(parent, text){
+  var pattern = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s<>]+)/g, match, last = 0;
+  while ((match = pattern.exec(text))){
+    parent.appendChild(document.createTextNode(text.slice(last,match.index)));
+    var link = document.createElement("a"); link.href = match[2] || match[3];
+    link.textContent = match[1] || match[3]; link.target = "_blank"; link.rel = "noopener noreferrer";
+    parent.appendChild(link); last = pattern.lastIndex;
+  }
+  parent.appendChild(document.createTextNode(text.slice(last)));
+}
 function noteView(getValue, setValue){
   var view = document.createElement("div");
   view.className = "note-view";
@@ -1481,7 +1505,7 @@ function noteView(getValue, setValue){
       var cb = document.createElement("input");
       cb.type = "checkbox"; cb.checked = m[2].toLowerCase() === "x";
       var sp = document.createElement("span");
-      sp.textContent = m[4] || "Untitled";
+      appendNoteLinks(sp, m[4] || "Untitled");
       cb.onchange = function(){
         var ls = getValue().split("\n");
         ls[index] = ls[index].replace(/\[([ xX])\]/, cb.checked ? "[x]" : "[ ]");
@@ -1497,14 +1521,14 @@ function noteView(getValue, setValue){
         block = document.createElement("ul"); block.className = "note-bullets";
         view.appendChild(block); kind = "bullet";
       }
-      var li = document.createElement("li"); li.textContent = bl[1]; block.appendChild(li);
+      var li = document.createElement("li"); appendNoteLinks(li, bl[1]); block.appendChild(li);
       return;
     }
     kind = ""; block = null;
     if (!line.trim()){ para = null; return; }
     if (!para){ para = document.createElement("p"); view.appendChild(para); }
     else para.appendChild(document.createElement("br"));
-    para.appendChild(document.createTextNode(line));
+    appendNoteLinks(para, line);
   });
 
   if (!view.children.length){
@@ -1544,6 +1568,16 @@ function notesEditor(value,label,placeholder,onChange,key,activityEditing){
   var ta=document.createElement("textarea");
   ta.value=cur;ta.maxLength=10000;ta.placeholder=placeholder;ta.setAttribute("aria-label",label);
   function changed(){setValue(ta.value);resizeNote(ta);}
+  var insertLink = document.createElement("button"); insertLink.type = "button"; insertLink.className = "mini"; insertLink.textContent = "Add link";
+  insertLink.onclick = function(){
+    var raw = window.prompt("Paste a website link"); if (!raw) return;
+    var url = safeLink(raw.trim()); if (!url) return;
+    var selected = ta.value.slice(ta.selectionStart,ta.selectionEnd);
+    var text = selected ? "[" + selected + "](" + url + ")" : url;
+    if (ta.value.length - selected.length + text.length > ta.maxLength) return;
+    ta.setRangeText(text,ta.selectionStart,ta.selectionEnd,"end"); ta.focus(); changed();
+  };
+  toolbar.appendChild(insertLink);
   [["• Bullets","• "],["☐ Checklist","- [ ] "]].forEach(function(option){
     var b=document.createElement("button");b.type="button";b.className="mini";
     b.textContent=option[0];b.setAttribute("aria-label",option[0]+" for "+label);
@@ -1703,6 +1737,11 @@ function activityBlock(it, S){
     tools.append(resources, toggle, statusSelect(a.s, function(v){ a.s = v; commit(); }, "Status of " + a.t));
     head.appendChild(tools);
 
+    (a.links || []).forEach(function(url,i){
+      if (!url || !safeLink(url)) return;
+      var extra = document.createElement("a"); extra.href = safeLink(url); extra.textContent = "Link " + (i + 2) + " ↗";
+      extra.target = "_blank"; extra.rel = "noopener noreferrer"; head.appendChild(extra);
+    });
     if (a.u){
       var link = document.createElement("a");
       link.href = a.u; link.target = "_blank"; link.rel = "noopener noreferrer";
@@ -1739,6 +1778,18 @@ function activityBlock(it, S){
       });
       erow.appendChild(u);
       row.appendChild(erow);
+      (a.links || []).forEach(function(url,i){
+        var line = document.createElement("div"); line.className = "aedit";
+        var input = document.createElement("input"); input.className = "au"; input.type = "url"; input.value = url; input.maxLength = 500;
+        input.setAttribute("aria-label", "Extra link " + (i+1) + " for " + a.t);
+        input.oninput = function(){a.links[i] = input.value; save();};
+        input.onblur = function(){a.links[i] = safeLink(input.value.trim()); input.value = a.links[i]; save();};
+        var remove = document.createElement("button"); remove.type = "button"; remove.className = "mini"; remove.textContent = "Remove link";
+        remove.onclick = function(){a.links.splice(i,1); commit();}; line.append(input,remove); row.appendChild(line);
+      });
+      var moreLink = document.createElement("button"); moreLink.type = "button"; moreLink.className = "mini"; moreLink.textContent = "Add another link";
+      moreLink.disabled = (a.links || []).length >= 10;
+      moreLink.onclick = function(){if (!a.links) a.links = []; a.links.push(""); commit();}; row.appendChild(moreLink);
     }
 
     if (a.n || editAct === a){
@@ -2686,7 +2737,7 @@ function mergeVotes(base, mine, theirs){
 }
 function mergeAct(base, mine, theirs){
   var out = {id: mine.id}, bad = false;
-  ["d", "t", "u", "s", "n"].forEach(function(f){
+  ["d", "t", "u", "s", "n", "links"].forEach(function(f){
     var r = mergeField(base[f], mine[f], theirs[f]);
     if (r === CONFLICT) bad = true; else out[f] = r;
   });
