@@ -628,6 +628,7 @@ h2{font-size:1.5rem}.legtop h3{font-size:1.65rem}
 .leg .st,.leg .dsel,.leg .activity-links a,.leg .ahead>a{color:#000}
 .leg .act.consensus-approved{background:#edf1e8}
 .leg .act.consensus-disapproved{background:#f4e9e3}
+.note-link-form{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.note-link-form input{min-width:0;flex:1 1 180px;padding:8px;border:1px solid var(--rule);font:inherit}
 </style>
 </head>
 <body>
@@ -1010,7 +1011,7 @@ function normaliseState(){
                 d: Math.max(0, parseInt(a.d, 10) || 0),
                 t: String(a.t).slice(0, 120),
                 u: typeof a.u === "string" ? a.u.slice(0, 500) : "",
-                links: Array.isArray(a.links) ? a.links.filter(function(x){return typeof x === "string";}).slice(0,10).map(function(x){return x.slice(0,500);}) : [],
+                links: Array.isArray(a.links) ? a.links.filter(function(x){return typeof x === "string" || (x && typeof x.url === "string");}).slice(0,10).map(function(x){return {name:typeof x.name === "string" ? x.name.slice(0,120) : "",url:(typeof x === "string" ? x : x.url).slice(0,500)};}) : [],
                 s: st,
                 n: typeof a.n === "string" ? a.n.slice(0, 10000) : "",
                 votes:{matteo:["approved","unsure","disapproved"].includes(votes.matteo) ? votes.matteo : "", levin:["approved","unsure","disapproved"].includes(votes.levin) ? votes.levin : ""}};
@@ -1569,14 +1570,29 @@ function notesEditor(value,label,placeholder,onChange,key,activityEditing){
   ta.value=cur;ta.maxLength=10000;ta.placeholder=placeholder;ta.setAttribute("aria-label",label);
   function changed(){setValue(ta.value);resizeNote(ta);}
   var insertLink = document.createElement("button"); insertLink.type = "button"; insertLink.className = "mini"; insertLink.textContent = "Add link";
+  var linkForm = document.createElement("div"); linkForm.className = "note-link-form"; linkForm.hidden = true;
+  var linkName = document.createElement("input"); linkName.placeholder = "Link name"; linkName.maxLength = 120; linkName.setAttribute("aria-label", "Link name for " + label);
+  var linkUrl = document.createElement("input"); linkUrl.placeholder = "https://…"; linkUrl.maxLength = 500; linkUrl.setAttribute("aria-label", "Link URL for " + label);
+  var addLink = document.createElement("button"); addLink.type = "button"; addLink.className = "mini"; addLink.textContent = "Insert link";
+  var cancelLink = document.createElement("button"); cancelLink.type = "button"; cancelLink.className = "mini"; cancelLink.textContent = "Cancel";
+  var selectionStart = 0, selectionEnd = 0;
   insertLink.onclick = function(){
-    var raw = window.prompt("Paste a website link"); if (!raw) return;
-    var url = safeLink(raw.trim()); if (!url) return;
-    var selected = ta.value.slice(ta.selectionStart,ta.selectionEnd);
-    var text = selected ? "[" + selected + "](" + url + ")" : url;
-    if (ta.value.length - selected.length + text.length > ta.maxLength) return;
-    ta.setRangeText(text,ta.selectionStart,ta.selectionEnd,"end"); ta.focus(); changed();
+    selectionStart = ta.selectionStart; selectionEnd = ta.selectionEnd;
+    linkName.value = ta.value.slice(selectionStart,selectionEnd); linkUrl.value = "";
+    linkForm.hidden = false; linkName.focus();
   };
+  addLink.onclick = function(){
+    var url = safeLink(linkUrl.value.trim()), name = linkName.value.trim();
+    linkName.setCustomValidity(name ? "" : "Enter a name for this link.");
+    linkUrl.setCustomValidity(linkUrl.value.trim() && url ? "" : "Enter a website URL.");
+    if (!linkName.reportValidity() || !linkUrl.reportValidity()) return;
+    var text = "[" + name.replace(/[\[\]\r\n]/g," ") + "](" + url.replace(/\)/g,"%29") + ")";
+    if (ta.value.length - (selectionEnd-selectionStart) + text.length > ta.maxLength) return;
+    ta.setRangeText(text,selectionStart,selectionEnd,"end"); linkForm.hidden = true; ta.focus(); changed();
+  };
+  linkName.oninput = function(){linkName.setCustomValidity("");}; linkUrl.oninput = function(){linkUrl.setCustomValidity("");};
+  cancelLink.onclick = function(){linkForm.hidden = true; ta.focus();};
+  linkForm.append(linkName,linkUrl,addLink,cancelLink); wrap.appendChild(linkForm);
   toolbar.appendChild(insertLink);
   [["• Bullets","• "],["☐ Checklist","- [ ] "]].forEach(function(option){
     var b=document.createElement("button");b.type="button";b.className="mini";
@@ -1737,9 +1753,10 @@ function activityBlock(it, S){
     tools.append(resources, toggle, statusSelect(a.s, function(v){ a.s = v; commit(); }, "Status of " + a.t));
     head.appendChild(tools);
 
-    (a.links || []).forEach(function(url,i){
+    (a.links || []).forEach(function(item,i){
+      var url = typeof item === "string" ? item : item.url;
       if (!url || !safeLink(url)) return;
-      var extra = document.createElement("a"); extra.href = safeLink(url); extra.textContent = "Link " + (i + 2) + " ↗";
+      var extra = document.createElement("a"); extra.href = safeLink(url); extra.textContent = (item.name || "Link " + (i + 2)) + " ↗";
       extra.target = "_blank"; extra.rel = "noopener noreferrer"; head.appendChild(extra);
     });
     if (a.u){
@@ -1778,18 +1795,24 @@ function activityBlock(it, S){
       });
       erow.appendChild(u);
       row.appendChild(erow);
-      (a.links || []).forEach(function(url,i){
+      (a.links || []).forEach(function(item,i){
+      var url = typeof item === "string" ? item : item.url;
         var line = document.createElement("div"); line.className = "aedit";
         var input = document.createElement("input"); input.className = "au"; input.type = "url"; input.value = url; input.maxLength = 500;
         input.setAttribute("aria-label", "Extra link " + (i+1) + " for " + a.t);
-        input.oninput = function(){a.links[i] = input.value; save();};
-        input.onblur = function(){a.links[i] = safeLink(input.value.trim()); input.value = a.links[i]; save();};
+        var nameInput = document.createElement("input"); nameInput.className = "au"; nameInput.placeholder = "Link name"; nameInput.maxLength = 120; nameInput.value = item.name || "";
+        nameInput.setAttribute("aria-label", "Extra link name " + (i+1) + " for " + a.t);
+        function updateLink(){a.links[i] = {name:nameInput.value,url:input.value}; save();}
+        nameInput.oninput = updateLink;
+        input.placeholder = "https://…";
+        input.oninput = updateLink;
+        input.onblur = function(){input.value = safeLink(input.value.trim()); updateLink();};
         var remove = document.createElement("button"); remove.type = "button"; remove.className = "mini"; remove.textContent = "Remove link";
-        remove.onclick = function(){a.links.splice(i,1); commit();}; line.append(input,remove); row.appendChild(line);
+        remove.onclick = function(){a.links.splice(i,1); commit();}; line.append(nameInput,input,remove); row.appendChild(line);
       });
       var moreLink = document.createElement("button"); moreLink.type = "button"; moreLink.className = "mini"; moreLink.textContent = "Add another link";
       moreLink.disabled = (a.links || []).length >= 10;
-      moreLink.onclick = function(){if (!a.links) a.links = []; a.links.push(""); commit();}; row.appendChild(moreLink);
+      moreLink.onclick = function(){if (!a.links) a.links = []; a.links.push({name:"",url:""}); commit();}; row.appendChild(moreLink);
     }
 
     if (a.n || editAct === a){
