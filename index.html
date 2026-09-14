@@ -70,14 +70,10 @@ img{max-width:100%}
 }
 
 /* ---- 3. Typography ------------------------------------------------ */
-/* One family for the whole page — a typed document, not a set one.
-   --serif is the reading weight, --cond the ruled/labelled weight; both
-   resolve to the same typewriter face, so nothing on the page is foreign
-   to anything else. The variables stay split so the two roles can drift
-   apart again later without touching every rule. */
+/* Sans-serif reading and controls; editorial serif masthead, typed dates. */
 :root{
-  --serif:"Courier Prime","Courier New",Courier,monospace;
-  --cond:"Courier Prime","Courier New",Courier,monospace;
+  --serif:"Helvetica Neue",Arial,sans-serif;
+  --cond:"Helvetica Neue",Arial,sans-serif;
 }
 body{
   background:var(--paper);color:var(--ink);
@@ -586,6 +582,29 @@ textarea::placeholder{color:var(--muted)}
   .hrow{grid-template-columns:56px 1fr}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+/* Contemporary notebook: clear sans typography, warm stock, restrained ink. */
+h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;text-transform:none;font-size:clamp(2.6rem,6vw,4.7rem);letter-spacing:-.055em;max-width:16ch}
+h2,.legtop h3,.discovery-head h2{text-transform:none;letter-spacing:-.025em}
+h2{font-size:1.5rem}.legtop h3{font-size:1.65rem}
+.dek{max-width:48ch;font-size:1.05rem}.lab{letter-spacing:.1em;font-size:10px}
+.mast{padding-bottom:28px}.mast::after{height:2px;background:var(--coast)}
+.mini,.btn{min-height:32px}.aname{font-size:15px;text-transform:none;letter-spacing:0}
+.act{padding-top:18px;padding-bottom:18px}.activity-links{opacity:.85}
+.route-overview{margin:26px 0 32px;padding:22px 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.route-overview h2{margin:0 0 6px;border:0;padding:0}
+.route-strip{display:flex;flex-wrap:wrap;gap:0;margin-top:18px}
+.route-strip a{flex:1 1 145px;display:flex;flex-direction:column;gap:6px;padding:12px 18px;border-left:2px solid var(--coast);color:var(--ink);text-decoration:none}
+.route-strip a:hover{background:var(--sunk)}.route-strip strong{font-size:17px;font-weight:500}
+.route-departure{padding:12px 18px;align-self:center;color:var(--muted);font-size:13px}
+.leg{scroll-margin-top:24px}.when .day{font-family:"Courier New",monospace;font-size:13px}
+@media(max-width:600px){.route-strip a{flex-basis:45%}.masthead-row{gap:12px}.mastedit{font-size:10px}}
+.activity-tools{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:6px 10px;margin-left:auto;max-width:100%}
+.act .activity-tools .activity-links{margin:0;gap:4px 10px;align-items:center}
+.act .activity-tools .activity-links a{font-size:11px;font-weight:400;text-transform:none;letter-spacing:0;min-height:28px;display:inline-flex;align-items:center}
+.act .activity-tools .activity-links a::before{content:none}
+.resource-toggle{border:0;background:none;color:var(--muted);font-size:10px;padding:4px 0;min-height:28px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.activity-tools .st{font-size:9px;min-height:28px;max-width:140px}
+@media(max-width:600px){.activity-tools{flex-basis:100%;justify-content:flex-start;margin-left:0}}
 </style>
 </head>
 <body>
@@ -597,11 +616,9 @@ textarea::placeholder{color:var(--muted)}
 
 <div class="wrap">
   <header class="mast">
-    <p class="lab">Peru &middot; 9–23 November 2026</p>
-    <div class="masthead-row"><div><h1 id="pageTitle">Fourteen Nights in Peru</h1>
-    <p class="dek" id="pageSubtitle">Add stops, set the nights, rewrite any of them, invent your own. Dates recompute
-    as you go, and the checks below flag anything that will bite you — altitude, travel days, and
-    whether the plan still has a macaw in it.</p></div><button class="mini mastedit" id="editHeading" type="button">Edit heading</button></div>
+    <p class="lab" id="tripDateline">Peru · A holiday notebook</p>
+    <div class="masthead-row"><div><h1 id="pageTitle">A notebook for Peru</h1>
+    <p class="dek" id="pageSubtitle">Our route, little discoveries, and room to change our minds.</p></div><button class="mini mastedit" id="editHeading" type="button">Edit heading</button></div>
     <div class="titleedit" id="titleEdit" hidden><label class="fld"><span class="lab">Heading</span><input id="titleInput" maxlength="100"></label><label class="fld"><span class="lab">Subtitle</span><textarea id="subtitleInput" maxlength="400"></textarea></label><button class="mini" id="doneHeading" type="button">Done</button></div>
   </header>
 
@@ -612,7 +629,7 @@ textarea::placeholder{color:var(--muted)}
       <label><span class="lab">Arrive</span><input type="date" id="dStart" value="2026-11-09"></label>
       <label><span class="lab">Depart</span><input type="date" id="dEnd" value="2026-11-23"></label>
     </div>
-    <p class="tally"><span class="big" id="mNights">0</span> nights planned across
+    <p class="tally"><span class="big" id="mNights">0</span> days + departure across
       <span class="big" id="mStops">0</span> stops <span class="bal" id="mBal">&nbsp;</span></p>
   </div>
 
@@ -642,12 +659,13 @@ textarea::placeholder{color:var(--muted)}
 
   <input type="text" id="linkBox" class="linkbox" readonly hidden aria-label="Link to this plan">
 
+  <section id="routeOverview" class="route-overview" aria-label="Trip overview"></section>
   <div id="notices"></div>
 
   <div id="checks"></div>
 
   <h2 id="itinTitle">Itinerary</h2>
-  <p class="sub">Nights, not days — a stop's last date is the morning you move on.</p>
+  <p class="sub">Each day belongs to one stop. The departure day is shown separately in your overview.</p>
   <div id="legs"></div>
 
   <div id="catalog" class="addstop"></div>
@@ -672,7 +690,7 @@ textarea::placeholder{color:var(--muted)}
   <footer class="foot">
     <p>Distances and flight legs assume the usual routings: Lima is the hub for the north coast,
     and Cusco is the hub for Tambopata and the Manu Road. Anything marked as a travel day will
-    swallow most of the daylight, so it is worth counting those separately from the nights.</p>
+    swallow most of the daylight, so it is worth counting those as part of your days.</p>
     <p class="saveline" id="saveline">Loading…</p>
     <p class="saveline" id="buildline"></p>
   </footer>
@@ -788,8 +806,8 @@ var FLAGS = [
 ];
 
 var FALLBACK_SEED = {
-  title:"Fourteen Nights in Peru",
-  subtitle:"Add stops, set the nights, rewrite any of them, invent your own. Dates recompute as you go, and the checks below flag anything that will bite you — altitude, travel days, and whether the plan still has a macaw in it.",
+  title:"A notebook for Peru",
+  subtitle:"Our route, little discoveries, and room to change our minds.",
   start:"2026-11-09", end:"2026-11-23",
   defs:{},
   items:[
@@ -945,6 +963,8 @@ function renderScenarios(){
   tabs.appendChild(del);
 }
 function normaliseState(){
+  if (state.title === "Fourteen Nights in Peru") state.title = FALLBACK_SEED.title;
+  if (state.subtitle && state.subtitle.indexOf("Add stops, set the nights") === 0) state.subtitle = FALLBACK_SEED.subtitle;
   if (typeof state.title !== "string" || !state.title.trim()) state.title = FALLBACK_SEED.title;
   if (typeof state.subtitle !== "string") state.subtitle = FALLBACK_SEED.subtitle;
   if (!Array.isArray(state.scenarios) || !state.scenarios.length){
@@ -974,10 +994,12 @@ function normaliseState(){
   });
 }
 
-/* Edits stay local until Save is pressed. */
+/* Compare saved content so opening an editor does not create a save. */
 var editSeq = 0;
+var savedFingerprint = null;
+function planFingerprint(){ return JSON.stringify(allPlan()); }
 function save(){
-  dirty = true;
+  dirty = planFingerprint() !== savedFingerprint;
   editSeq++;
   renderStatus();
 }
@@ -994,6 +1016,7 @@ function adoptServer(v){
   history_ = Array.isArray(v.history) ? v.history : [];
   state = clone(v);
   normaliseState();
+  savedFingerprint = planFingerprint();
   dirty = false;
   conflict = null;
 }
@@ -1070,6 +1093,7 @@ async function loadSeedFile(){
 }
 
 async function saveToServer(label, key, force){
+  var sentFingerprint = planFingerprint();
   var seqAtStart = editSeq;   /* if this changes before the request returns, you edited something new mid-flight */
   var res = await fetch(PLAN_API, {
     method:"POST",
@@ -1102,7 +1126,8 @@ async function saveToServer(label, key, force){
      flight — otherwise a newer, still-unsaved edit would look "saved" to
      poll()/adoptServer(), which would then happily overwrite it with the
      server copy that never actually saw it (the "click reverts itself" bug) */
-  dirty = editSeq !== seqAtStart;
+  savedFingerprint = sentFingerprint;
+  dirty = planFingerprint() !== savedFingerprint;
   conflict = null;
   return v;
 }
@@ -1190,6 +1215,7 @@ function renderStatus(){
     parts.push("Read-only — no server on this host");
   } else if (dirty){
     parts.push("<b>Unsaved changes</b>");
+    parts.push(lsGet(LS_KEY) ? "Autosave every minute" : "Save once with your edit key to enable autosave");
     if (publishedSeed.rev) parts.push("server has v" + publishedSeed.rev);
   } else if (fetchState === "ok"){
     parts.push("<b>Saved</b>");
@@ -1367,7 +1393,7 @@ function editPanel(id, refs, it0){
     var v = parseInt(minN.value, 10);
     if (v >= 1 && v <= 30) put("min", v);
   });
-  grid.appendChild(field("Minimum nights", minN));
+  grid.appendChild(field("Minimum days", minN));
   panel.appendChild(grid);
 
 
@@ -1475,7 +1501,7 @@ function noteView(getValue, setValue){
   return view;
 }
 
-function notesEditor(value,label,placeholder,onChange,key){
+function notesEditor(value,label,placeholder,onChange,key,activityEditing){
   key = key || "1";
   var cur = String(value || "");
   function getValue(){ return cur; }
@@ -1489,14 +1515,14 @@ function notesEditor(value,label,placeholder,onChange,key){
   wrap.appendChild(toolbar);
 
   /* reading mode — checkboxes stay live, the markup stays out of sight */
-  if (!editNotes[key] && cur.trim()){
+  if (activityEditing === false || (activityEditing === undefined && !editNotes[key] && cur.trim())){
     var edit=document.createElement("button");
     edit.type="button";edit.className="mini";edit.textContent="Edit";
     edit.setAttribute("aria-label","Edit "+label);
     edit.onclick=function(){ editNotes[key]=true; render();
       var t=document.querySelector('[data-note="'+key+'"] textarea');
       if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);} };
-    toolbar.appendChild(edit);
+    if (activityEditing === undefined) toolbar.appendChild(edit);
     wrap.appendChild(noteView(getValue, setValue));
     return wrap;
   }
@@ -1526,7 +1552,7 @@ function notesEditor(value,label,placeholder,onChange,key){
     if(!cur.trim()) delete openNotes[key];
     render();
   };
-  toolbar.appendChild(done);
+  if (activityEditing === undefined) toolbar.appendChild(done);
 
   ta.addEventListener("input",changed);
   ta.addEventListener("keydown",function(e){
@@ -1565,6 +1591,8 @@ function activityLinks(title,place){
   return links;
 }
 
+var hiddenActivityLinks = {};
+try { hiddenActivityLinks = JSON.parse(lsGet(LS + ":hidden-links") || "{}") || {}; } catch(e) {}
 function activityBlock(it, S){
   var wrap = document.createElement("div");
   wrap.className = "acts";
@@ -1637,7 +1665,31 @@ function activityBlock(it, S){
       head.appendChild(name);
     }
 
-    head.appendChild(statusSelect(a.s, function(v){ a.s = v; commit(); }, "Status of " + a.t));
+    var tools = document.createElement("div"); tools.className = "activity-tools";
+    var idea = ACTIVITIES.find(function(idea){return idea[2] === a.t;});
+    var resources = activityLinks(a.t, idea ? idea[0] : S.name);
+    resources.querySelector("a").textContent = "Maps";
+    var hideKey = state.activeScenario + ":" + akey;
+    resources.id = "activity-resources-" + akey;
+    resources.hidden = !!hiddenActivityLinks[hideKey];
+    var toggle = document.createElement("button"); toggle.type = "button";
+    toggle.className = "resource-toggle";
+    function updateLinkToggle(){
+      toggle.textContent = resources.hidden ? "Links" : "Hide links";
+      toggle.setAttribute("aria-expanded", String(!resources.hidden));
+      toggle.setAttribute("aria-controls", resources.id);
+      toggle.setAttribute("aria-label", (resources.hidden ? "Show links for " : "Hide links for ") + a.t);
+    }
+    updateLinkToggle();
+    toggle.onclick = function(){
+      resources.hidden = !resources.hidden;
+      if (resources.hidden) hiddenActivityLinks[hideKey] = true;
+      else delete hiddenActivityLinks[hideKey];
+      lsSet(LS + ":hidden-links", JSON.stringify(hiddenActivityLinks));
+      updateLinkToggle();
+    };
+    tools.append(resources, toggle, statusSelect(a.s, function(v){ a.s = v; commit(); }, "Status of " + a.t));
+    head.appendChild(tools);
 
     if (a.u){
       var link = document.createElement("a");
@@ -1677,12 +1729,10 @@ function activityBlock(it, S){
       row.appendChild(erow);
     }
 
-    if (a.n || openNotes[akey]){
+    if (a.n || editAct === a){
       row.appendChild(notesEditor(a.n, "Note for " + a.t, "Time, price, who to ask…",
-        function(value){a.n=value;save();renderStatus();}, akey));
+        function(value){a.n=value;save();renderStatus();}, akey, editAct === a));
     }
-    var idea=ACTIVITIES.find(function(idea){return idea[2]===a.t;});
-    row.appendChild(activityLinks(a.t,idea?idea[0]:S.name));
 
     var decisions = document.createElement("div"); decisions.className = "decision-row";
     var mv = a.votes.matteo || "", lv = a.votes.levin || "";
@@ -1713,14 +1763,6 @@ function activityBlock(it, S){
     var c = document.createElement("span"); c.className="consensus "+consensus;
     c.textContent = consensus === "approved" ? "Doppiproved 🎉" : consensus === "disapproved" ? "Both disapproved" : "Waiting for agreement";
     decisions.appendChild(c);
-    if (!(a.n || openNotes[akey])){
-      var an = document.createElement("button");
-      an.type = "button"; an.className = "mini summon";
-      an.textContent = "Note";
-      an.onclick = function(){ openNotes[akey] = true; render();
-        var t = document.querySelector('[data-note="' + akey + '"] textarea'); if (t) t.focus(); };
-      decisions.appendChild(an);
-    }
     decisions.appendChild(ed);
     decisions.appendChild(x);
     row.appendChild(decisions);
@@ -1802,6 +1844,7 @@ function activityBlock(it, S){
 /* ---------- render ---------- */
 function render(){
   renderScenarios();
+  document.getElementById("tripDateline").textContent = "Peru · " + fmt(parseD(state.start)) + " – " + fmt(parseD(state.end)) + " " + parseD(state.end).getFullYear();
   document.getElementById("pageTitle").textContent=state.title;
   document.getElementById("pageSubtitle").textContent=state.subtitle;
   renderActivities();
@@ -1823,12 +1866,13 @@ function render(){
 
     var leg = document.createElement("div");
     leg.className = "leg";
+    leg.id = "stop-" + i;
     leg.style.setProperty("--band", "var(--" + S.band + ")");
 
     var when = document.createElement("div");
     when.className = "when";
     when.innerHTML = '<div class="day">' + fmt(inD) + '</div>'
-      + '<div class="out">to ' + fmt(outD) + '</div>'
+      + '<div class="out">to ' + fmt(addDays(outD, -1)) + '</div>'
       + '<div class="nn">' + esc(bandLabel(S.band)) + '</div>';
     leg.appendChild(when);
 
@@ -1865,16 +1909,16 @@ function render(){
     step.className = "step";
     var minus = document.createElement("button");
     minus.type = "button"; minus.textContent = "–";
-    minus.setAttribute("aria-label", "One night fewer in " + S.name);
+    minus.setAttribute("aria-label", "One day fewer in " + S.name);
     minus.disabled = it.nights <= 1;
     minus.onclick = function(){ it.nights = Math.max(1, it.nights - 1); commit(); };
     var n = document.createElement("span");
     n.className = "n";
-    n.textContent = it.nights + (it.nights === 1 ? " night" : " nights");
+    n.textContent = it.nights + (it.nights === 1 ? " day" : " days");
     n.setAttribute("aria-live", "polite");
     var plus = document.createElement("button");
     plus.type = "button"; plus.textContent = "+";
-    plus.setAttribute("aria-label", "One night more in " + S.name);
+    plus.setAttribute("aria-label", "One day more in " + S.name);
     plus.disabled = it.nights >= 30;
     plus.onclick = function(){ it.nights = Math.min(30, it.nights + 1); commit(); };
     step.appendChild(minus); step.appendChild(n); step.appendChild(plus);
@@ -1940,12 +1984,36 @@ function render(){
     legs.appendChild(leg);
   });
 
+  renderOverview();
   renderMeter();
   renderChecks(cursor);
   renderCatalog();
   renderStatus();
   renderNotices();
   renderHistory();
+}
+
+function renderOverview(){
+  var box = document.getElementById("routeOverview");
+  box.replaceChildren();
+  var title = document.createElement("h2");
+  title.textContent = "Your trip at a glance"; box.appendChild(title);
+  var summary = document.createElement("p"); summary.className = "sub";
+  var acts = state.items.flatMap(function(it){return it.acts || [];});
+  summary.textContent = (tripNights() + 1) + " calendar days · " + state.items.length + " stops · " + acts.length + (acts.length === 1 ? " activity" : " activities");
+  box.appendChild(summary);
+  var route = document.createElement("nav"); route.className = "route-strip"; route.setAttribute("aria-label", "Jump to a stop");
+  var day = 1;
+  state.items.forEach(function(it,i){
+    var stop = resolve(it.id); if (!stop) return;
+    var link = document.createElement("a"); link.href = "#stop-" + i;
+    var label = document.createElement("span"); label.className = "lab";
+    label.textContent = "Day " + day + (it.nights > 1 ? "–" + (day + it.nights - 1) : "");
+    var name = document.createElement("strong"); name.textContent = stop.name;
+    link.append(label,name); route.appendChild(link); day += it.nights;
+  });
+  var end = document.createElement("div"); end.className = "route-departure";
+  end.textContent = "Departure · " + fmt(parseD(state.end)); route.appendChild(end); box.appendChild(route);
 }
 
 function renderMeter(){
@@ -1956,10 +2024,10 @@ function renderMeter(){
   var bal = document.getElementById("mBal"), diff = planned - budget;
   bal.className = "bal " + (diff === 0 ? "ok" : diff > 0 ? "over" : "under");
   bal.textContent = diff === 0
-    ? "Fits the " + budget + " nights exactly"
+    ? "Fits the " + budget + " days before departure"
     : diff > 0
-      ? Math.abs(diff) + (Math.abs(diff) === 1 ? " night" : " nights") + " over — trim somewhere"
-      : Math.abs(diff) + (Math.abs(diff) === 1 ? " night" : " nights") + " spare";
+      ? Math.abs(diff) + (Math.abs(diff) === 1 ? " day" : " days") + " over — trim somewhere"
+      : Math.abs(diff) + (Math.abs(diff) === 1 ? " day" : " days") + " spare";
 }
 
 
@@ -1971,8 +2039,8 @@ function renderChecks(endCursor){
   var out = [], planned = plannedNights(), budget = tripNights();
 
   if (planned !== budget){
-    out.push(["bad","Nights",
-      "The plan runs to <b>" + planned + " nights</b> but the trip is <b>" + budget + "</b>."
+    out.push(["bad","Days",
+      "The plan runs to <b>" + planned + " days</b> but the trip is <b>" + budget + "</b>."
       + (endCursor ? " Last stop currently ends " + fmt(endCursor) + "." : "")]);
   }
 
@@ -2452,7 +2520,7 @@ function renderCatalog(){
   name.setAttribute("aria-label", "Name of the new stop");
   var nights = document.createElement("input");
   nights.type = "number"; nights.min = "1"; nights.max = "30"; nights.value = "2";
-  nights.setAttribute("aria-label", "Nights");
+  nights.setAttribute("aria-label", "Days");
   var kind = document.createElement("select");
   kind.setAttribute("aria-label", "Kind of place");
   KINDS.forEach(function(k){
@@ -2834,7 +2902,11 @@ async function poll(){
   } finally { polling = false; }
 }
 
-setInterval(poll, 6000);   /* saves are now a deliberate button-press, not constant — a plain 6s poll is enough to see a partner's save without a push service */
+setInterval(poll, 6000);
+setInterval(function(){
+  dirty = planFingerprint() !== savedFingerprint;
+  if (canPublish && dirty && !saving && !polling && !conflict && lsGet(LS_KEY)) doSave("Autosave", false);
+}, 60000);
 document.addEventListener("visibilitychange", function(){ if (!document.hidden) poll(); });
 window.addEventListener("beforeunload", function(e){
   if (dirty){ e.preventDefault(); e.returnValue = ""; }

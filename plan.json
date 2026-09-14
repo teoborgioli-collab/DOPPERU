@@ -1,13 +1,13 @@
 {
-  "title": "Fourteen Nights in Peru",
-  "subtitle": "Add stops, set the nights, rewrite any of them, invent your own. Dates recompute as you go, and the checks below flag anything that will bite you — altitude, travel days, and whether the plan still has a macaw in it.",
+  "title": "A notebook for Peru",
+  "subtitle": "Our route, little discoveries, and room to change our minds.",
   "updated": "2026-09-08T10:00:00Z",
   "label": "Starting plan",
   "start": "2026-11-09",
   "end": "2026-11-23",
   "defs": {
     "x1": {
-      "name": "The last five nights",
+      "name": "The last five days",
       "band": "coast",
       "region": "Your own stops",
       "elev": "",
@@ -43,7 +43,7 @@
       "id": "x1",
       "nights": 5,
       "vibe": "Still open.",
-      "note": "Either north to Máncora and Vichayito for the beach — or skip the north, stay longer around Cusco and go into the jungle from there.",
+      "note": "Either north to M\u00e1ncora and Vichayito for the beach \u2014 or skip the north, stay longer around Cusco and go into the jungle from there.",
       "acts": []
     }
   ]
