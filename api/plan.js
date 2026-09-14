@@ -126,6 +126,7 @@ function cleanItem(item) {
       id: String((activity && activity.id) || '').slice(0, 40) || randomId(),
       d: Math.min(60, Math.max(0, parseInt(activity && activity.d, 10) || 0)),
       t: String((activity && activity.t) || '').slice(0, 120),
+      links: Array.isArray(activity && activity.links) ? activity.links.filter(x => typeof x === 'string' || (x && typeof x.url === 'string')).slice(0, 10).map(x => ({name: typeof x.name === 'string' ? x.name.slice(0, 120) : '', url: (typeof x === 'string' ? x : x.url).slice(0, 500)})) : [],
       u: typeof (activity && activity.u) === 'string' ? activity.u.slice(0, 500) : '',
       s: STATUSES.includes(activity && activity.s) ? activity.s : '',
       n: typeof (activity && activity.n) === 'string' ? activity.n.slice(0, 10000) : '',
