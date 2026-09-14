@@ -614,6 +614,10 @@ h2{font-size:1.5rem}.legtop h3{font-size:1.65rem}
 .act.consensus-disapproved{border-left-color:var(--bad);background:color-mix(in srgb,var(--bad) 7%,var(--surface))}
 .act>.aedit,.act>.notes-editor,.act>.activity-links,.act>.decision-row,.act>.move-row{padding-left:0}
 @media(max-width:600px){.act,.act.consensus-approved,.act.consensus-disapproved{padding:13px}}
+/* Typed notebook entries, with clean sans-serif titles for easy scanning. */
+.leg,.leg.leg *{font-family:"Courier New",Courier,monospace}
+.leg .legtop h3,.leg .aname,.leg .at{font-family:"Helvetica Neue",Arial,sans-serif}
+.leg .legtop h3 .sub2{font-family:"Courier New",Courier,monospace}
 </style>
 </head>
 <body>
@@ -674,7 +678,7 @@ h2{font-size:1.5rem}.legtop h3{font-size:1.65rem}
   <div id="checks"></div>
 
   <h2 id="itinTitle">Itinerary</h2>
-  <p class="sub">Each day belongs to one stop. The departure day is shown separately in your overview.</p>
+  <p class="sub">Each day belongs to one stop. Day ranges cover the itinerary before departure.</p>
   <div id="legs"></div>
 
   <div id="catalog" class="addstop"></div>
@@ -1680,7 +1684,7 @@ function activityBlock(it, S){
     resources.querySelector("a").textContent = "Maps";
     var hideKey = state.activeScenario + ":" + akey;
     resources.id = "activity-resources-" + akey;
-    resources.hidden = !!hiddenActivityLinks[hideKey];
+    resources.hidden = hiddenActivityLinks[hideKey] !== false;
     var toggle = document.createElement("button"); toggle.type = "button";
     toggle.className = "resource-toggle";
     function updateLinkToggle(){
@@ -1692,8 +1696,7 @@ function activityBlock(it, S){
     updateLinkToggle();
     toggle.onclick = function(){
       resources.hidden = !resources.hidden;
-      if (resources.hidden) hiddenActivityLinks[hideKey] = true;
-      else delete hiddenActivityLinks[hideKey];
+      hiddenActivityLinks[hideKey] = resources.hidden;
       lsSet(LS + ":hidden-links", JSON.stringify(hiddenActivityLinks));
       updateLinkToggle();
     };
@@ -2021,8 +2024,7 @@ function renderOverview(){
     var name = document.createElement("strong"); name.textContent = stop.name;
     link.append(label,name); route.appendChild(link); day += it.nights;
   });
-  var end = document.createElement("div"); end.className = "route-departure";
-  end.textContent = "Departure · " + fmt(parseD(state.end)); route.appendChild(end); box.appendChild(route);
+  box.appendChild(route);
 }
 
 function renderMeter(){
