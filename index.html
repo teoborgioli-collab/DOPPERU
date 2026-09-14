@@ -195,7 +195,7 @@ h2{font-family:var(--cond);font-weight:700;text-transform:uppercase;
   border-left:5px solid var(--band,var(--ink));border-radius:0;
   padding:22px 24px 24px 20px;margin:0 0 18px}
 .when{padding-top:2px;padding-right:22px;margin-right:-22px;
-  border-right:1px solid var(--rule)}
+  border-right:0}
 .when .day{font-family:var(--cond);font-weight:700;font-size:.95rem;line-height:1.25;
   letter-spacing:-.02em;color:var(--ink);white-space:nowrap}
 .when .out{font-family:var(--cond);font-size:12.5px;color:var(--muted);
@@ -605,6 +605,15 @@ h2{font-size:1.5rem}.legtop h3{font-size:1.65rem}
 .resource-toggle{border:0;background:none;color:var(--muted);font-size:10px;padding:4px 0;min-height:28px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .activity-tools .st{font-size:9px;min-height:28px;max-width:140px}
 @media(max-width:600px){.activity-tools{flex-basis:100%;justify-content:flex-start;margin-left:0}}
+/* Separate activity cards keep the stop's date column free of a divider. */
+.acts{margin-top:24px}
+.acts:not(:empty){border-top:0}
+.act,.act:last-of-type{margin:0 0 12px;padding:16px;border:1px solid var(--rule-soft);border-radius:4px;background:var(--surface)}
+.act.consensus-approved,.act.consensus-disapproved{padding:16px;box-shadow:none;border-left:4px solid var(--ok)}
+.act.consensus-approved{background:color-mix(in srgb,var(--ok) 7%,var(--surface))}
+.act.consensus-disapproved{border-left-color:var(--bad);background:color-mix(in srgb,var(--bad) 7%,var(--surface))}
+.act>.aedit,.act>.notes-editor,.act>.activity-links,.act>.decision-row,.act>.move-row{padding-left:0}
+@media(max-width:600px){.act,.act.consensus-approved,.act.consensus-disapproved{padding:13px}}
 </style>
 </head>
 <body>
