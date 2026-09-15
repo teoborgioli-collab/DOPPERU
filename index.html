@@ -194,6 +194,7 @@ h1{
 
 .toolbar{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:center;
   padding:18px 0;border-bottom:1px solid var(--border)}
+.toolbar-actions{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:center}
 .btn{font-family:var(--sans);font-weight:600;font-size:13px;
   letter-spacing:-.005em;cursor:pointer;padding:9px 17px;
   border:1px solid var(--border-strong);border-radius:var(--r-pill);
@@ -670,8 +671,17 @@ textarea::placeholder{color:var(--muted)}
   .scenarios{padding-top:22px}
   .scenario-tabs .btn{padding:8px 14px}
   .scenarios>.sub{margin-top:6px}
-  .dates{padding:14px 0}
-  .toolbar{padding:14px 0}
+  .deck{display:block;padding:20px 0}
+  .dates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0}
+  .dates label{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-width:0}
+  .dates input{width:100%;min-width:0}
+  .tally{margin-top:20px;text-align:left}
+  .tally .bal{display:table;margin:9px 0 0}
+  .toolbar{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;padding:16px 0}
+  .toolbar-actions{justify-content:center;width:100%}
+  .status{width:100%;margin-left:0;text-align:left;line-height:1.55}
+  .toolbar>#moreBtn{justify-self:start}
+  .moremenu{justify-content:flex-start}
   h2{margin-top:48px}
   .leg{grid-template-columns:1fr;gap:14px;padding:20px 17px 22px 20px;border-radius:var(--r-md)}
   .when{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;
@@ -730,9 +740,11 @@ textarea::placeholder{color:var(--muted)}
   </div>
 
   <div class="toolbar" id="toolbar" hidden>
-    <button class="btn primary" id="saveBtn" type="button">Save</button>
-    <button class="btn" id="shareBtn" type="button">Share link</button>
-    <button class="btn" id="reloadBtn" type="button">Reload</button>
+    <div class="toolbar-actions">
+      <button class="btn primary" id="saveBtn" type="button">Save</button>
+      <button class="btn" id="shareBtn" type="button">Share link</button>
+      <button class="btn" id="reloadBtn" type="button">Reload</button>
+    </div>
     <span class="status" id="status">Loading…</span>
     <button class="mini" id="moreBtn" type="button" aria-expanded="false">More</button>
   </div>
