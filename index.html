@@ -147,16 +147,30 @@ h1{
 }
 .theme-toggle:hover{border-color:var(--focus)}
 
-/* ---- 5. Scenario tabs — a segmented control -------------------------- */
-.scenarios{padding-top:26px}
-.scenario-tabs{display:inline-flex;flex-wrap:wrap;align-items:center;gap:2px;margin:0 0 14px;
+/* ---- 5. Scenario tabs — navigation and management stay separate ------ */
+.scenarios{padding-top:26px;min-width:0}
+.scenario-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:9px}
+.scenario-scroll{max-width:100%;overflow-x:auto;padding:1px 0 5px;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.scenario-scroll::-webkit-scrollbar{display:none}
+.scenario-tabs{display:inline-flex;flex-wrap:nowrap;align-items:center;gap:3px;min-width:max-content;
   padding:4px;background:var(--surface-2);border-radius:var(--r-pill);border:1px solid var(--border)}
 .scenario-tabs .btn{margin:0;border:none;background:transparent;color:var(--ink-soft);
-  box-shadow:none;border-radius:var(--r-pill)}
+  box-shadow:none;border-radius:var(--r-pill);white-space:nowrap}
 .scenario-tabs .btn:hover{background:color-mix(in srgb,var(--ink) 6%,transparent);color:var(--ink)}
-.scenario-tabs .mini{margin-left:18px}
 .scenario-tabs .active,.scenario-tabs .active:hover{background:var(--surface);color:var(--ink);
   box-shadow:var(--shadow-xs)}
+.scenario-menu{position:relative;flex:none}
+.scenario-menu>summary{list-style:none;cursor:pointer;width:34px;height:28px;display:flex;
+  align-items:center;justify-content:center;border:1px solid var(--border);border-radius:var(--r-pill);
+  color:var(--muted);font-family:var(--sans);font-weight:700;letter-spacing:.08em}
+.scenario-menu>summary::-webkit-details-marker{display:none}
+.scenario-menu>summary:hover,.scenario-menu[open]>summary{color:var(--ink);background:var(--surface-2)}
+.scenario-menu-panel{position:absolute;z-index:20;right:0;top:34px;min-width:160px;display:flex;
+  flex-direction:column;align-items:stretch;padding:6px;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--r-sm);box-shadow:var(--shadow-pop)}
+.scenario-menu-panel .mini{text-align:left;padding:9px 10px;border-radius:7px}
+.scenario-menu-panel .mini:hover{background:var(--surface-2);text-decoration:none}
 
 /* ---- 6. Deck: dates and the running tally ---------------------------- */
 .deck{display:flex;flex-wrap:wrap;gap:14px 32px;align-items:baseline;
@@ -462,6 +476,25 @@ textarea::placeholder{color:var(--muted)}
 .check.bad .mark{color:var(--bad)}
 .check.warn .mark{color:var(--warn)}
 .check.ok .mark{color:var(--ok)}
+.decision-check{display:block;padding:15px 17px}
+.decision-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:7px}
+.decision-head .mark{width:auto;padding:0;color:var(--warn)}
+.decision-count{font-family:var(--sans);font-weight:700;font-size:10px;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--warn);white-space:nowrap}
+.decision-list{display:flex;flex-direction:column}
+.decision-item{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 14px;
+  align-items:center;text-align:left;padding:11px 0;border:0;border-top:1px solid
+  color-mix(in srgb,var(--warn) 18%,transparent);background:none;color:var(--ink);cursor:pointer}
+.decision-item:first-child{border-top:0}
+.decision-item:hover .decision-title{text-decoration:underline;text-underline-offset:3px}
+.decision-copy{min-width:0}
+.decision-title{display:block;font-family:var(--sans);font-weight:650;font-size:14px;
+  line-height:1.35;overflow-wrap:anywhere}
+.decision-stop{display:block;margin-top:3px;color:var(--muted);font-size:12.5px;line-height:1.35}
+.decision-status{font-family:var(--sans);font-weight:700;font-size:9.5px;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--warn);border:1px solid color-mix(in srgb,var(--warn) 38%,transparent);
+  border-radius:var(--r-pill);padding:5px 9px;white-space:nowrap}
+.act:focus{outline:2px solid var(--focus);outline-offset:3px}
 
 /* ---- 15. Catalogue ----------------------------------------------------------- */
 .cat{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:0 34px}
@@ -634,6 +667,9 @@ textarea::placeholder{color:var(--muted)}
   .masthead-row{display:block}
   .mastedit{margin-top:16px}
   h1{font-size:clamp(2.1rem,11.5vw,3.2rem);max-width:12ch}
+  .scenarios{padding-top:22px}
+  .scenario-tabs .btn{padding:8px 14px}
+  .scenarios>.sub{margin-top:6px}
   .dates{padding:14px 0}
   .toolbar{padding:14px 0}
   h2{margin-top:48px}
@@ -678,7 +714,11 @@ textarea::placeholder{color:var(--muted)}
     <div class="titleedit" id="titleEdit" hidden><label class="fld"><span class="lab">Heading</span><input id="titleInput" maxlength="100"></label><label class="fld"><span class="lab">Subtitle</span><textarea id="subtitleInput" maxlength="400"></textarea></label><button class="mini" id="doneHeading" type="button">Done</button></div>
   </header>
 
-  <section class="scenarios" aria-label="Trip scenarios"><div id="scenarioTabs" class="scenario-tabs"></div><p class="sub">A second route to compare. Edits stay separate.</p></section>
+  <section class="scenarios" aria-label="Trip scenarios">
+    <div class="scenario-head"><span class="lab">Itinerary</span><details class="scenario-menu" id="scenarioMenu"><summary aria-label="Manage current itinerary">•••</summary><div class="scenario-menu-panel"><button class="mini" id="renameScenario" type="button">Rename itinerary</button><button class="mini drop" id="deleteScenario" type="button">Delete itinerary</button></div></details></div>
+    <div class="scenario-scroll"><div id="scenarioTabs" class="scenario-tabs"></div></div>
+    <p class="sub">A second route to compare. Edits stay separate.</p>
+  </section>
 
   <div class="deck">
     <div class="dates">
@@ -1025,15 +1065,15 @@ function renderScenarios(){
     state.scenarios.push(p); state.activeScenario = p.id; editing = null; editAct = null; commit();
   };
   add.disabled = state.scenarios.length >= 20; tabs.appendChild(add);
-  var rename = document.createElement("button"); rename.type = "button"; rename.className = "mini"; rename.textContent = "Rename scenario";
-  rename.onclick = function(){ var p = state.scenarios.find(function(p){return p.id === state.activeScenario;}); var n = window.prompt("Scenario name",p.name); if(n && n.trim()){p.name=n.trim().slice(0,40);commit();} };
-  tabs.appendChild(rename);
+  var rename = document.getElementById("renameScenario");
+  rename.onclick = function(){ var p = state.scenarios.find(function(p){return p.id === state.activeScenario;}); var n = window.prompt("Itinerary name",p.name); if(n && n.trim()){p.name=n.trim().slice(0,40);document.getElementById("scenarioMenu").open=false;commit();} };
 
-  var del = document.createElement("button"); del.type = "button"; del.className = "mini drop"; del.textContent = "Delete scenario";
+  var del = document.getElementById("deleteScenario");
   del.disabled = state.scenarios.length <= 1;
   del.title = del.disabled ? "The last option can't be deleted" : "";
   del.onclick = function(){
     if (state.scenarios.length <= 1) return;
+    document.getElementById("scenarioMenu").open = false;
     var current = state.scenarios.find(function(p){ return p.id === state.activeScenario; });
     if (!window.confirm('Delete "' + (current ? current.name : "this option") + '"? Unsaved, this is instant; once saved, it is only recoverable from Earlier saves.')) return;
     state.scenarios = state.scenarios.filter(function(p){ return p.id !== state.activeScenario; });
@@ -1042,7 +1082,6 @@ function renderScenarios(){
     state.activeScenario = next.id;
     normaliseState(); editing = null; editAct = null; syncDateInputs(); commit();
   };
-  tabs.appendChild(del);
 }
 function normaliseState(){
   if (state.title === "Fourteen Nights in Peru") state.title = FALLBACK_SEED.title;
@@ -1764,6 +1803,7 @@ function activityBlock(it, S){
     var akey = a.id || (it.id + "#" + entry.i);
     var row = document.createElement("div");
     row.className = "act";
+    row.dataset.activityId = akey;
     if (!a.votes) a.votes = {matteo:"",levin:""};
     var consensus = a.votes.matteo && a.votes.matteo === a.votes.levin ? a.votes.matteo : "pending";
     if (consensus === "approved" || consensus === "disapproved") row.classList.add("consensus-" + consensus);
@@ -2200,17 +2240,7 @@ function renderChecks(endCursor){
       if (a.s === "tobook" || a.s === "unsure") pending.push({stop: resolve(it.id), a: a, s: a.s});
     });
   });
-  if (pending.length){
-    out.push(["warn","Decisions",
-      "<b>" + pending.length + (pending.length === 1 ? " activity" : " activities")
-      + " still unsure or to book</b> — "
-      + pending.slice(0, 6).map(function(x){
-          return esc(x.a.t) + " (" + esc(x.stop ? x.stop.name : "?") + ", " + (x.s === "unsure" ? "unsure" : "to book") + ")";
-        }).join(", ")
-      + (pending.length > 6 ? " and " + (pending.length - 6) + " more" : "") + "."]);
-  }
-
-  if (!out.length){
+  if (!out.length && !pending.length){
     out.push(["ok","Clear","Nights balance, and nothing left unsure or to book."]);
   }
 
@@ -2224,6 +2254,41 @@ function renderChecks(endCursor){
     d.appendChild(m); d.appendChild(t);
     box.appendChild(d);
   });
+
+  if (pending.length){
+    var decisions = document.createElement("section");
+    decisions.className = "check warn decision-check";
+    decisions.setAttribute("aria-label", "Open decisions");
+
+    var head = document.createElement("div"); head.className = "decision-head";
+    var label = document.createElement("span"); label.className = "mark"; label.textContent = "Decisions";
+    var count = document.createElement("span"); count.className = "decision-count";
+    count.textContent = pending.length + " open";
+    head.appendChild(label); head.appendChild(count); decisions.appendChild(head);
+
+    var list = document.createElement("div"); list.className = "decision-list";
+    pending.forEach(function(x){
+      var item = document.createElement("button"); item.type = "button"; item.className = "decision-item";
+      item.setAttribute("aria-label", "Go to " + x.a.t + " in " + (x.stop ? x.stop.name : "the itinerary"));
+      var copy = document.createElement("span"); copy.className = "decision-copy";
+      var title = document.createElement("span"); title.className = "decision-title"; title.textContent = x.a.t;
+      var stop = document.createElement("span"); stop.className = "decision-stop"; stop.textContent = x.stop ? x.stop.name : "Unknown stop";
+      var status = document.createElement("span"); status.className = "decision-status";
+      status.textContent = x.s === "unsure" ? "Unsure" : "To book";
+      copy.appendChild(title); copy.appendChild(stop); item.appendChild(copy); item.appendChild(status);
+      item.onclick = function(){
+        var rows = document.querySelectorAll(".act[data-activity-id]");
+        for (var i = 0; i < rows.length; i++){
+          if (rows[i].dataset.activityId === (x.a.id || "")){
+            rows[i].setAttribute("tabindex", "-1"); rows[i].focus({preventScroll:true});
+            rows[i].scrollIntoView({block:"center", behavior:"smooth"}); break;
+          }
+        }
+      };
+      list.appendChild(item);
+    });
+    decisions.appendChild(list); box.appendChild(decisions);
+  }
 }
 
 
