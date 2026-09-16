@@ -46,6 +46,7 @@ img{max-width:100%}
   --accent-strong:#8f4014;
   --accent-soft:rgba(179,82,31,.13);
   --accent-ink:#fff8f2;
+  --itinerary-line:#8a8175;
 
   --link:#2f6e93;
   --focus:#b3521f;
@@ -74,6 +75,7 @@ img{max-width:100%}
     --puna:#e2ac5f; --city:#e096b9;
     --accent:#e3895c; --accent-strong:#efa377; --accent-soft:rgba(227,137,92,.18);
     --accent-ink:#1c1109;
+    --itinerary-line:#918a80;
     --link:#8fc4ea; --focus:#e3895c;
     --warn:#e2ac5f; --warn-bg:#2c2414; --bad:#e37e70; --bad-bg:#301c18; --ok:#83d093; --ok-bg:#16261a;
     --shadow-xs:0 1px 1px rgba(0,0,0,.5);
@@ -91,6 +93,7 @@ img{max-width:100%}
   --puna:#e2ac5f; --city:#e096b9;
   --accent:#e3895c; --accent-strong:#efa377; --accent-soft:rgba(227,137,92,.18);
   --accent-ink:#1c1109;
+  --itinerary-line:#918a80;
   --link:#8fc4ea; --focus:#e3895c;
   --warn:#e2ac5f; --warn-bg:#2c2414; --bad:#e37e70; --bad-bg:#301c18; --ok:#83d093; --ok-bg:#16261a;
   --shadow-xs:0 1px 1px rgba(0,0,0,.5);
@@ -269,7 +272,7 @@ h2::before{content:"";display:block;width:26px;height:3px;border-radius:2px;
   box-shadow:var(--shadow-sm);
   padding:26px 26px 26px 22px;margin:0 0 18px;position:relative;overflow:hidden}
 .leg::before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:3px;border-radius:3px;
-  background:var(--accent)}
+  background:var(--itinerary-line)}
 .when{padding-top:2px;padding-right:22px}
 .when .day{font-family:var(--sans);font-weight:700;font-size:.92rem;line-height:1.25;
   letter-spacing:-.01em;color:var(--ink);white-space:nowrap}
@@ -685,7 +688,7 @@ textarea::placeholder{color:var(--muted)}
 .route-strip a{flex:1 1 145px;display:flex;flex-direction:column;gap:6px;padding:13px 18px;
   border-radius:var(--r-sm);color:var(--ink);text-decoration:none;position:relative}
 .route-strip a::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:3px;
-  background:var(--accent)}
+  background:var(--itinerary-line)}
 .route-strip a:hover{background:var(--surface-2)}
 .route-strip strong{font-size:16px;font-weight:600;font-family:var(--sans)}
 .route-departure{padding:13px 18px;align-self:center;color:var(--muted);font-size:13px}
@@ -776,7 +779,7 @@ textarea::placeholder{color:var(--muted)}
       <label><span class="lab">Arrive</span><input type="date" id="dStart" value="2026-11-09"></label>
       <label><span class="lab">Depart</span><input type="date" id="dEnd" value="2026-11-23"></label>
     </div>
-    <p class="tally"><span class="big" id="mNights">0</span> days + departure across
+    <p class="tally"><span class="big" id="mNights">0</span> nights + departure across
       <span class="big" id="mStops">0</span> stops <span class="bal" id="mBal">&nbsp;</span></p>
   </div>
 
@@ -814,7 +817,7 @@ textarea::placeholder{color:var(--muted)}
   <div id="checks"></div>
 
   <h2 id="itinTitle">Itinerary</h2>
-  <p class="sub">Each day belongs to one stop. Day ranges cover the itinerary before departure.</p>
+  <p class="sub">Each night belongs to one stop. Date ranges run from arrival to checkout or transfer.</p>
   <div id="legs"></div>
 
   <div id="catalog" class="addstop"></div>
@@ -2075,7 +2078,7 @@ function render(){
     var when = document.createElement("div");
     when.className = "when";
     when.innerHTML = '<div class="day">' + fmt(inD) + '</div>'
-      + '<div class="out">to ' + fmt(addDays(outD, -1)) + '</div>'
+      + '<div class="out">to ' + fmt(outD) + '</div>'
       + '<div class="nn">' + esc(bandLabel(S.band)) + '</div>';
     leg.appendChild(when);
 
@@ -2117,7 +2120,7 @@ function render(){
     minus.onclick = function(){ it.nights = Math.max(1, it.nights - 1); commit(); };
     var n = document.createElement("span");
     n.className = "n";
-    n.textContent = it.nights + (it.nights === 1 ? " day" : " days");
+    n.textContent = it.nights + (it.nights === 1 ? " night" : " nights");
     n.setAttribute("aria-live", "polite");
     var plus = document.createElement("button");
     plus.type = "button"; plus.textContent = "+";
@@ -2220,16 +2223,16 @@ function renderOverview(){
 
 function renderMeter(){
   var planned = plannedNights(), budget = tripNights();
-  document.getElementById("mNights").textContent = planned;
+  document.getElementById("mNights").textContent = budget;
   document.getElementById("mStops").textContent = state.items.length;
 
   var bal = document.getElementById("mBal"), diff = planned - budget;
   bal.className = "bal " + (diff === 0 ? "ok" : diff > 0 ? "over" : "under");
   bal.textContent = diff === 0
-    ? "Fits the " + budget + " days before departure"
+    ? "All " + budget + (budget === 1 ? " night is" : " nights are") + " allocated"
     : diff > 0
-      ? Math.abs(diff) + (Math.abs(diff) === 1 ? " day" : " days") + " over — trim somewhere"
-      : Math.abs(diff) + (Math.abs(diff) === 1 ? " day" : " days") + " spare";
+      ? Math.abs(diff) + (Math.abs(diff) === 1 ? " night" : " nights") + " too many"
+      : Math.abs(diff) + (Math.abs(diff) === 1 ? " night" : " nights") + " missing";
 }
 
 
@@ -2241,8 +2244,9 @@ function renderChecks(endCursor){
   var out = [], planned = plannedNights(), budget = tripNights();
 
   if (planned !== budget){
-    out.push(["bad","Days",
-      "The plan runs to <b>" + planned + " days</b> but the trip is <b>" + budget + "</b>."
+    out.push(["bad","Nights",
+      "The stops contain <b>" + planned + (planned === 1 ? " night" : " nights")
+      + "</b>, but the travel dates allow <b>" + budget + (budget === 1 ? " night" : " nights") + "</b>."
       + (endCursor ? " Last stop currently ends " + fmt(endCursor) + "." : "")]);
   }
 
@@ -2747,7 +2751,7 @@ function renderCatalog(){
   name.setAttribute("aria-label", "Name of the new stop");
   var nights = document.createElement("input");
   nights.type = "number"; nights.min = "1"; nights.max = "30"; nights.value = "2";
-  nights.setAttribute("aria-label", "Days");
+  nights.setAttribute("aria-label", "Nights");
   var kind = document.createElement("select");
   kind.setAttribute("aria-label", "Kind of place");
   KINDS.forEach(function(k){
