@@ -1388,7 +1388,7 @@ function renderStatus(){
     parts.push("Read-only — no server on this host");
   } else if (dirty){
     parts.push("<b>Unsaved changes</b>");
-    parts.push(lsGet(LS_KEY) ? "Autosave every minute" : "Enter your access key to save");
+    parts.push(lsGet(LS_KEY) ? "Autosaves after you edit" : "Enter your access key to save");
     if (publishedSeed.rev) parts.push("server has v" + publishedSeed.rev);
   } else if (fetchState === "ok"){
     parts.push("<b>Saved</b>");
