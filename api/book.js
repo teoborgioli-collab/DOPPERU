@@ -1,11 +1,8 @@
 import { head } from '@vercel/blob';
 import { handleUpload } from '@vercel/blob/client';
 
-/* One book, one slot. Reading is always open (no password) — the GET below
-   never checks a key. Replacing it does need the password, checked in
-   onBeforeGenerateToken, since this app's URL is a public Vercel domain
-   (those show up in certificate-transparency logs, so "nobody will guess it"
-   isn't real privacy). */
+/* One book, one slot. Both reading and replacing require either BOOK_EDIT_KEY
+   or one of the two PLAN_EDIT_KEYS. The Blob token always stays server-side. */
 const BOOK_PATH = 'book.epub';
 
 function safeEq(a, b) {
@@ -16,8 +13,20 @@ function safeEq(a, b) {
 }
 
 function checkKey(given) {
-  const expected = process.env.BOOK_EDIT_KEY || '';
-  return expected.length >= 4 && safeEq(expected, String(given || ''));
+  const supplied = String(given || '');
+  const keys = [];
+  if ((process.env.BOOK_EDIT_KEY || '').length >= 4) keys.push(process.env.BOOK_EDIT_KEY);
+  (process.env.PLAN_EDIT_KEYS || '').split(',').forEach((pair) => {
+    const i = pair.indexOf(':');
+    const key = i > 0 ? pair.slice(i + 1).trim() : '';
+    if (key.length >= 4) keys.push(key);
+  });
+  return keys.some((expected) => safeEq(expected, supplied));
+}
+
+function headerKey(req) {
+  const raw = String(req.headers['x-edit-key'] || '');
+  try { return decodeURIComponent(raw); } catch (error) { return raw; }
 }
 
 /* @vercel/blob looks for BLOB_READ_WRITE_TOKEN by default; connecting a
@@ -30,7 +39,9 @@ function blobToken() {
 }
 
 function setHeaders(res) {
-  res.setHeader('Cache-Control', 'no-store, max-age=0');
+  res.setHeader('Cache-Control', 'private, no-store, max-age=0');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'no-referrer');
 }
 
 function send(res, status, data) {
@@ -55,6 +66,7 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'GET') {
+      if (!checkKey(headerKey(req))) return send(res, 401, { error: 'bad_key' });
       const meta = await head(BOOK_PATH, { token: blobToken() }).catch(() => null);
       if (!meta || !meta.url) return send(res, 200, { empty: true });
       return send(res, 200, { url: meta.url, uploadedAt: meta.uploadedAt || null, size: meta.size || null });

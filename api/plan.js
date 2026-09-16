@@ -50,11 +50,12 @@ function blobToken() {
 }
 
 function setHeaders(res) {
-  res.setHeader('Cache-Control', 'no-store, max-age=0');
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cache-Control', 'private, no-store, max-age=0');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Edit-Key');
   res.setHeader('X-Plan-Open', '0');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'no-referrer');
 }
 
 function send(res, status, data) {
@@ -175,28 +176,29 @@ export default async function handler(req, res) {
     if (req.method === 'OPTIONS') return send(res, 200, { ok: true });
 
     const configured = editors();
-    if (req.method === 'GET' && req.query && req.query.diag) return send(res, 200, {
-      build: '2026-09-10-epub-reader-link', openMode: false,
-      PLAN_EDIT_KEYS_set: !!(process.env.PLAN_EDIT_KEYS || '').trim(),
-      BLOB_TOKEN_set: !!blobToken(),
-      usableEditors: configured.length, names: configured.map((e) => e.name),
-    });
     if (configured.length !== 2 || !configured.some((e) => e.name === 'matteo') || !configured.some((e) => e.name === 'levin')) {
       return send(res, 503, { error: 'invalid_edit_keys', message: 'Set PLAN_EDIT_KEYS in Vercel with exactly matteo:key,levin:key (each key at least 4 characters), then redeploy.' });
     }
 
     if (req.method === 'GET') {
+      const name = whoIs(headerKey(req));
       if (req.query && req.query.who) {
-        const name = whoIs(headerKey(req));
         return name ? send(res, 200, { name }) : send(res, 401, { error: 'bad_key' });
       }
+      if (!name) return send(res, 401, { error: 'bad_key' });
+      if (req.query && req.query.diag) return send(res, 200, {
+        build: '2026-09-15-private-plan', openMode: false,
+        PLAN_EDIT_KEYS_set: true,
+        BLOB_TOKEN_set: !!blobToken(),
+        usableEditors: configured.length, names: configured.map((e) => e.name),
+      });
       const plan = await readPlan();
       return plan ? send(res, 200, plan) : send(res, 404, { error: 'no_plan_yet' });
     }
 
     if (req.method !== 'POST') return send(res, 405, { error: 'method_not_allowed' });
     const who = whoIs(headerKey(req));
-    if (!who) return send(res, 401, { error: 'bad_key', message: 'That edit key was not accepted.' });
+    if (!who) return send(res, 401, { error: 'bad_key', message: 'That access key was not accepted.' });
 
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
     if (!body || !Array.isArray(body.items)) return send(res, 400, { error: 'bad_plan' });

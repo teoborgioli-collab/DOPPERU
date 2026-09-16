@@ -55,10 +55,11 @@ function guideToken() {
 }
 
 function setHeaders(res) {
-  res.setHeader('Cache-Control', 'no-store, max-age=0');
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cache-Control', 'private, no-store, max-age=0');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Edit-Key');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'no-referrer');
 }
 
 function send(res, status, data) {
