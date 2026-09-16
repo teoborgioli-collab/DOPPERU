@@ -322,7 +322,7 @@ h2::before{content:"";display:block;width:26px;height:3px;border-radius:2px;
   border-color:color-mix(in srgb,var(--bad) 35%,var(--border))}
 .ahead{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
 .asub{display:flex;flex-wrap:wrap;gap:7px 12px;align-items:center;margin-top:8px;padding-left:0}
-.aname{flex:1 1 240px;min-width:150px;font-family:var(--sans);font-size:14.5px;
+.aname{flex:0 1 auto;min-width:150px;font-family:var(--sans);font-size:14.5px;
   font-weight:600;color:var(--ink);text-transform:none;letter-spacing:0;
   line-height:1.35}
 /* everything below an activity's title line stays flush with it */
@@ -370,7 +370,9 @@ h2::before{content:"";display:block;width:26px;height:3px;border-radius:2px;
   background:color-mix(in srgb,var(--ok) 10%,var(--surface))}
 
 .decision-row,.move-row{display:flex;flex-wrap:wrap;gap:9px 16px;align-items:center;margin-top:12px}
-@media (min-width:761px){.decision-row .mini.drop{margin-left:auto}}
+.activity-actions{display:flex;align-items:center;gap:16px;margin-left:auto}
+.activity-actions .mini{font-size:13px}
+.act .activity-actions .x{margin-left:0}
 .move-select{font-family:var(--sans);font-size:12px;color:var(--ink);background:var(--surface);
   border:1px solid var(--border);border-radius:var(--r-sm);padding:6px 9px}
 .vote-box{width:26px;height:26px;flex:none;line-height:1;font-size:13px;font-weight:700;
@@ -657,15 +659,15 @@ textarea::placeholder{color:var(--muted)}
 .activity-dialog .activity-links a:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 
 /* activity row's own inline tools (links + status tag) */
-.activity-tools{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:6px 10px;
-  margin-left:auto;max-width:100%}
+.activity-tools{display:flex;align-items:center;justify-content:flex-start;flex:1 1 280px;flex-wrap:wrap;gap:6px 10px;
+  margin-left:0;max-width:100%}
 .act .activity-tools .activity-links{margin:0;gap:4px 12px;align-items:center}
 .act .activity-tools .activity-links a{font-size:11.5px;font-weight:500;text-transform:none;letter-spacing:0;
   min-height:28px;display:inline-flex;align-items:center}
 .act .activity-tools .activity-links a::before{content:none}
 .resource-toggle{border:0;background:none;color:var(--muted);font-size:11px;padding:4px 0;min-height:28px;
   cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-.activity-tools .st{font-size:9.5px;min-height:28px;max-width:150px}
+.activity-tools .st{font-size:9.5px;min-height:28px;max-width:150px;margin-left:auto}
 
 /* ---- 18. Colophon ---------------------------------------------------------------- */
 .foot{position:relative;margin-top:76px;padding-top:28px;border-top:1px solid var(--border);
@@ -731,7 +733,8 @@ textarea::placeholder{color:var(--muted)}
   .activity-dialog{width:calc(100% - 20px);padding:22px}
   .hrow{grid-template-columns:56px 1fr}
   .route-strip a{flex-basis:45%}
-  .activity-tools{flex-basis:100%;justify-content:flex-start;margin-left:0}
+  .activity-tools{justify-content:flex-start;margin-left:0}
+  .activity-tools .st{margin-left:0}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -1834,6 +1837,12 @@ function activityBlock(it, S){
     }
 
     var tools = document.createElement("div"); tools.className = "activity-tools";
+    if (a.u){
+      var link = document.createElement("a");
+      link.href = a.u; link.target = "_blank"; link.rel = "noopener noreferrer";
+      link.textContent = "Open ↗";
+      tools.appendChild(link);
+    }
     var idea = ACTIVITIES.find(function(idea){return idea[2] === a.t;});
     var resources = activityLinks(a.t, idea ? idea[0] : S.name);
     resources.querySelector("a").textContent = "Maps";
@@ -1843,7 +1852,7 @@ function activityBlock(it, S){
     var toggle = document.createElement("button"); toggle.type = "button";
     toggle.className = "resource-toggle";
     function updateLinkToggle(){
-      toggle.textContent = resources.hidden ? "Links" : "Hide links";
+      toggle.textContent = resources.hidden ? "Other links" : "Hide other links";
       toggle.setAttribute("aria-expanded", String(!resources.hidden));
       toggle.setAttribute("aria-controls", resources.id);
       toggle.setAttribute("aria-label", (resources.hidden ? "Show links for " : "Hide links for ") + a.t);
@@ -1855,21 +1864,17 @@ function activityBlock(it, S){
       lsSet(LS + ":hidden-links", JSON.stringify(hiddenActivityLinks));
       updateLinkToggle();
     };
-    tools.append(resources, toggle, statusSelect(a.s, function(v){ a.s = v; commit(); }, "Status of " + a.t));
-    head.appendChild(tools);
+    tools.appendChild(toggle);
 
     (a.links || []).forEach(function(item,i){
       var url = typeof item === "string" ? item : item.url;
       if (!url || !safeLink(url)) return;
       var extra = document.createElement("a"); extra.href = safeLink(url); extra.textContent = (item.name || "Link " + (i + 2)) + " ↗";
-      extra.target = "_blank"; extra.rel = "noopener noreferrer"; head.appendChild(extra);
+      extra.target = "_blank"; extra.rel = "noopener noreferrer"; tools.appendChild(extra);
     });
-    if (a.u){
-      var link = document.createElement("a");
-      link.href = a.u; link.target = "_blank"; link.rel = "noopener noreferrer";
-      link.textContent = "open ↗";
-      head.appendChild(link);
-    }
+    tools.appendChild(resources);
+    tools.appendChild(statusSelect(a.s, function(v){ a.s = v; commit(); }, "Status of " + a.t));
+    head.appendChild(tools);
 
     var ed = document.createElement("button");
     ed.type = "button"; ed.className = "mini";
@@ -1960,8 +1965,10 @@ function activityBlock(it, S){
     c.hidden = consensus === "approved" && !celebrating;
     decisions.appendChild(c);
     if (celebrating) window.setTimeout(function(){ c.textContent = ""; c.classList.remove("celebrate"); c.hidden = true; }, 900);
-    decisions.appendChild(ed);
-    decisions.appendChild(x);
+    var actions = document.createElement("div"); actions.className = "activity-actions";
+    actions.appendChild(ed);
+    actions.appendChild(x);
+    decisions.appendChild(actions);
     row.appendChild(decisions);
 
     var move = document.createElement("div"); move.className="move-row";
