@@ -156,14 +156,15 @@ If saving still fails, inspect `/api/plan?diag=1` and the Vercel function logs.
 Before reloading after a failed save, use **More → Download a copy** to keep edits.
 
 
-## Manual saving (2026-09-10)
+## Debounced autosaving
 
-Edits stay on your screen until you press Save. There are no automatic saves.
-Live updates pause while you have unsaved changes or a focused input.
-If you edit during a save, those newer edits remain unsaved until the next Save.
-A real conflict detected by Save still requires reconciliation; it never silently
-overwrites a newer shared plan. Refresh other open tabs after deploying this update
-so they stop running the previous autosave code.
+Content changes save automatically after 15 seconds without another change.
+Further edits restart that countdown, so one editing session normally produces
+one version instead of a version every minute. The Save button remains available
+for an immediate save and cancels any pending automatic save. If another edit is
+made while a save is running, that newer edit remains pending and saves after its
+own quiet period. Live updates pause while local changes are unsaved. A real save
+conflict still requires reconciliation and never silently overwrites a newer plan.
 
 ## Activity catalogue and guide
 

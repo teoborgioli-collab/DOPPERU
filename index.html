@@ -299,6 +299,8 @@ h2::before{content:"";display:block;width:26px;height:3px;border-radius:2px;
 .legwhy{color:var(--ink-soft);font-size:14px;line-height:1.62;margin:10px 0 0;max-width:74ch}
 
 .controls{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-top:16px}
+.stop-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;
+  gap:10px 18px;margin-top:18px}
 .step{display:inline-flex;align-items:center;border:1px solid var(--border-strong);
   border-radius:var(--r-pill);overflow:hidden;background:var(--surface-2)}
 .step button{width:30px;height:30px;border:none;background:none;color:var(--ink);
@@ -704,15 +706,14 @@ textarea::placeholder{color:var(--muted)}
   .scenario-tabs .btn{padding:8px 14px}
   .scenarios>.sub{margin-top:6px}
   .deck{display:block;padding:20px 0}
-  .dates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0}
-  .dates label{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-width:0}
-  .dates input{width:100%;min-width:0}
+  .dates{display:grid;grid-template-columns:1fr;gap:8px;padding:0;width:100%}
+  .dates label{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;min-width:0}
+  .dates input{width:auto;min-width:0;font-size:12.5px;padding:6px 8px}
   .tally{margin-top:20px;text-align:left}
   .tally .bal{display:table;margin:9px 0 0}
   .toolbar{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;padding:16px 0}
   .toolbar-actions{justify-content:center;width:100%}
   .status{width:100%;margin-left:0;text-align:left;line-height:1.55}
-  .toolbar>#moreBtn{justify-self:start}
   .moremenu{justify-content:flex-start}
   h2{margin-top:48px}
   .leg{grid-template-columns:1fr;gap:14px;padding:20px 17px 22px 20px;border-radius:var(--r-md)}
@@ -788,9 +789,9 @@ textarea::placeholder{color:var(--muted)}
       <button class="btn primary" id="saveBtn" type="button">Save</button>
       <button class="btn" id="shareBtn" type="button">Share link</button>
       <button class="btn" id="reloadBtn" type="button">Reload</button>
+      <button class="mini" id="moreBtn" type="button" aria-expanded="false">More</button>
     </div>
     <span class="status" id="status">Loading…</span>
-    <button class="mini" id="moreBtn" type="button" aria-expanded="false">More</button>
   </div>
 
   <div class="moremenu" id="moreMenu" hidden>
@@ -1171,11 +1172,49 @@ function normaliseState(){
 /* Compare saved content so opening an editor does not create a save. */
 var editSeq = 0;
 var savedFingerprint = null;
+var autosaveTimer = null;
+var queuedAutosaveFingerprint = null;
+var AUTOSAVE_DELAY = 15000;
+var AUTOSAVE_RETRY_DELAY = 2000;
+
+function cancelQueuedAutosave(){
+  if (autosaveTimer) clearTimeout(autosaveTimer);
+  autosaveTimer = null;
+  queuedAutosaveFingerprint = null;
+}
+
+function runQueuedAutosave(){
+  autosaveTimer = null;
+  dirty = planFingerprint() !== savedFingerprint;
+  if (!dirty){ queuedAutosaveFingerprint = null; return; }
+  if (!canPublish || !lsGet(LS_KEY) || conflict) return;
+  if (saving || polling){
+    autosaveTimer = setTimeout(runQueuedAutosave, AUTOSAVE_RETRY_DELAY);
+    return;
+  }
+  doSave("Autosave", false);
+}
+
+function queueAutosave(fingerprint){
+  if (!dirty || !canPublish || !lsGet(LS_KEY)){
+    cancelQueuedAutosave();
+    return;
+  }
+  /* UI-only actions such as opening Edit stop call save() too. They must not
+     postpone a save unless the actual plan content changed. */
+  if (autosaveTimer && queuedAutosaveFingerprint === fingerprint) return;
+  if (autosaveTimer) clearTimeout(autosaveTimer);
+  queuedAutosaveFingerprint = fingerprint;
+  autosaveTimer = setTimeout(runQueuedAutosave, AUTOSAVE_DELAY);
+}
+
 function planFingerprint(){ return JSON.stringify(allPlan()); }
 function save(){
-  dirty = planFingerprint() !== savedFingerprint;
+  var fingerprint = planFingerprint();
+  dirty = fingerprint !== savedFingerprint;
   editSeq++;
   renderStatus();
+  queueAutosave(fingerprint);
 }
 
 function usablePlan(v){
@@ -1185,6 +1224,7 @@ function usablePlan(v){
 }
 
 function adoptServer(v){
+  cancelQueuedAutosave();
   publishedSeed = clone(v);
   serverRev = v.rev || 0;
   history_ = Array.isArray(v.history) ? v.history : [];
@@ -2115,7 +2155,7 @@ function render(){
     step.className = "step";
     var minus = document.createElement("button");
     minus.type = "button"; minus.textContent = "–";
-    minus.setAttribute("aria-label", "One day fewer in " + S.name);
+    minus.setAttribute("aria-label", "One night fewer in " + S.name);
     minus.disabled = it.nights <= 1;
     minus.onclick = function(){ it.nights = Math.max(1, it.nights - 1); commit(); };
     var n = document.createElement("span");
@@ -2124,7 +2164,7 @@ function render(){
     n.setAttribute("aria-live", "polite");
     var plus = document.createElement("button");
     plus.type = "button"; plus.textContent = "+";
-    plus.setAttribute("aria-label", "One day more in " + S.name);
+    plus.setAttribute("aria-label", "One night more in " + S.name);
     plus.disabled = it.nights >= 30;
     plus.onclick = function(){ it.nights = Math.min(30, it.nights + 1); commit(); };
     step.appendChild(minus); step.appendChild(n); step.appendChild(plus);
@@ -2144,7 +2184,6 @@ function render(){
     ed.onclick = function(){
       editing = editing === it.id ? null : it.id; commit();
     };
-    ctl.appendChild(up); ctl.appendChild(dn); ctl.appendChild(ed);
     body.appendChild(ctl);
 
     if (editing === it.id){
@@ -2185,6 +2224,12 @@ function render(){
         "Lodge, guide, flight number, what to book…",
         function(value){it.note=value;save();renderStatus();}, it.id));
     }
+
+    var stopActions = document.createElement("div");
+    stopActions.className = "stop-actions";
+    if (editing === it.id){ stopActions.appendChild(up); stopActions.appendChild(dn); }
+    stopActions.appendChild(ed);
+    body.appendChild(stopActions);
 
     leg.appendChild(body);
     legs.appendChild(leg);
@@ -3024,7 +3069,10 @@ async function doSave(label, force){
   }
 }
 
-$("saveBtn").addEventListener("click", function(){ doSave("", false); });
+$("saveBtn").addEventListener("click", function(){
+  cancelQueuedAutosave();
+  doSave("", false);
+});
 
 $("noteBtn").addEventListener("click", function(){
   var r = $("keyRow");
@@ -3037,6 +3085,7 @@ $("keyRow").addEventListener("submit", function(ev){
   ev.preventDefault();
   var k = $("pubKey").value;
   if (k) lsSet(LS_KEY, k);
+  cancelQueuedAutosave();
   doSave($("pubLabel").value.trim(), false);
 });
 
@@ -3135,16 +3184,13 @@ async function poll(){
 }
 
 setInterval(poll, 6000);
-setInterval(function(){
-  dirty = planFingerprint() !== savedFingerprint;
-  if (canPublish && dirty && !saving && !polling && !conflict && lsGet(LS_KEY)) doSave("Autosave", false);
-}, 60000);
 document.addEventListener("visibilitychange", function(){ if (!document.hidden) poll(); });
 window.addEventListener("beforeunload", function(e){
   if (dirty){ e.preventDefault(); e.returnValue = ""; }
 });
 
 function lockApp(message){
+  cancelQueuedAutosave();
   appStarted = false;
   canPublish = false;
   currentEditor = "";
