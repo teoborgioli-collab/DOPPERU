@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
 <style>
 /* ============================================================
    DOPPERU — visual system, rev. 2026-09-15
@@ -108,6 +109,18 @@ button,input,select,textarea{font-family:var(--sans)}
 :focus-visible{outline:none;box-shadow:0 0 0 4px var(--accent-soft);border-radius:var(--r-xs)}
 
 .wrap{max-width:900px;margin:0 auto;padding:60px 28px 130px}
+.access-gate{min-height:100svh;display:grid;place-items:center;padding:28px;background:var(--bg)}
+.access-card{width:min(100%,420px);padding:32px;border:1px solid var(--border);border-radius:var(--r-lg);
+  background:var(--surface);box-shadow:var(--shadow-md)}
+.access-brand{margin:0 0 6px;font-family:var(--serif);font-weight:600;font-size:2.25rem;
+  line-height:1.05;letter-spacing:-.02em;color:var(--ink)}
+.access-card .sub{margin-bottom:22px}
+.access-form{display:flex;flex-direction:column;gap:11px}
+.access-form input{width:100%;padding:12px 13px;border:1px solid var(--border-strong);
+  border-radius:var(--r-sm);background:var(--bg);color:var(--ink);font-size:16px}
+.access-form .btn{align-self:flex-start}
+.access-message{min-height:1.5em;margin:1px 0 0;color:var(--bad);font-size:13px}
+.access-note{margin:16px 0 0;color:var(--muted);font-size:12.5px;line-height:1.55}
 
 .lab{font-family:var(--sans);font-weight:600;text-transform:uppercase;
   letter-spacing:.07em;font-size:11px;color:var(--muted);line-height:1.4}
@@ -258,15 +271,15 @@ h2::before{content:"";display:block;width:26px;height:3px;border-radius:2px;
   box-shadow:var(--shadow-sm);
   padding:26px 26px 26px 22px;margin:0 0 18px;position:relative;overflow:hidden}
 .leg::before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:3px;border-radius:3px;
-  background:var(--band,var(--muted))}
+  background:var(--accent)}
 .when{padding-top:2px;padding-right:22px}
 .when .day{font-family:var(--sans);font-weight:700;font-size:.92rem;line-height:1.25;
   letter-spacing:-.01em;color:var(--ink);white-space:nowrap}
 .when .out{font-family:var(--sans);font-size:12.5px;color:var(--muted);
   letter-spacing:0;margin-top:3px}
 .when .nn{margin-top:12px;display:inline-block;font-family:var(--sans);font-weight:700;font-size:10px;
-  text-transform:uppercase;letter-spacing:.06em;color:var(--band,var(--ink));line-height:1.35;
-  background:color-mix(in srgb,var(--band,var(--ink)) 14%,transparent);
+  text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);line-height:1.35;
+  background:var(--surface-2);
   padding:4px 9px;border-radius:var(--r-pill)}
 .body{min-width:0}
 .legtop h3{font-family:var(--serif);font-weight:600;font-size:1.35rem;line-height:1.22;
@@ -345,7 +358,7 @@ h2::before{content:"";display:block;width:26px;height:3px;border-radius:2px;
     linear-gradient(135deg,currentColor 50%,transparent 50%);
   background-position:calc(100% - 12px) 55%, calc(100% - 8px) 55%;
   background-size:4px 4px,4px 4px;background-repeat:no-repeat}
-.dsel{border:1px solid var(--band,var(--border-strong));color:var(--band,var(--ink))}
+.dsel{border:1px solid var(--border-strong);color:var(--ink-soft)}
 .st{border:1px solid var(--border);color:var(--muted)}
 .st:hover{border-color:var(--border-strong);color:var(--ink)}
 .st-unsure{color:var(--muted)}
@@ -365,7 +378,7 @@ h2::before{content:"";display:block;width:26px;height:3px;border-radius:2px;
 .vote-box{width:26px;height:26px;flex:none;line-height:1;font-size:13px;font-weight:700;
   font-family:var(--sans);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
   color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:50%;
-  transition:transform .15s var(--ease)}
+  transition:transform .15s var(--ease);position:relative;isolation:isolate}
 .vote-box:hover:not(:disabled){border-color:var(--ink);color:var(--ink);transform:scale(1.08)}
 .vote-box.approved{color:var(--accent-ink);border-color:var(--ok);background:var(--ok)}
 .vote-box.disapproved{color:var(--accent-ink);border-color:var(--bad);background:var(--bad)}
@@ -380,6 +393,22 @@ h2::before{content:"";display:block;width:26px;height:3px;border-radius:2px;
 .consensus.approved{color:var(--ok)}
 .consensus.disapproved{color:var(--bad)}
 .consensus.pending{color:var(--muted)}
+.vote-box.celebrate{animation:doppi-pop .58s var(--ease)}
+.vote-box.celebrate::before{content:"";position:absolute;z-index:-1;left:50%;top:50%;width:4px;height:4px;
+  border-radius:50%;background:var(--accent);opacity:0;pointer-events:none;
+  box-shadow:0 -21px var(--ok),17px -13px var(--accent),22px 4px var(--puna),12px 19px var(--city),
+    -10px 20px var(--coast),-22px 5px var(--ok),-17px -14px var(--puna);
+  animation:doppi-sparks .82s var(--ease) forwards}
+.vote-box.celebrate::after{content:"";position:absolute;inset:-4px;border:1px solid var(--ok);
+  border-radius:50%;opacity:0;pointer-events:none;animation:doppi-ring .68s var(--ease) forwards}
+.consensus.celebrate{animation:doppi-label .62s var(--ease)}
+.act.consensus-celebrate{animation:doppi-card .72s var(--ease)}
+@keyframes doppi-pop{0%,100%{transform:scale(1)}38%{transform:scale(1.28)}68%{transform:scale(.94)}}
+@keyframes doppi-sparks{0%{opacity:0;transform:translate(-50%,-50%) scale(.25) rotate(-12deg)}
+  24%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.22) rotate(10deg)}}
+@keyframes doppi-ring{0%{opacity:.7;transform:scale(.65)}100%{opacity:0;transform:scale(1.75)}}
+@keyframes doppi-label{0%,100%{transform:translateY(0);opacity:1}35%{transform:translateY(-2px);opacity:.72}}
+@keyframes doppi-card{0%,100%{box-shadow:none}40%{box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 15%,transparent)}}
 
 .actadd{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:14px 0 2px;
   border-top:1px solid var(--rule-soft);margin-top:4px}
@@ -656,7 +685,7 @@ textarea::placeholder{color:var(--muted)}
 .route-strip a{flex:1 1 145px;display:flex;flex-direction:column;gap:6px;padding:13px 18px;
   border-radius:var(--r-sm);color:var(--ink);text-decoration:none;position:relative}
 .route-strip a::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:3px;
-  background:var(--coast)}
+  background:var(--accent)}
 .route-strip a:hover{background:var(--surface-2)}
 .route-strip strong{font-size:16px;font-weight:600;font-family:var(--sans)}
 .route-departure{padding:13px 18px;align-self:center;color:var(--muted);font-size:13px}
@@ -715,8 +744,22 @@ textarea::placeholder{color:var(--muted)}
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&display=swap">
 
+<div class="access-gate" id="accessGate">
+  <div class="access-card">
+    <p class="lab">Private trip notebook</p>
+    <p class="access-brand">DOPPERU</p>
+    <p class="sub">Enter your personal access key to open the itinerary.</p>
+    <form class="access-form" id="accessForm">
+      <label for="accessKey" class="lab">Access key</label>
+      <input id="accessKey" type="password" autocomplete="current-password" required>
+      <button class="btn primary" id="accessSubmit" type="submit">Open itinerary</button>
+      <p class="access-message" id="accessMessage" role="status" aria-live="polite"></p>
+    </form>
+    <p class="access-note">Use Matteo’s or Levin’s personal key. The Vercel Blob token is never entered here.</p>
+  </div>
+</div>
 
-<div class="wrap">
+<div class="wrap" id="appShell" hidden>
   <header class="mast">
     <p class="lab" id="tripDateline">Peru · A holiday notebook</p>
     <div class="masthead-row"><div><h1 id="pageTitle">A notebook for Peru</h1>
@@ -754,13 +797,13 @@ textarea::placeholder{color:var(--muted)}
     <button class="mini" id="resetPlan" type="button">Reset current scenario</button>
     <button class="mini" id="dlPlan" type="button">Download a copy</button>
     <button class="mini" id="upBtn" type="button">Load from a file</button>
-    <button class="mini drop" id="pubForget" type="button" hidden>Forget edit key</button>
+    <button class="mini drop" id="pubForget" type="button" hidden>Forget access key</button>
     <input type="file" id="upPlan" accept=".json,application/json" hidden>
   </div>
 
   <form class="keyrow" id="keyRow" hidden>
     <input type="text" id="pubLabel" placeholder="What changed? (optional)">
-    <input type="password" id="pubKey" placeholder="Edit key" autocomplete="current-password" hidden>
+    <input type="password" id="pubKey" placeholder="Access key" autocomplete="current-password" hidden>
     <button type="submit" class="btn primary">Save</button>
     <button type="button" class="mini" id="pubCancel">Cancel</button>
   </form>
@@ -940,28 +983,24 @@ var FLAGS = [
 ];
 
 var FALLBACK_SEED = {
-  title:"A notebook for Peru",
-  subtitle:"Our route, little discoveries, and room to change our minds.",
+  title:"DOPPERU",
+  subtitle:"A private trip notebook.",
   start:"2026-11-09", end:"2026-11-23",
   defs:{},
-  items:[
-    {id:"lima", nights:1, note:""},
-    {id:"arequipa", nights:4, note:"Salinas one day, Mejía the next."},
-    {id:"cusco", nights:5, note:""},
-    {id:"mancora", nights:4, note:""}
-  ]
+  items:[]
 };
 
-/* The API is tried first; a plain static host without it falls back to the
-   file next to this page. */
-var BUILD = "2026-09-11-repo-notebook";   /* shown in the footer — check it after deploying */
+/* The private API is the only source of itinerary data. */
+var BUILD = "2026-09-15-private-access";   /* shown in the footer — check it after deploying */
 var PLAN_API = "/api/plan";
-var PLAN_FILE = "plan.json";
 var canPublish = false;
 var publishedSeed = clone(FALLBACK_SEED);
 var state = clone(FALLBACK_SEED);
 var LS = "peru-nov-2026-plan";
 var editing = null;
+var celebrateActivity = "";
+var ACCESS_DENIED = {};
+var appStarted = false;
 
 function clone(o){ return JSON.parse(JSON.stringify(o)); }
 
@@ -1033,10 +1072,9 @@ function plannedNights(){
   return state.items.reduce(function(s, it){ return s + (it.nights || 0); }, 0);
 }
 
-/* ---------- the plan lives on the server ----------
-   Nothing about the plan is kept in this browser. The page loads it from the
-   API, you edit on screen, and Save writes it back for everybody. Only the
-   edit key is remembered locally, and only as a convenience. */
+/* ---------- the plan lives behind the private server API ----------
+   The browser receives no itinerary until a personal access key is accepted.
+   The key is remembered locally only as a convenience. */
 var LS_KEY = LS + ":editkey";
 var fetchState = "pending";   // ok | missing | error | serverError | pending
 var serverErrorDetail = "";   // message from the server when fetchState is serverError
@@ -1157,11 +1195,18 @@ function adoptServer(v){
 
 async function loadServer(){
   try {
-    var res = await fetch(PLAN_API + "?t=" + Date.now(), {cache:"no-store"});
+    var key = lsGet(LS_KEY) || "";
+    var res = await fetch(PLAN_API + "?t=" + Date.now(), {
+      headers:{"X-Edit-Key":encodeURIComponent(key)}, cache:"no-store"
+    });
     openMode = false;
     if (res.ok){
       var v = usablePlan(await res.json());
       if (v){ fetchState = "ok"; canPublish = true; return v; }
+    } else if (res.status === 401){
+      canPublish = false;
+      fetchState = "locked";
+      return ACCESS_DENIED;
     } else if (res.status === 404){
       canPublish = true;         // API is live, nothing saved yet
       fetchState = "missing";
@@ -1203,7 +1248,7 @@ async function identifyEditor(){
 /* asked for from the vote checkbox when no key is set yet — same key the Save
    flow uses, just entered inline so a vote does not stall on a trip to Save */
 async function promptForEditor(){
-  var key = window.prompt("Enter your edit key to vote (Matteo or Levin's own key):");
+  var key = window.prompt("Enter your personal access key to vote:");
   if (key == null) return false;
   key = key.trim();
   if (!key) return false;
@@ -1215,15 +1260,6 @@ async function promptForEditor(){
   lsSet(LS_KEY, key);
   currentEditor = name;
   return true;
-}
-
-/* the file in the repo is only the starting point, used until the first save */
-async function loadSeedFile(){
-  try {
-    var r = await fetch(PLAN_FILE + "?t=" + Date.now(), {cache:"no-store"});
-    if (!r.ok) return null;
-    return usablePlan(await r.json());
-  } catch(e){ return null; }
 }
 
 async function saveToServer(label, key, force){
@@ -1284,18 +1320,6 @@ function syncDateInputs(){
 }
 
 /* ---------- carrying a copy out ---------- */
-function utf8ToB64(s){
-  var bytes = new TextEncoder().encode(s), bin = "";
-  for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
-  return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-}
-function b64ToUtf8(s){
-  var b = s.replace(/-/g, "+").replace(/_/g, "/");
-  while (b.length % 4) b += "=";
-  var bin = atob(b), bytes = new Uint8Array(bin.length);
-  for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-  return new TextDecoder().decode(bytes);
-}
 function packed(){
   return JSON.stringify(Object.assign(allPlan(), {v:2, rev:serverRev}));
 }
@@ -1306,39 +1330,12 @@ function adopt(obj){
   normaliseState(); dirty = true; return true;
 }
 
-function planLink(){
-  return location.origin + location.pathname + location.search
-       + "#p=" + utf8ToB64(packed());
-}
 function flash(msg){
   var el = document.getElementById("shareMsg");
   if (!el) return;
   el.textContent = msg;
   setTimeout(function(){ if (el.textContent === msg) el.textContent = ""; }, 4000);
 }
-function readHash(){
-  var h = location.hash || "";
-
-  /* An editor link carries the key. Take it, remember it, and strip it back
-     out of the address bar so it does not sit in screenshots or history. */
-  var k = h.match(/[#&]k=([^&]+)/);
-  if (k){
-    try { lsSet(LS_KEY, decodeURIComponent(k[1])); } catch(e){}
-    h = h.replace(/([#&])k=[^&]*/, "$1").replace(/^#&/, "#").replace(/^#$/, "");
-    try { history.replaceState(null, "", location.pathname + location.search + h); } catch(e){}
-  }
-
-  if (h.indexOf("#p=") !== 0) return false;
-  try { return adopt(JSON.parse(b64ToUtf8(h.slice(3)))); } catch(e){}
-  return false;
-}
-
-function editorLink(){
-  var key = lsGet(LS_KEY) || "";
-  return location.origin + location.pathname + location.search
-       + (key ? "#k=" + encodeURIComponent(key) : "");
-}
-
 /* ---------- status line, notices, history ---------- */
 function renderStatus(){
   var el = document.getElementById("status");
@@ -1349,7 +1346,7 @@ function renderStatus(){
     parts.push("Read-only — no server on this host");
   } else if (dirty){
     parts.push("<b>Unsaved changes</b>");
-    parts.push(lsGet(LS_KEY) ? "Autosave every minute" : "Save once with your edit key to enable autosave");
+    parts.push(lsGet(LS_KEY) ? "Autosave every minute" : "Enter your access key to save");
     if (publishedSeed.rev) parts.push("server has v" + publishedSeed.rev);
   } else if (fetchState === "ok"){
     parts.push("<b>Saved</b>");
@@ -1406,7 +1403,7 @@ function renderNotices(){
 
   if (saveError === "bad_key"){
     box.appendChild(notice("warn",
-      "<b>Saving was refused — wrong edit key.</b> The key on this page does not match any "
+      "<b>Saving was refused — wrong access key.</b> The key on this page does not match any "
       + "configured on the server. Check <code>PLAN_EDIT_KEYS</code> in Vercel, remember that "
       + "changing it needs a redeploy, and that you type only the part <em>after</em> the colon."));
   }
@@ -1419,8 +1416,7 @@ function renderNotices(){
   if (fetchState === "error"){
     box.appendChild(notice("warn",
       "<b>No API on this host</b>, so nothing can be saved for other people. "
-      + "This page is showing the plan from <code>plan.json</code> and any change stays on "
-      + "this screen until you reload."));
+      + "This private planner needs its Vercel API and cannot reveal an offline fallback."));
   }
   if (fetchState === "serverError"){
     box.appendChild(notice("warn",
@@ -1485,7 +1481,6 @@ function editPanel(id, refs, it0){
     refs.bd.textContent = R.badge;
     refs.meta.textContent = [R.elev, R.travel].filter(Boolean).join(" · ");
     refs.why.textContent = R.why || "";
-    refs.leg.style.setProperty("--band", "var(--" + R.band + ")");
   }
   function text(key, placeholder){
     var i = document.createElement("input");
@@ -1818,6 +1813,8 @@ function activityBlock(it, S){
     row.dataset.activityId = akey;
     if (!a.votes) a.votes = {matteo:"",levin:""};
     var consensus = a.votes.matteo && a.votes.matteo === a.votes.levin ? a.votes.matteo : "pending";
+    var celebrating = consensus === "approved" && celebrateActivity === akey;
+    if (celebrating){ row.classList.add("consensus-celebrate"); celebrateActivity = ""; }
     if (consensus === "approved" || consensus === "disapproved") row.classList.add("consensus-" + consensus);
 
     var head = document.createElement("div");
@@ -1940,7 +1937,7 @@ function activityBlock(it, S){
     else if (mv === "disapproved" || lv === "disapproved"){ boxCls = "partial-disapproved"; boxSym = "✕"; }
     var box = document.createElement("button");
     box.type = "button";
-    box.className = "vote-box" + (boxCls ? " " + boxCls : "");
+    box.className = "vote-box" + (boxCls ? " " + boxCls : "") + (celebrating ? " celebrate" : "");
     box.textContent = boxSym;
     box.setAttribute("aria-label", "Decision on " + a.t + ". Matteo: " + (mv || "not voted")
       + ". Levin: " + (lv || "not voted") + "."
@@ -1951,13 +1948,15 @@ function activityBlock(it, S){
         var ok = await promptForEditor();
         if (!ok) return;
       }
+      var wasApproved = a.votes.matteo === "approved" && a.votes.levin === "approved";
       var cur = VOTE_CYCLE.indexOf(a.votes[currentEditor] || "");
       a.votes[currentEditor] = VOTE_CYCLE[(cur + 1) % VOTE_CYCLE.length];
+      if (!wasApproved && a.votes.matteo === "approved" && a.votes.levin === "approved") celebrateActivity = akey;
       commit();
     };
     decisions.appendChild(box);
-    var c = document.createElement("span"); c.className="consensus "+consensus;
-    c.textContent = consensus === "approved" ? "Doppiproved 🎉" : consensus === "disapproved" ? "Both disapproved" : "Waiting for agreement";
+    var c = document.createElement("span"); c.className="consensus "+consensus+(celebrating ? " celebrate" : "");
+    c.textContent = consensus === "approved" ? "Doppiproved" : consensus === "disapproved" ? "Both disapproved" : "Waiting for agreement";
     decisions.appendChild(c);
     decisions.appendChild(ed);
     decisions.appendChild(x);
@@ -2063,7 +2062,6 @@ function render(){
     var leg = document.createElement("div");
     leg.className = "leg";
     leg.id = "stop-" + i;
-    leg.style.setProperty("--band", "var(--" + S.band + ")");
 
     var when = document.createElement("div");
     when.className = "when";
@@ -2561,7 +2559,7 @@ async function openGuide(){
   $("guideStatus").textContent = "Loading…";
   var key = await guideKey();
   if (!key){
-    $("guideStatus").textContent = "An edit key is needed to view the guide.";
+    $("guideStatus").textContent = "An access key is needed to view the guide.";
     if (tab) tab.close();
     return;
   }
@@ -2625,7 +2623,7 @@ async function openEpub(chapter){
     ? "Opening the guide at “" + chapter + "”…"
     : "Loading the EPUB…";
   var key = await guideKey();
-  if (!key){ $("guideStatus").textContent = "An edit key is needed to read the guide."; if (tab) tab.close(); return; }
+  if (!key){ $("guideStatus").textContent = "An access key is needed to read the guide."; if (tab) tab.close(); return; }
   try {
     var r = await fetch("/api/guide?file=epub", {headers:{"X-Edit-Key":encodeURIComponent(key)}, cache:"no-store"});
     if (r.status === 404){
@@ -2794,25 +2792,23 @@ $("moreBtn").addEventListener("click", function(){
 });
 
 $("resetPlan").addEventListener("click", function(){
-  var keep = {};
-  customIds().forEach(function(id){ keep[id] = state.defs[id]; });
-  Object.assign(state, clone(FALLBACK_SEED));
-  state.defs = Object.assign({}, state.defs || {}, keep);
+  if (!window.confirm("Restore this itinerary to its last saved version?")) return;
+  var saved = publishedSeed;
+  if (Array.isArray(publishedSeed.scenarios)){
+    saved = publishedSeed.scenarios.find(function(p){ return p.id === state.activeScenario; }) || publishedSeed;
+  }
+  Object.assign(state, scenarioCopy(saved));
   normaliseState();
   dirty = true; editing = null;
   syncDateInputs(); commit();
-  say("Starting plan loaded — press Save to share it");
+  say("Last saved itinerary restored — press Save to share it");
 });
 
-/* Include the locally remembered key when available. */
 $("shareBtn").addEventListener("click", function(){
-  var key = lsGet(LS_KEY) || "";
-  var url = location.origin + location.pathname
-          + (key ? "#k=" + encodeURIComponent(key) : "");
+  var url = location.origin + location.pathname + location.search;
   var box = $("linkBox");
   box.hidden = false; box.value = url; box.focus(); box.select();
-  var msg = key ? "Copied — this link can edit the plan"
-                : "Copied — viewing only until an edit key is entered";
+  var msg = "Copied — the recipient will enter their own access key";
   if (navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(url).then(
       function(){ say(msg); }, function(){ say("Copy the link below"); });
@@ -2822,6 +2818,7 @@ $("shareBtn").addEventListener("click", function(){
 $("reloadBtn").addEventListener("click", async function(){
   if (dirty && !window.confirm("Discard your unsaved changes and load the saved version?")) return;
   var v = await loadServer();
+  if (v === ACCESS_DENIED){ lockApp("Your access key is no longer valid."); return; }
   if (v){ adoptServer(v); syncDateInputs(); render(); say("Loaded v" + (v.rev || "?")); }
   else { render(); say("Nothing saved yet"); }
 });
@@ -2951,7 +2948,7 @@ async function doSave(label, force){
     $("keyRow").hidden = false;
     $("pubKey").hidden = false;
     $("pubKey").focus();
-    say("Enter the edit key to save");
+    say("Enter the access key to save");
     return;
   }
   var key = lsGet(LS_KEY) || $("pubKey").value;
@@ -2979,7 +2976,7 @@ async function doSave(label, force){
       $("pubKey").value = ""; $("pubKey").hidden = false;
       $("keyRow").hidden = false; $("pubKey").focus();
       render();
-      say("That edit key was not accepted");
+      say("That access key was not accepted");
     } else if (e.message === "conflict"){
       var merged = editingField() ? null : mergePlan(publishedSeed, state, conflict);
       if (merged){
@@ -3031,8 +3028,9 @@ $("keyRow").addEventListener("submit", function(ev){
 });
 
 $("pubForget").addEventListener("click", function(){
-  lsDel(LS_KEY); $("pubKey").value = "";
-  renderStatus(); say("Edit key removed from this browser");
+  if (dirty && !window.confirm("Forget the access key and discard unsaved changes?")) return;
+  $("pubKey").value = "";
+  lockApp("Access key removed from this browser.");
 });
 
 /* ---------- file copy in and out ---------- */
@@ -3111,6 +3109,7 @@ async function poll(){
   var seq = editSeq, rev = serverRev;
   try {
     var v = await loadServer();
+    if (v === ACCESS_DENIED){ lockApp("Your access key is no longer valid."); return; }
     // A read begun before a save/edit must never replace newer local state.
     if (!v || saving || serverRev !== rev || editSeq !== seq || (v.rev || 0) <= serverRev) return;
     if (dirty) return; // An edit may have started while this read was in flight.
@@ -3132,28 +3131,45 @@ window.addEventListener("beforeunload", function(e){
   if (dirty){ e.preventDefault(); e.returnValue = ""; }
 });
 
-async function init(){
+function lockApp(message){
+  appStarted = false;
+  canPublish = false;
+  currentEditor = "";
+  lsDel(LS_KEY);
+  state = clone(FALLBACK_SEED);
+  publishedSeed = clone(FALLBACK_SEED);
+  history_ = [];
+  conflict = null;
+  dirty = false;
+  savedFingerprint = null;
+  $("appShell").hidden = true;
+  $("accessGate").hidden = false;
+  $("accessMessage").textContent = message || "";
+  $("accessSubmit").disabled = false;
+  $("accessSubmit").textContent = "Open itinerary";
+  $("accessKey").value = "";
+  window.setTimeout(function(){ $("accessKey").focus(); }, 0);
+}
+
+async function startApp(){
+  if (appStarted) return;
   var v = await loadServer();
 
+  if (v === ACCESS_DENIED){ lockApp("That access key was not accepted."); return; }
   if (v === undefined){
-    fetchState = "error";
-    var seed = await loadSeedFile();
-    state = seed ? clone(seed)
-                 : clone(FALLBACK_SEED);
-    normaliseState();
+    lockApp("The private plan server could not be reached. Try again after deployment.");
+    return;
   } else if (v){
     adoptServer(v);
   } else {
-    var seed2 = await loadSeedFile();
-    state = seed2 ? clone(seed2)
-                  : clone(FALLBACK_SEED);
+    state = clone(FALLBACK_SEED);
     normaliseState();
-    dirty = true;
+    dirty = fetchState === "missing";
   }
 
-  if (readHash()) dirty = true;
-  await identifyEditor();
-
+  appStarted = true;
+  $("accessGate").hidden = true;
+  $("appShell").hidden = false;
   document.getElementById("toolbar").hidden = false;
   document.getElementById("buildline").textContent = "Build " + BUILD;
   syncDateInputs();
@@ -3161,8 +3177,42 @@ async function init(){
   loadExpandedActivities();   /* fire-and-forget — re-renders the catalogue itself once it's parsed */
 
   setSaveLine(!canPublish
-    ? "No server on this address, so this is a read-only copy. Changes stay on this screen until you reload."
-    : "The plan lives on the server. Everyone with the link can view it; saving always requires Matteo's or Levin's edit key.");
+    ? "The private plan server is unavailable."
+    : "The itinerary is private. Viewing and saving require Matteo's or Levin's personal access key.");
+}
+
+$("accessForm").addEventListener("submit", async function(event){
+  event.preventDefault();
+  var key = $("accessKey").value.trim();
+  if (!key) return;
+  $("accessSubmit").disabled = true;
+  $("accessSubmit").textContent = "Checking…";
+  $("accessMessage").textContent = "";
+  var name = await identifyByKey(key);
+  if (REVIEWERS.indexOf(name) === -1){
+    $("accessSubmit").disabled = false;
+    $("accessSubmit").textContent = "Open itinerary";
+    $("accessMessage").textContent = "That access key was not accepted.";
+    $("accessKey").select();
+    return;
+  }
+  lsSet(LS_KEY, key);
+  currentEditor = name;
+  await startApp();
+});
+
+async function init(){
+  if (location.hash){
+    try { history.replaceState(null, "", location.pathname + location.search); } catch(e){}
+  }
+  var saved = lsGet(LS_KEY) || "";
+  if (!saved){ lockApp(""); return; }
+  $("accessSubmit").disabled = true;
+  $("accessSubmit").textContent = "Checking…";
+  var name = await identifyByKey(saved);
+  if (REVIEWERS.indexOf(name) === -1){ lockApp("Please enter your access key."); return; }
+  currentEditor = name;
+  await startApp();
 }
 
 init();

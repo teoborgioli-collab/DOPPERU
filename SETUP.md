@@ -1,13 +1,13 @@
 # Fourteen Nights in Peru — setup
 
-A shared trip planner. The plan lives on the server, so everyone who opens the
-link sees the same one and can change it.
+A private shared trip planner. The plan lives on the server and is returned
+only after Matteo's or Levin's personal access key has been validated.
 
 Four files, all at the repo root:
 
 ```
 index.html
-plan.json        ← the starting plan, used until the first save
+plan.json        ← deliberately contains no itinerary data
 package.json
 api/plan.js      ← api is a FOLDER
 ```
@@ -21,7 +21,7 @@ api/plan.js      ← api is a FOLDER
    project. That adds `BLOB_READ_WRITE_TOKEN` on its own; you never touch it.
 4. Redeploy.
 
-Saving is deliberately disabled until both edit keys are configured.
+Viewing and saving are deliberately disabled until both access keys are configured.
 
 ### Check it worked
 
@@ -70,12 +70,12 @@ counted as an Amazon stop, a beach, or a travel day.
 | Button | What it does |
 |---|---|
 | **Save** | Writes your screen back for everyone. Greyed out when there is nothing to save. |
-| **Share link** | Copies the address. Send it to anyone who should see or edit the plan. |
+| **Share link** | Copies the clean address without a key. The recipient enters their own access key. |
 | **Reload** | Throws away your unsaved edits and reloads the saved version. |
 | **You** | Your name, so saves are labelled. Optional, remembered locally. |
 | **More** | Save with a note, reset to the starting plan, download a copy, load a file. |
 
-Once your edit key is known, edits save themselves about 2.5 seconds after
+Once your access key is known, edits save themselves about 2.5 seconds after
 you stop typing — the status line briefly says **Unsaved changes**, then
 **Saved**. The Save button still works too, for a save right now or one with
 a note. The page also re-checks the server every 6 seconds and whenever you
@@ -95,38 +95,35 @@ The last ten versions are listed at the bottom of the page with who saved them
 and when. **Restore** puts one back on your screen; it becomes the shared plan
 only once you save it. Nothing is ever lost for good.
 
-## Required edit keys
+## Required access keys
 
-The address is not really secret — Vercel domains show up in public
-certificate-transparency logs. If that bothers you, add one environment
-variable (Settings → Environment Variables, all environments, then redeploy):
+The address is not treated as a secret. Add this environment variable under
+Settings → Environment Variables, apply it to all environments, then redeploy:
 
 | Name | Value |
 |---|---|
-| `PLAN_EDIT_KEYS` | `matteo:dopperu2026,levin:tambopata26` |
+| `PLAN_EDIT_KEYS` | `matteo:A_LONG_RANDOM_KEY,levin:ANOTHER_LONG_RANDOM_KEY` |
 
-Both `matteo` and `levin` must be present, comma-separated, with **at least 4
-characters per key**. Reading stays open to anyone with the link; saving never
-works without one of these keys.
-
-A short word like `doppi` is fine here — the address already has to be known,
-and the last ten versions are always restorable. A long random key is stronger,
-but for a trip plan that is a choice, not a rule.
+Both `matteo` and `levin` must be present, comma-separated, with at least four
+characters per key. Use long random values in practice. The same personal key
+unlocks viewing, identifies each person's decisions, and authorizes saving.
 
 Then:
 
-- You type your key **once**. It is remembered in that browser.
-- **Share link** now includes the key, so whoever opens it can save
-  immediately without typing anything. That link can edit — send it the way you
-  would send a password.
+- The itinerary is hidden until a valid key is entered.
+- You type your key once per browser unless you use **More → Forget access key**.
+- **Share link** never places a key in the URL. Each person enters their own.
 - Each save is labelled with the name belonging to the key that was used.
 - Activity decisions are tied to those names: Matteo's key edits Matteo's field,
   and Levin's key edits Levin's field. An activity turns fully green or red only
   when both people make the same final decision.
 - To revoke one person: remove their pair, redeploy. Everyone else is
-  unaffected. They get *"That edit key was not accepted"* and the page clears
+  unaffected. They get *"That access key was not accepted"* and the page clears
   the stored key.
-- **More → Forget edit key** wipes it from a shared or borrowed machine.
+- **More → Forget access key** locks the page and wipes it from that browser.
+
+The Vercel Blob token is infrastructure credentials. Never paste it into the
+page, send it to another person, or put it in a URL.
 
 ## Live updates
 
@@ -145,15 +142,13 @@ remove whenever you like, nothing reads them.
 
 - `PLAN_OPEN` and `PLAN_EDIT_KEY` are ignored. Only `PLAN_EDIT_KEYS` is accepted.
 - Missing or invalid key configuration refuses all saves instead of allowing anonymous writes.
-- Hosted somewhere without the API (GitHub Pages, Netlify Drop), the page reads
-  `plan.json` read-only and hides the toolbar's save controls.
-- `?diag=1` reports what the server sees — key names and lengths, never the
-  keys themselves.
+- The page no longer reveals a fallback itinerary when hosted without the API.
+- `?diag=1` also requires a valid personal access key.
 
 
 ## Save errors
 
-Edit keys and storage credentials are separate. Even with edit keys configured,
+Access keys and storage credentials are separate. Even with access keys configured,
 Vercel needs `BLOB_READ_WRITE_TOKEN` from a connected **public** Blob store to save.
 Ensure environment variables apply to the deployed environment, then redeploy.
 The new API reports storage configuration failures on screen rather than `http_500`.
